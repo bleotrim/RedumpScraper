@@ -239,4 +239,18 @@ public void Pvd_EffectiveDate_ShouldMatchCreationOrZero()
     Assert.NotNull(effective);
     Assert.Equal("0000-00-00", effective.Date);
 }
+
+[Fact]
+public void LibCryptSectors_ShouldBeEmpty()
+{
+    // The test data (ID_17031.html) has LibCrypt: No, so no sectors should be parsed
+    Assert.Empty(_disc.LibCryptSectors);
+}
+
+[Fact]
+public void LibCryptSectors_ShouldBeInitialized()
+{
+    // Verify the collection is initialized (not null)
+    Assert.NotNull(_disc.LibCryptSectors);
+}
 }

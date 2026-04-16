@@ -27,4 +27,5 @@ public class RedumpDisc
     public List<DiscTrack> Tracks { get; set; } = new();
     public List<DiscRing> Rings { get; set; } = new();
     public List<PvdRecord> PvdEntries { get; set; } = new();
+    public List<LibCryptSector> LibCryptSectors { get; set; } = new();
 }

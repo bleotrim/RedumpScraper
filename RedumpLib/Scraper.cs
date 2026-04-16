@@ -220,6 +220,33 @@ public class Scraper
         var barcodeNode = doc.DocumentNode.SelectSingleNode("//th[text()='Barcode']/../following-sibling::tr/td");
         if (barcodeNode != null) disc.Barcode = barcodeNode.InnerText.Trim();
 
+        var libcryptTable = doc.DocumentNode.SelectSingleNode("//table[@class='libcrypt']");
+        if (libcryptTable != null)
+        {
+            var libcryptRows = libcryptTable.SelectNodes(".//tr[td]");
+            if (libcryptRows != null)
+            {
+                foreach (var row in libcryptRows)
+                {
+                    var cols = row.SelectNodes("td");
+                    if (cols?.Count >= 5)
+                    {
+                        string sector = cols[0].InnerText.Trim();
+                        string msf = cols[1].InnerText.Trim();
+                        string contents = cols[2].InnerText.Trim();
+                        string xor = cols[3].InnerText.Trim();
+                        string comments = cols[4].InnerText.Trim();
+                        
+                        // Skip the "Total" row
+                        if (sector != "" && !sector.StartsWith("Total"))
+                        {
+                            disc.LibCryptSectors.Add(new LibCryptSector(sector, msf, contents, xor, comments));
+                        }
+                    }
+                }
+            }
+        }
+
         var commentsNode = doc.DocumentNode.SelectSingleNode("//th[text()='Comments']/../following-sibling::tr/td");
         if (commentsNode != null)
         {

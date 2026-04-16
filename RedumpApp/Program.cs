@@ -148,6 +148,21 @@ try
         }
     }
 
+    if (disc.LibCryptSectors.Count > 0)
+    {
+        Console.WriteLine("\n" + new string('=', 70));
+        Console.WriteLine($"LIBCRYPT PROTECTION ({disc.LibCryptSectors.Count})".PadRight(70));
+        Console.WriteLine(new string('=', 70));
+        foreach (var sector in disc.LibCryptSectors)
+        {
+            Console.WriteLine($"\nSector {sector.Sector}:");
+            Console.WriteLine($"  MSF:      {sector.Msf}");
+            Console.WriteLine($"  Contents: {sector.Contents}");
+            Console.WriteLine($"  XOR:      {sector.Xor}");
+            Console.WriteLine($"  Comments: {sector.Comments}");
+        }
+    }
+
     Console.WriteLine("\n" + new string('=', 70));
 }
 catch (Exception ex)
