@@ -1,0 +1,7 @@
+.DS_Store
+RedumpApp/bin/
+RedumpApp/obj/
+RedumpLib/bin/
+RedumpLib/obj/
+RedumpLib.Tests/bin/
+RedumpLib.Tests/obj/

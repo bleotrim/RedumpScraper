@@ -1,0 +1,32 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug RedumpApp",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/RedumpApp/bin/Debug/net10.0/RedumpApp.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/RedumpApp",
+            "console": "integratedTerminal",
+            "stopAtEntry": false
+        },
+        {
+            "name": "Debug Tests",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "dotnet",
+            "args": [
+                "test",
+                "${workspaceFolder}/RedumpLib.Tests/RedumpLib.Tests.csproj",
+                "--no-build",
+                "--logger=console;verbosity=detailed"
+            ],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "stopAtEntry": true
+        }
+    ]
+}
