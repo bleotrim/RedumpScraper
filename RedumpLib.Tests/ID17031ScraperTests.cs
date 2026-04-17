@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace RedumpLib.Tests;
 
-public class ScraperTests : IClassFixture<RedumpFixture>
+public class ID17031ScraperTests : IClassFixture<ID17031Fixture>
 {
     private readonly RedumpDisc _disc;
 
-    public ScraperTests(RedumpFixture fixture)
+    public ID17031ScraperTests(ID17031Fixture fixture)
     {
         _disc = fixture.Disc;
     }

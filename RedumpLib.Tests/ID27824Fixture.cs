@@ -4,15 +4,15 @@ using RedumpLib;
 
 namespace RedumpLib.Tests;
 
-public class RedumpFixture
+public class ID27824Fixture
 {
     public RedumpDisc Disc { get; private set; }
 
-    public RedumpFixture()
+    public ID27824Fixture()
     {
         var scraper = new Scraper();
         
-        var filePath = Path.Combine(AppContext.BaseDirectory, "TestData", "ID_17031.html");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "TestData", "ID_27824.html");
         
         if (!File.Exists(filePath))
         {
@@ -22,6 +22,6 @@ public class RedumpFixture
         string htmlContent = File.ReadAllText(filePath);
         
         Disc = scraper.ParseRedumpHtml(htmlContent);
-        Disc.Id = "17031";
+        Disc.Id = "27824";
     }
 }
