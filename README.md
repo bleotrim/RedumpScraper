@@ -28,10 +28,15 @@ RedumpScraper/
 │   ├── PvdRecord.cs        # PVD record model
 │   ├── LibCryptSector.cs   # LibCrypt sector data
 │   └── RedumpLib.csproj
-└── RedumpLib.Tests/        # Unit tests
-    ├── ScraperTests.cs     # Test suite
-    ├── RedumpFixture.cs    # Test fixture
-    └── TestData/           # Sample HTML files for testing
+└── RedumpLib.Tests/        # Unit tests (69 tests total)
+    ├── ID17031Fixture.cs           # Fixture for Sheep, Dog 'n' Wolf disc
+    ├── ID17031ScraperTests.cs      # 36 tests for basic disc parsing
+    ├── ID27824Fixture.cs           # Fixture for Disney Tarzan disc
+    ├── ID27824LibCryptTests.cs     # 33 tests for LibCrypt validation
+    ├── TestData/                   # Sample HTML files for testing
+    │   ├── ID_17031.html           # Sheep, Dog 'n' Wolf (no LibCrypt)
+    │   └── ID_27824.html           # Disney Tarzan (32 LibCrypt sectors)
+    └── RedumpLib.Tests.csproj
 ```
 
 ## Requirements
@@ -193,13 +198,47 @@ public record LibCryptSector(
 
 ## Testing
 
-Run the test suite:
+The project includes a comprehensive test suite with 69 tests organized by disc ID using fixtures for test data management.
+
+### Test Structure
+
+Tests are organized using ID-based naming conventions for better organization and reusability:
+
+**ID 17031 - Sheep, Dog 'n' Wolf (No LibCrypt)**
+- **Fixture**: `ID17031Fixture.cs` - Loads and parses `TestData/ID_17031.html`
+- **Test Class**: `ID17031ScraperTests.cs` - 36 tests covering:
+  - Disc metadata (title, system, region, serial, etc.)
+  - Languages (6 languages supported)
+  - Technical details (EDC, anti-modchip, write offset)
+  - Tracks and ring information
+  - PVD records with timestamps
+  - Empty LibCrypt validation (disc has no protection)
+
+**ID 27824 - Disney Tarzan (32 LibCrypt Sectors)**
+- **Fixture**: `ID27824Fixture.cs` - Loads and parses `TestData/ID_27824.html`
+- **Test Class**: `ID27824LibCryptTests.cs` - 33 tests covering comprehensive LibCrypt validation:
+  - Sector collection integrity (verify exactly 32 sectors)
+  - MSF timestamp format validation (MM:SS:FF format)
+  - Sector data completeness (all required fields populated)
+  - Specific sector validation (first, last, middle sectors)
+  - XOR value variation between sectors
+  - Hex contents and comment validation
+  - Sector numbering gaps and ordering
+
+### Running Tests
 
 ```bash
+# Run all tests
 dotnet test RedumpScraper.slnx
+
+# Run with verbose output
+dotnet test RedumpScraper.slnx -v normal
+
+# Run specific test class
+dotnet test --filter "ClassName=RedumpLib.Tests.ID17031ScraperTests"
 ```
 
-All tests pass with the sample data (Sheep, Dog 'n' Wolf - ID 17031).
+**Test Results**: All 69 tests pass ✅
 
 ## Example Output
 
