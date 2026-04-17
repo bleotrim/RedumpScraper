@@ -1,6 +1,9 @@
 ﻿using System;
 using RedumpLib;
 
+// Helper method to check if a value should be displayed
+static bool HasValue(string? value) => !string.IsNullOrWhiteSpace(value);
+
 if (args.Length == 0)
 {
     Console.WriteLine("Usage: RedumpApp <disc-id>");
@@ -24,57 +27,75 @@ try
     Console.WriteLine($"[DEBUG] Connecting to: {url}");
     RedumpDisc disc = scraper.ParseRedumpPage(url);
 
-    Console.WriteLine("\n" + new string('=', 70));
-    Console.WriteLine("BASIC INFORMATION".PadRight(70));
-    Console.WriteLine(new string('=', 70));
-    Console.WriteLine($"ID:          {disc.Id}");
-    Console.WriteLine($"Title:       {disc.Title}");
-    Console.WriteLine($"System:      {disc.System}");
-    Console.WriteLine($"Media:       {disc.Media}");
-    Console.WriteLine($"Category:    {disc.Category}");
-    Console.WriteLine($"Serial:      {disc.Serial}");
-    Console.WriteLine($"Region:      {disc.Region}");
-    Console.WriteLine($"Edition:     {disc.Edition}");
-    if (!string.IsNullOrWhiteSpace(disc.Version))
+    // BASIC INFORMATION
+    if (HasValue(disc.Id) || HasValue(disc.Title) || HasValue(disc.System) || HasValue(disc.Media) || 
+        HasValue(disc.Category) || HasValue(disc.Serial) || HasValue(disc.Region) || HasValue(disc.Edition) || 
+        HasValue(disc.Version))
     {
-        Console.WriteLine($"Version:     {disc.Version}");
+        Console.WriteLine("\n" + new string('=', 70));
+        Console.WriteLine("BASIC INFORMATION".PadRight(70));
+        Console.WriteLine(new string('=', 70));
+        if (HasValue(disc.Id)) Console.WriteLine($"ID:          {disc.Id}");
+        if (HasValue(disc.Title)) Console.WriteLine($"Title:       {disc.Title}");
+        if (HasValue(disc.System)) Console.WriteLine($"System:      {disc.System}");
+        if (HasValue(disc.Media)) Console.WriteLine($"Media:       {disc.Media}");
+        if (HasValue(disc.Category)) Console.WriteLine($"Category:    {disc.Category}");
+        if (HasValue(disc.Serial)) Console.WriteLine($"Serial:      {disc.Serial}");
+        if (HasValue(disc.Region)) Console.WriteLine($"Region:      {disc.Region}");
+        if (HasValue(disc.Edition)) Console.WriteLine($"Edition:     {disc.Edition}");
+        if (HasValue(disc.Version)) Console.WriteLine($"Version:     {disc.Version}");
     }
-    Console.WriteLine("\n" + new string('=', 70));
-    Console.WriteLine("LANGUAGES".PadRight(70));
-    Console.WriteLine(new string('=', 70));
+
+    // LANGUAGES
     if (disc.Languages.Count > 0)
     {
+        Console.WriteLine("\n" + new string('=', 70));
+        Console.WriteLine("LANGUAGES".PadRight(70));
+        Console.WriteLine(new string('=', 70));
         foreach (var lang in disc.Languages)
         {
             Console.WriteLine($"  • {lang}");
         }
     }
 
-    Console.WriteLine("\n" + new string('=', 70));
-    Console.WriteLine("TECHNICAL DETAILS".PadRight(70));
-    Console.WriteLine(new string('=', 70));
-    Console.WriteLine($"EXE Date:        {disc.ExeDate}");    if (!string.IsNullOrWhiteSpace(disc.Version))
+    // TECHNICAL DETAILS
+    if (HasValue(disc.ExeDate) || HasValue(disc.Edc) || HasValue(disc.AntiModchip) || 
+        HasValue(disc.LibCrypt) || HasValue(disc.ErrorsCount) || HasValue(disc.WriteOffset) || 
+        HasValue(disc.NumberOfTracks))
     {
-        Console.WriteLine($"Version:        {disc.Version}");
-    }    Console.WriteLine($"EDC:             {disc.Edc}");
-    Console.WriteLine($"Anti-modchip:    {disc.AntiModchip}");
-    Console.WriteLine($"LibCrypt:        {disc.LibCrypt}");
-    Console.WriteLine($"Errors Count:    {disc.ErrorsCount}");
-    Console.WriteLine($"Write Offset:    {disc.WriteOffset}");
-    Console.WriteLine($"Number of Tracks: {disc.NumberOfTracks}");
+        Console.WriteLine("\n" + new string('=', 70));
+        Console.WriteLine("TECHNICAL DETAILS".PadRight(70));
+        Console.WriteLine(new string('=', 70));
+        if (HasValue(disc.ExeDate)) Console.WriteLine($"EXE Date:        {disc.ExeDate}");
+        if (HasValue(disc.Edc)) Console.WriteLine($"EDC:             {disc.Edc}");
+        if (HasValue(disc.AntiModchip)) Console.WriteLine($"Anti-modchip:    {disc.AntiModchip}");
+        if (HasValue(disc.LibCrypt)) Console.WriteLine($"LibCrypt:        {disc.LibCrypt}");
+        if (HasValue(disc.ErrorsCount)) Console.WriteLine($"Errors Count:    {disc.ErrorsCount}");
+        if (HasValue(disc.WriteOffset)) Console.WriteLine($"Write Offset:    {disc.WriteOffset}");
+        if (HasValue(disc.NumberOfTracks)) Console.WriteLine($"Number of Tracks: {disc.NumberOfTracks}");
+    }
 
-    Console.WriteLine("\n" + new string('=', 70));
-    Console.WriteLine("DATABASE INFORMATION".PadRight(70));
-    Console.WriteLine(new string('=', 70));
-    Console.WriteLine($"Added:          {disc.AddedDate}");
-    Console.WriteLine($"Last Modified:  {disc.LastModifiedDate}");
+    // DATABASE INFORMATION
+    if (HasValue(disc.AddedDate) || HasValue(disc.LastModifiedDate))
+    {
+        Console.WriteLine("\n" + new string('=', 70));
+        Console.WriteLine("DATABASE INFORMATION".PadRight(70));
+        Console.WriteLine(new string('=', 70));
+        if (HasValue(disc.AddedDate)) Console.WriteLine($"Added:          {disc.AddedDate}");
+        if (HasValue(disc.LastModifiedDate)) Console.WriteLine($"Last Modified:  {disc.LastModifiedDate}");
+    }
 
-    Console.WriteLine("\n" + new string('=', 70));
-    Console.WriteLine("BARCODE".PadRight(70));
-    Console.WriteLine(new string('=', 70));
-    Console.WriteLine($"{disc.Barcode}");
+    // BARCODE
+    if (HasValue(disc.Barcode))
+    {
+        Console.WriteLine("\n" + new string('=', 70));
+        Console.WriteLine("BARCODE".PadRight(70));
+        Console.WriteLine(new string('=', 70));
+        Console.WriteLine(disc.Barcode);
+    }
 
-    if (!string.IsNullOrEmpty(disc.Comments))
+    // COMMENTS
+    if (HasValue(disc.Comments))
     {
         Console.WriteLine("\n" + new string('=', 70));
         Console.WriteLine("COMMENTS".PadRight(70));
@@ -82,34 +103,36 @@ try
         Console.WriteLine(disc.Comments);
     }
 
+    // TRACKS
     if (disc.Tracks.Count > 0)
     {
         Console.WriteLine("\n" + new string('=', 70));
         Console.WriteLine($"TRACKS ({disc.Tracks.Count})".PadRight(70));
         Console.WriteLine(new string('=', 70));
-        if (!string.IsNullOrWhiteSpace(disc.TrackStatus))
+        if (HasValue(disc.TrackStatus))
         {
             Console.WriteLine($"Tracks Status:  {disc.TrackStatus}");
         }
-        if (!string.IsNullOrWhiteSpace(disc.CuesheetStatus))
+        if (HasValue(disc.CuesheetStatus))
         {
             Console.WriteLine($"Cuesheet Status: {disc.CuesheetStatus}");
         }
-        if (!string.IsNullOrWhiteSpace(disc.TrackStatus) || !string.IsNullOrWhiteSpace(disc.CuesheetStatus))
+        if (HasValue(disc.TrackStatus) || HasValue(disc.CuesheetStatus))
         {
             Console.WriteLine();
         }
         foreach (var track in disc.Tracks)
         {
             Console.WriteLine($"\nTrack {track.Number}:");
-            Console.WriteLine($"  Type:    {track.Type}");
-            Console.WriteLine($"  Size:    {track.Size}");
-            Console.WriteLine($"  CRC32:   {track.Crc32}");
-            Console.WriteLine($"  MD5:     {track.Md5}");
-            Console.WriteLine($"  SHA1:    {track.Sha1}");
+            if (HasValue(track.Type)) Console.WriteLine($"  Type:    {track.Type}");
+            if (HasValue(track.Size)) Console.WriteLine($"  Size:    {track.Size}");
+            if (HasValue(track.Crc32)) Console.WriteLine($"  CRC32:   {track.Crc32}");
+            if (HasValue(track.Md5)) Console.WriteLine($"  MD5:     {track.Md5}");
+            if (HasValue(track.Sha1)) Console.WriteLine($"  SHA1:    {track.Sha1}");
         }
     }
 
+    // RINGS
     if (disc.Rings.Count > 0)
     {
         Console.WriteLine("\n" + new string('=', 70));
@@ -117,37 +140,47 @@ try
         Console.WriteLine(new string('=', 70));
         foreach (var ring in disc.Rings)
         {
-            Console.WriteLine($"\nRing {ring.Number}:");
-            Console.WriteLine($"  Mastering Code:       {(string.IsNullOrEmpty(ring.MasteringCode) ? "N/A" : ring.MasteringCode)}");
-            Console.WriteLine($"  Mastering SID Code:   {(string.IsNullOrEmpty(ring.MasteringSidCode) ? "N/A" : ring.MasteringSidCode)}");
-            Console.WriteLine($"  Toolstamp:            {(string.IsNullOrEmpty(ring.Toolstamp) ? "N/A" : ring.Toolstamp)}");
-            Console.WriteLine($"  Mould SID Code:       {(string.IsNullOrEmpty(ring.MouldSidCode) ? "N/A" : ring.MouldSidCode)}");
-            if (!string.IsNullOrWhiteSpace(ring.Status))
+            bool hasRingData = HasValue(ring.MasteringCode) || HasValue(ring.MasteringSidCode) || 
+                              HasValue(ring.Toolstamp) || HasValue(ring.MouldSidCode) || HasValue(ring.Status);
+            
+            if (hasRingData)
             {
-                Console.WriteLine($"  Status:               {ring.Status}");
+                Console.WriteLine($"\nRing {ring.Number}:");
+                if (HasValue(ring.MasteringCode)) Console.WriteLine($"  Mastering Code:       {ring.MasteringCode}");
+                if (HasValue(ring.MasteringSidCode)) Console.WriteLine($"  Mastering SID Code:   {ring.MasteringSidCode}");
+                if (HasValue(ring.Toolstamp)) Console.WriteLine($"  Toolstamp:            {ring.Toolstamp}");
+                if (HasValue(ring.MouldSidCode)) Console.WriteLine($"  Mould SID Code:       {ring.MouldSidCode}");
+                if (HasValue(ring.Status)) Console.WriteLine($"  Status:               {ring.Status}");
             }
         }
     }
 
+    // PRIMARY VOLUME DESCRIPTOR (PVD)
     if (disc.PvdEntries.Count > 0)
     {
         Console.WriteLine("\n" + new string('=', 70));
         Console.WriteLine($"PRIMARY VOLUME DESCRIPTOR (PVD) ({disc.PvdEntries.Count})".PadRight(70));
         Console.WriteLine(new string('=', 70));
-        if (!string.IsNullOrWhiteSpace(disc.PvdStatus))
+        if (HasValue(disc.PvdStatus))
         {
             Console.WriteLine($"Status: {disc.PvdStatus}\n");
         }
         foreach (var pvd in disc.PvdEntries)
         {
-            Console.WriteLine($"\n{pvd.Entry}:");
-            Console.WriteLine($"  Contents: {pvd.Contents}");
-            Console.WriteLine($"  Date:     {pvd.Date}");
-            Console.WriteLine($"  Time:     {pvd.Time}");
-            Console.WriteLine($"  GMT:      {pvd.Gmt}");
+            bool hasPvdData = HasValue(pvd.Contents) || HasValue(pvd.Date) || HasValue(pvd.Time) || HasValue(pvd.Gmt);
+            
+            if (hasPvdData)
+            {
+                Console.WriteLine($"\n{pvd.Entry}:");
+                if (HasValue(pvd.Contents)) Console.WriteLine($"  Contents: {pvd.Contents}");
+                if (HasValue(pvd.Date)) Console.WriteLine($"  Date:     {pvd.Date}");
+                if (HasValue(pvd.Time)) Console.WriteLine($"  Time:     {pvd.Time}");
+                if (HasValue(pvd.Gmt)) Console.WriteLine($"  GMT:      {pvd.Gmt}");
+            }
         }
     }
 
+    // LIBCRYPT PROTECTION
     if (disc.LibCryptSectors.Count > 0)
     {
         Console.WriteLine("\n" + new string('=', 70));
@@ -156,10 +189,10 @@ try
         foreach (var sector in disc.LibCryptSectors)
         {
             Console.WriteLine($"\nSector {sector.Sector}:");
-            Console.WriteLine($"  MSF:      {sector.Msf}");
-            Console.WriteLine($"  Contents: {sector.Contents}");
-            Console.WriteLine($"  XOR:      {sector.Xor}");
-            Console.WriteLine($"  Comments: {sector.Comments}");
+            if (HasValue(sector.Msf)) Console.WriteLine($"  MSF:      {sector.Msf}");
+            if (HasValue(sector.Contents)) Console.WriteLine($"  Contents: {sector.Contents}");
+            if (HasValue(sector.Xor)) Console.WriteLine($"  XOR:      {sector.Xor}");
+            if (HasValue(sector.Comments)) Console.WriteLine($"  Comments: {sector.Comments}");
         }
     }
 
