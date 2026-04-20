@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using HtmlAgilityPack;
 
 namespace RedumpLib;
@@ -40,6 +42,61 @@ public class Scraper
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
         return ParseDocument(doc);
+    }
+
+    /// <summary>
+    /// Search for a disc using Redump's quicksearch feature (by serial, hash, etc.)
+    /// </summary>
+    /// <param name="query">Search query (serial number, CRC32, MD5, SHA1, etc.)</param>
+    /// <returns>Parsed RedumpDisc object</returns>
+    public async Task<RedumpDisc> SearchRedumpByQuickSearchAsync(string query)
+    {
+        if (string.IsNullOrWhiteSpace(query))
+            throw new ArgumentException("Search query cannot be empty", nameof(query));
+
+        using (var handler = new HttpClientHandler { AllowAutoRedirect = false })
+        using (var client = new HttpClient(handler))
+        {
+            client.DefaultRequestHeaders.Add("User-Agent", _userAgent);
+
+            // Step 1: POST to /results/ with quicksearch parameter
+            var content = new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("quicksearch", query)
+            });
+
+            var response = await client.PostAsync("http://redump.org/results/", content);
+
+            // Follow redirects manually to get the final disc URL
+            string? finalUrl = null;
+
+            // Step 2: Follow first redirect to /discs/quicksearch/{query}/
+            if (response.StatusCode == System.Net.HttpStatusCode.Found || 
+                response.StatusCode == System.Net.HttpStatusCode.Moved)
+            {
+                var redirectUrl = response.Content.Headers.ContentLocation?.AbsoluteUri ?? 
+                                 response.Headers.Location?.AbsoluteUri;
+
+                if (!string.IsNullOrEmpty(redirectUrl))
+                {
+                    var response2 = await client.GetAsync(redirectUrl);
+
+                    // Step 3: Follow second redirect to /disc/{id}/
+                    if (response2.StatusCode == System.Net.HttpStatusCode.Found || 
+                        response2.StatusCode == System.Net.HttpStatusCode.Moved)
+                    {
+                        finalUrl = response2.Content.Headers.ContentLocation?.AbsoluteUri ?? 
+                                  response2.Headers.Location?.AbsoluteUri;
+                    }
+                }
+            }
+
+            if (string.IsNullOrEmpty(finalUrl))
+                throw new Exception($"Could not find disc matching search query: {query}");
+
+            // Step 4: Parse the final disc page
+            return ParseRedumpPage(finalUrl);
+        }
     }
 
     private RedumpDisc ParseDocument(HtmlDocument doc)

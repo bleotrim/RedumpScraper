@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using RedumpLib;
 
 // Helper method to check if a value should be displayed
@@ -11,25 +12,48 @@ Console.WriteLine("   • See README.md for ethical usage guidelines\n");
 if (args.Length == 0)
 {
     Console.WriteLine("Usage: RedumpApp <disc-id>");
-    Console.WriteLine("Example: RedumpApp 1041");
+    Console.WriteLine("       RedumpApp --serial <serial-number>");
+    Console.WriteLine("       RedumpApp --hash <hash-value>");
+    Console.WriteLine("\nExamples:");
+    Console.WriteLine("  RedumpApp 1041");
+    Console.WriteLine("  RedumpApp --serial SCES-01518");
+    Console.WriteLine("  RedumpApp --hash f45c579064568e96f6a01f16fc7b726f");
     return;
 }
 
-string discId = args[0];
-
-if (string.IsNullOrWhiteSpace(discId))
-{
-    Console.WriteLine("Error: Disc ID cannot be empty.");
-    return;
-}
-
-string url = $"http://redump.org/disc/{discId}/";
 var scraper = new Scraper();
+RedumpDisc disc;
 
 try
 {
-    Console.WriteLine($"[DEBUG] Connecting to: {url}");
-    RedumpDisc disc = scraper.ParseRedumpPage(url);
+    // Check if it's a search by serial or hash
+    if (args[0] == "--serial" || args[0] == "--hash")
+    {
+        if (args.Length < 2)
+        {
+            Console.WriteLine($"Error: {args[0]} requires a search value");
+            return;
+        }
+
+        string searchQuery = args[1];
+        Console.WriteLine($"[DEBUG] Searching for: {searchQuery}");
+        disc = await scraper.SearchRedumpByQuickSearchAsync(searchQuery);
+    }
+    else
+    {
+        // Direct disc ID lookup
+        string discId = args[0];
+
+        if (string.IsNullOrWhiteSpace(discId))
+        {
+            Console.WriteLine("Error: Disc ID cannot be empty.");
+            return;
+        }
+
+        string url = $"http://redump.org/disc/{discId}/";
+        Console.WriteLine($"[DEBUG] Connecting to: {url}");
+        disc = scraper.ParseRedumpPage(url);
+    }
 
     // BASIC INFORMATION
     if (HasValue(disc.Id) || HasValue(disc.Title) || HasValue(disc.System) || HasValue(disc.Media) || 

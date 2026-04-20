@@ -115,16 +115,30 @@ dotnet build RedumpScraper.slnx
 
 ### Console Application
 
-Run the application with a Redump disc ID:
+Run the application with a Redump disc ID, serial number, or hash:
 
 ```bash
+# Look up by disc ID
 dotnet run --project RedumpApp -- <disc-id>
+
+# Search by serial number
+dotnet run --project RedumpApp -- --serial <serial-number>
+
+# Search by hash (CRC32, MD5, SHA1)
+dotnet run --project RedumpApp -- --hash <hash-value>
 ```
 
-Example:
+Examples:
 
 ```bash
+# By disc ID
 dotnet run --project RedumpApp -- 27824
+
+# By serial number
+dotnet run --project RedumpApp -- --serial SCES-01518
+
+# By hash
+dotnet run --project RedumpApp -- --hash f45c579064568e96f6a01f16fc7b726f
 ```
 
 This will output comprehensive information about the disc formatted in sections:
@@ -146,6 +160,7 @@ Use `RedumpLib` in your own projects:
 
 ```csharp
 using RedumpLib;
+using System.Threading.Tasks;
 
 var scraper = new Scraper();
 
@@ -155,6 +170,10 @@ var disc = scraper.ParseRedumpPage("http://redump.org/disc/27824/");
 // Or parse from HTML string
 string htmlContent = File.ReadAllText("disc.html");
 var disc = scraper.ParseRedumpHtml(htmlContent);
+
+// Search by serial number, hash, or any search term
+var searchDisc = await scraper.SearchRedumpByQuickSearchAsync("SCES-01518");
+var hashDisc = await scraper.SearchRedumpByQuickSearchAsync("f45c579064568e96f6a01f16fc7b726f");
 
 // Access disc data
 Console.WriteLine($"Title: {disc.Title}");
