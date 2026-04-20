@@ -1,6 +1,10 @@
 .DS_Store
 RedumpApp/bin/
 RedumpApp/obj/
+RedumpDatabase/bin/
+RedumpDatabase/obj/
+RedumpDbLoader/bin/
+RedumpDbLoader/obj/
 RedumpLib/bin/
 RedumpLib/obj/
 RedumpLib.Tests/bin/

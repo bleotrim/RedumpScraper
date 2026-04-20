@@ -1,5 +1,7 @@
 <Solution>
   <Project Path="RedumpApp/RedumpApp.csproj" />
+  <Project Path="RedumpDatabase/RedumpDatabase.csproj" />
+  <Project Path="RedumpDbLoader/RedumpDbLoader.csproj" />
   <Project Path="RedumpLib.Tests/RedumpLib.Tests.csproj" />
   <Project Path="RedumpLib/RedumpLib.csproj" />
 </Solution>

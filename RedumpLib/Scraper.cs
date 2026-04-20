@@ -6,6 +6,16 @@ using HtmlAgilityPack;
 
 namespace RedumpLib;
 
+/// <summary>
+/// Scraper for parsing disc information from redump.org
+/// 
+/// IMPORTANT: Use this tool responsibly!
+/// - Scrape only discs you personally own and are archiving
+/// - Implement delays between requests to avoid overloading Redump's servers
+/// - Cache results locally to minimize repeated requests
+/// - Do NOT perform bulk/automated scraping of the entire database
+/// - See README.md for complete responsible usage guidelines
+/// </summary>
 public class Scraper
 {
     private readonly string _userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";

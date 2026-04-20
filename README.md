@@ -13,11 +13,57 @@ A .NET tool for scraping and parsing disc information from [redump.org](http://r
 - **LibCrypt Protection**: Parse LibCrypt protection sectors with detailed hex contents and XOR values
 - **Database Info**: Track when discs were added and last modified
 
+## ⚠️ Responsible Usage & Legal Disclaimer
+
+**This tool is provided for educational and personal archival purposes only.**
+
+### Important Considerations
+
+**Respect Redump's Infrastructure:**
+- Redump is a volunteer-driven project maintained by a small team
+- Do NOT use this tool for bulk/mass scraping of the entire Redump database
+- Implement appropriate delays between requests to avoid overloading their servers
+- Use this tool responsibly and sparingly
+
+**Best Practices:**
+- ✅ Scrape specific discs you personally own and are preserving
+- ✅ Cache results locally to minimize repeated requests to Redump
+- ✅ Use the MongoDB local storage feature to build your personal archive
+- ✅ Add reasonable delays between requests (use `Thread.Sleep()` if scripting multiple discs)
+- ❌ Do NOT perform automated bulk downloads of entire disc database
+- ❌ Do NOT republish Redump data without permission
+- ❌ Do NOT use this tool to create competing databases
+- ❌ Do NOT overload Redump's servers with rapid-fire requests
+
+### Legal Disclaimer
+
+- **No Warranty**: This tool is provided as-is without any warranty
+- **User Responsibility**: Users are solely responsible for ensuring their usage complies with:
+  - Redump's [Terms of Service](http://redump.org/)
+  - Applicable laws in their jurisdiction
+  - Respectful use of volunteer-maintained infrastructure
+- **Copyright**: Redump data is copyrighted by the Redump team. This tool is for personal/archival use only
+- **Not Endorsed**: This tool is not affiliated with, endorsed by, or associated with Redump
+- **Liability**: The author is not liable for any consequences resulting from misuse of this tool
+
+### Ethical Usage
+
+By using this tool, you agree to:
+1. Use it only for personal archival of discs you own
+2. Not perform bulk/automated scraping of the Redump database
+3. Respect Redump as a volunteer community resource
+4. Cache results locally rather than making repeated requests
+5. Comply with all applicable laws and Redump's terms of service
+
+**If you build a large local collection:** Host the data locally and don't make public mirrors. If you want to contribute your data back to Redump, please contact the Redump team directly.
+
+---
+
 ## Project Structure
 
 ```
 RedumpScraper/
-├── RedumpApp/              # Console application
+├── RedumpApp/              # Console application for disc lookup
 │   ├── Program.cs          # Main entry point with formatted output
 │   └── RedumpApp.csproj
 ├── RedumpLib/              # Core scraping library
@@ -28,6 +74,17 @@ RedumpScraper/
 │   ├── PvdRecord.cs        # PVD record model
 │   ├── LibCryptSector.cs   # LibCrypt sector data
 │   └── RedumpLib.csproj
+├── RedumpDatabase/         # MongoDB database library
+│   ├── Models/             # MongoDB document models
+│   │   └── DiscDocument.cs # Disc, Track, Ring, PVD, LibCrypt documents
+│   ├── Services/
+│   │   └── RedumpMongoDbService.cs # Database operations
+│   ├── Mappers/
+│   │   └── DiscMapper.cs   # RedumpDisc ↔ DiscDocument conversion
+│   └── RedumpDatabase.csproj
+├── RedumpDbLoader/         # Database population CLI tool
+│   ├── Program.cs          # Add discs, search, list by system/region
+│   └── RedumpDbLoader.csproj
 └── RedumpLib.Tests/        # Unit tests (69 tests total)
     ├── ID17031Fixture.cs           # Fixture for Sheep, Dog 'n' Wolf disc
     ├── ID17031ScraperTests.cs      # 36 tests for basic disc parsing
@@ -43,6 +100,8 @@ RedumpScraper/
 
 - **.NET 10.0** or later
 - **HtmlAgilityPack** (for HTML parsing)
+- **MongoDB.Driver** (for database operations)
+- **MongoDB 4.0+** (for local database - optional, only for RedumpDbLoader)
 
 ## Installation
 
@@ -108,6 +167,82 @@ foreach (var sector in disc.LibCryptSectors)
 {
     Console.WriteLine($"Sector {sector.Sector}: {sector.Msf}");
 }
+```
+
+### MongoDB Database Usage
+
+Store and query disc data in a local MongoDB database:
+
+```bash
+# Make sure MongoDB is running locally (mongodb://localhost:27017)
+
+# Add a disc to the database
+dotnet run --project RedumpDbLoader -- add 27824
+
+# Search discs by title
+dotnet run --project RedumpDbLoader -- search "Disney"
+
+# List all discs for a specific system
+dotnet run --project RedumpDbLoader -- system "Sony PlayStation"
+
+# List all discs for a specific region
+dotnet run --project RedumpDbLoader -- region "Europe"
+
+# List all discs with LibCrypt protection
+dotnet run --project RedumpDbLoader -- libcrypt
+
+# Advanced filter with multiple criteria
+dotnet run --project RedumpDbLoader -- filter title "Disney" system "Sony PlayStation"
+
+# Filter by region and LibCrypt
+dotnet run --project RedumpDbLoader -- filter region "Italy" libcrypt
+
+# Any combination of filters
+dotnet run --project RedumpDbLoader -- filter title "Crash" system "Sony PlayStation" region "USA"
+
+# Show database statistics
+dotnet run --project RedumpDbLoader -- stats
+```
+
+Use `RedumpDatabase` library in your projects:
+
+```csharp
+using RedumpDatabase.Services;
+using RedumpDatabase.Mappers;
+
+var dbService = new RedumpMongoDbService("mongodb://localhost:27017", "redump");
+
+// Get a disc by ID
+var disc = await dbService.GetDiscByIdAsync("27824");
+
+// Search discs by title
+var results = await dbService.SearchDiscsByTitleAsync("Tarzan");
+
+// Get discs by system
+var psDiscs = await dbService.GetDiscsBySystemAsync("Sony PlayStation");
+
+// Get discs with LibCrypt
+var libcryptDiscs = await dbService.GetDiscsWithLibCryptAsync();
+
+// Advanced filtering with multiple criteria
+var filteredDiscs = await dbService.GetDiscsByMultipleFiltersAsync(
+    title: "Disney",
+    system: "Sony PlayStation",
+    region: null,
+    hasLibCrypt: null
+);
+
+// Filter by system and LibCrypt
+var protectedDiscs = await dbService.GetDiscsByMultipleFiltersAsync(
+    system: "Sony PlayStation",
+    hasLibCrypt: true
+);
+
+// Add/update a disc
+var scraper = new Scraper();
+var redumpDisc = scraper.ParseRedumpPage("http://redump.org/disc/27824/");
+var document = DiscMapper.ToDocument(redumpDisc);
+await dbService.UpsertDiscAsync(document);
 ```
 
 ## Data Models
@@ -195,6 +330,25 @@ public record LibCryptSector(
     string Comments
 );
 ```
+
+### MongoDB Document Models
+
+MongoDB documents are automatically indexed for optimal query performance:
+
+**Indexes:**
+- `disc_id` (Unique) - Fast disc lookup by ID
+- `system` - Filter discs by system
+- `region` - Filter discs by region
+- `title` (Text) - Full-text search support
+
+**DiscDocument** - Main disc storage with all metadata, tracks, rings, PVD entries, and LibCrypt sectors embedded.
+
+All nested objects (tracks, rings, PVD entries, LibCrypt sectors) are stored as arrays within the main document for efficient querying and atomic operations.
+
+**Fields include:**
+- Timestamps: `created_at`, `updated_at` (automatic)
+- All RedumpDisc properties normalized to snake_case (e.g., `disc_id`, `anti_modchip`)
+- Nested arrays for tracks, rings, PVD entries, and LibCrypt sectors
 
 ## Testing
 

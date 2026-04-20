@@ -4,6 +4,10 @@ using RedumpLib;
 // Helper method to check if a value should be displayed
 static bool HasValue(string? value) => !string.IsNullOrWhiteSpace(value);
 
+Console.WriteLine("⚠️  Redump Disc Scraper - Responsible Use Reminder:");
+Console.WriteLine("   • Use only for discs you personally own");
+Console.WriteLine("   • See README.md for ethical usage guidelines\n");
+
 if (args.Length == 0)
 {
     Console.WriteLine("Usage: RedumpApp <disc-id>");
