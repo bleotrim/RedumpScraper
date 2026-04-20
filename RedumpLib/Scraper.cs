@@ -45,11 +45,12 @@ public class Scraper
     }
 
     /// <summary>
-    /// Search for a disc using Redump's quicksearch feature (by serial, hash, etc.)
+    /// Search for discs using Redump's quicksearch feature (by serial, hash, etc.)
+    /// Returns search results which may contain multiple discs
     /// </summary>
     /// <param name="query">Search query (serial number, CRC32, MD5, SHA1, etc.)</param>
-    /// <returns>Parsed RedumpDisc object</returns>
-    public async Task<RedumpDisc> SearchRedumpByQuickSearchAsync(string query)
+    /// <returns>SearchResultsContainer with list of matching discs</returns>
+    public async Task<SearchResultsContainer> SearchRedumpQuickSearchAsync(string query)
     {
         if (string.IsNullOrWhiteSpace(query))
             throw new ArgumentException("Search query cannot be empty", nameof(query));
@@ -67,37 +68,137 @@ public class Scraper
 
             var response = await client.PostAsync("http://redump.org/results/", content);
 
-            // Follow redirects manually to get the final disc URL
-            string? finalUrl = null;
+            // Step 2: Follow redirect to /discs/quicksearch/{query}/
+            if (response.StatusCode != System.Net.HttpStatusCode.Found && 
+                response.StatusCode != System.Net.HttpStatusCode.Moved)
+                throw new Exception($"Unexpected response from search: {response.StatusCode}");
 
-            // Step 2: Follow first redirect to /discs/quicksearch/{query}/
-            if (response.StatusCode == System.Net.HttpStatusCode.Found || 
-                response.StatusCode == System.Net.HttpStatusCode.Moved)
-            {
-                var redirectUrl = response.Content.Headers.ContentLocation?.AbsoluteUri ?? 
-                                 response.Headers.Location?.AbsoluteUri;
+            var redirectUrl = response.Content.Headers.ContentLocation?.AbsoluteUri ?? 
+                             response.Headers.Location?.AbsoluteUri;
 
-                if (!string.IsNullOrEmpty(redirectUrl))
-                {
-                    var response2 = await client.GetAsync(redirectUrl);
+            if (string.IsNullOrEmpty(redirectUrl))
+                throw new Exception("No redirect location found");
 
-                    // Step 3: Follow second redirect to /disc/{id}/
-                    if (response2.StatusCode == System.Net.HttpStatusCode.Found || 
-                        response2.StatusCode == System.Net.HttpStatusCode.Moved)
-                    {
-                        finalUrl = response2.Content.Headers.ContentLocation?.AbsoluteUri ?? 
-                                  response2.Headers.Location?.AbsoluteUri;
-                    }
-                }
-            }
+            // Step 3: Get the search results page
+            var resultsResponse = await client.GetAsync(redirectUrl);
+            if (resultsResponse.StatusCode != System.Net.HttpStatusCode.OK)
+                throw new Exception($"Could not retrieve search results: {resultsResponse.StatusCode}");
 
-            if (string.IsNullOrEmpty(finalUrl))
-                throw new Exception($"Could not find disc matching search query: {query}");
-
-            // Step 4: Parse the final disc page
-            return ParseRedumpPage(finalUrl);
+            var responseContent = await resultsResponse.Content.ReadAsStringAsync();
+            
+            // Step 4: Parse the results page
+            var results = ParseSearchResultsPage(responseContent, query);
+            
+            return results;
         }
     }
+
+    /// <summary>
+    /// Parse the search results HTML page and extract disc information
+    /// </summary>
+    private SearchResultsContainer ParseSearchResultsPage(string html, string query)
+    {
+        var doc = new HtmlDocument();
+        doc.LoadHtml(html);
+
+        var container = new SearchResultsContainer { SearchQuery = query };
+
+        // Find the results table
+        var table = doc.DocumentNode.SelectSingleNode("//table[@class='games']");
+        if (table == null)
+            return container; // No results table found
+
+        // Get all rows except the header (first tr with class 'th')
+        var rows = table.SelectNodes(".//tr[not(@class='th')]");
+        if (rows == null || rows.Count == 0)
+            return container; // No data rows
+
+        foreach (var row in rows)
+        {
+            var cols = row.SelectNodes("td");
+            if (cols == null || cols.Count < 7)
+                continue;
+
+            try
+            {
+                var result = new SearchResult
+                {
+                    Region = cols[0].InnerText.Trim(),
+                    System = cols[2].InnerText.Trim(),
+                    Version = cols[3].InnerText.Trim(),
+                    Edition = cols[4].InnerText.Trim(),
+                    Serial = cols[6].InnerText.Trim()
+                };
+
+                // Extract title and disc ID from the link in column 1
+                var titleLink = cols[1].SelectSingleNode(".//a");
+                if (titleLink != null)
+                {
+                    result.Title = titleLink.InnerText.Trim();
+                    var href = titleLink.GetAttributeValue("href", "");
+                    var discIdMatch = Regex.Match(href, @"/disc/(\d+)/");
+                    if (discIdMatch.Success)
+                    {
+                        result.DiscId = discIdMatch.Groups[1].Value;
+                    }
+                }
+
+                // Extract languages from images in column 5
+                var langImages = cols[5].SelectNodes(".//img");
+                if (langImages != null)
+                {
+                    foreach (var img in langImages)
+                    {
+                        var title = img.GetAttributeValue("title", "");
+                        if (!string.IsNullOrEmpty(title))
+                        {
+                            result.Languages.Add(title);
+                        }
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(result.DiscId))
+                {
+                    container.Results.Add(result);
+                }
+            }
+            catch
+            {
+                // Skip rows that can't be parsed
+                continue;
+            }
+        }
+
+        return container;
+    }
+
+    /// <summary>
+    /// Search for a disc using Redump's quicksearch feature (by serial, hash, etc.)
+    /// If single result is found, automatically parses and returns the disc
+    /// If multiple results are found, throws exception with results for user to choose
+    /// </summary>
+    /// <param name="query">Search query (serial number, CRC32, MD5, SHA1, etc.)</param>
+    /// <returns>Parsed RedumpDisc object (if single result)</returns>
+    public async Task<RedumpDisc> SearchRedumpByQuickSearchAsync(string query)
+    {
+        var searchResults = await SearchRedumpQuickSearchAsync(query);
+
+        if (searchResults.Results.Count == 0)
+            throw new Exception($"No discs found matching search query: {query}");
+
+        if (searchResults.Results.Count == 1)
+        {
+            // Auto-select single result
+            return ParseRedumpPage($"http://redump.org/disc/{searchResults.Results[0].DiscId}/");
+        }
+
+        // Multiple results - throw exception with formatted list
+        var resultsList = string.Join("\n", searchResults.Results.Select((r, i) => 
+            $"[{r.DiscId}] {r.Title} | {r.System} | {r.Region} | Version: {r.Version} | Edition: {r.Edition}"));
+        
+        throw new InvalidOperationException($"Multiple results found. Please specify disc ID:\n\n{resultsList}");
+    }
+
 
     private RedumpDisc ParseDocument(HtmlDocument doc)
     {

@@ -36,8 +36,20 @@ try
         }
 
         string searchQuery = args[1];
-        Console.WriteLine($"[DEBUG] Searching for: {searchQuery}");
-        disc = await scraper.SearchRedumpByQuickSearchAsync(searchQuery);
+        Console.WriteLine($"[DEBUG] Searching for: {searchQuery}\n");
+
+        try
+        {
+            disc = await scraper.SearchRedumpByQuickSearchAsync(searchQuery);
+        }
+        catch (InvalidOperationException ex)
+        {
+            // Multiple results found - display them and ask user to select
+            Console.WriteLine(ex.Message);
+            Console.WriteLine("\nUsage: RedumpApp <disc-id>");
+            Console.WriteLine("Example: RedumpApp 2869");
+            return;
+        }
     }
     else
     {

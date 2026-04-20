@@ -134,12 +134,26 @@ Examples:
 # By disc ID
 dotnet run --project RedumpApp -- 27824
 
-# By serial number
+# By serial number (single result auto-selects)
 dotnet run --project RedumpApp -- --serial SCES-01518
+
+# By serial with multiple results (shows list to choose from)
+dotnet run --project RedumpApp -- --serial SCES-00344
+# Output:
+# Multiple results found. Please specify disc ID:
+# [2869] Crash Bandicoot | PSX | Europe | Version: EDC | Edition: Platinum
+# [810] Crash Bandicoot | PSX | Europe, Australia | Version:  | Edition: Original, Platinum
+# Then run: RedumpApp 2869
 
 # By hash
 dotnet run --project RedumpApp -- --hash f45c579064568e96f6a01f16fc7b726f
 ```
+
+#### Search Behavior
+
+- **Single Result**: Automatically displays the disc information
+- **Multiple Results**: Shows a list of matching discs with key identifiers (ID, Title, System, Region, Version, Edition) and prompts you to select by disc ID
+- **No Results**: Displays an error message
 
 This will output comprehensive information about the disc formatted in sections:
 
@@ -172,10 +186,26 @@ string htmlContent = File.ReadAllText("disc.html");
 var disc = scraper.ParseRedumpHtml(htmlContent);
 
 // Search by serial number, hash, or any search term
-var searchDisc = await scraper.SearchRedumpByQuickSearchAsync("SCES-01518");
-var hashDisc = await scraper.SearchRedumpByQuickSearchAsync("f45c579064568e96f6a01f16fc7b726f");
+// Returns directly if single result found, throws InvalidOperationException if multiple
+try
+{
+    var searchDisc = await scraper.SearchRedumpByQuickSearchAsync("SCES-01518");
+}
+catch (InvalidOperationException ex)
+{
+    // Multiple results found - display list and let user choose
+    Console.WriteLine(ex.Message);
+}
 
-// Access disc data
+// Or use SearchRedumpQuickSearchAsync to get results container directly
+var results = await scraper.SearchRedumpQuickSearchAsync("SCES-01518");
+foreach (var result in results.Results)
+{
+    Console.WriteLine($"[{result.DiscId}] {result.Title} | {result.System} | {result.Region}");
+}
+
+// Once you have the disc, access its data
+var disc = scraper.ParseRedumpPage("http://redump.org/disc/27824/");
 Console.WriteLine($"Title: {disc.Title}");
 Console.WriteLine($"System: {disc.System}");
 foreach (var track in disc.Tracks)
