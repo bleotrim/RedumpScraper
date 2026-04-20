@@ -81,15 +81,50 @@ public class Scraper
 
             // Step 3: Get the search results page
             var resultsResponse = await client.GetAsync(redirectUrl);
+            
+            // Check if we got a redirect (single result case - redirects directly to disc page)
+            if (resultsResponse.StatusCode == System.Net.HttpStatusCode.Found || 
+                resultsResponse.StatusCode == System.Net.HttpStatusCode.Moved)
+            {
+                // Single result - follows redirect to disc page
+                var discUrl = resultsResponse.Content.Headers.ContentLocation?.AbsoluteUri ?? 
+                             resultsResponse.Headers.Location?.AbsoluteUri;
+                
+                if (string.IsNullOrEmpty(discUrl))
+                    throw new Exception("No redirect to disc page found");
+                
+                // Return single result in container
+                var results = new SearchResultsContainer { SearchQuery = query };
+                
+                // Parse the disc page to get the ID
+                var discResponse = await client.GetAsync(discUrl);
+                if (discResponse.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    var discHtml = await discResponse.Content.ReadAsStringAsync();
+                    var discIdMatch = Regex.Match(discUrl, @"/disc/(\d+)/");
+                    
+                    if (discIdMatch.Success)
+                    {
+                        results.Results.Add(new SearchResult
+                        {
+                            DiscId = discIdMatch.Groups[1].Value
+                            // Other fields will be populated when disc is fully parsed
+                        });
+                    }
+                }
+                
+                return results;
+            }
+            
             if (resultsResponse.StatusCode != System.Net.HttpStatusCode.OK)
                 throw new Exception($"Could not retrieve search results: {resultsResponse.StatusCode}");
 
             var responseContent = await resultsResponse.Content.ReadAsStringAsync();
             
             // Step 4: Parse the results page
-            var results = ParseSearchResultsPage(responseContent, query);
+            var results2 = ParseSearchResultsPage(responseContent, query);
             
-            return results;
+            return results2;
         }
     }
 
