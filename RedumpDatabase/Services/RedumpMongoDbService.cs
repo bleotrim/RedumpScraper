@@ -47,7 +47,12 @@ public class RedumpMongoDbService
                 Builders<DiscDocument>.IndexKeys.Text(d => d.Title)
             );
 
-            _discsCollection.Indexes.CreateMany(new[] { discIdIndexModel, systemIndexModel, regionIndexModel, titleIndexModel });
+            // Index on serial for search
+            var serialIndexModel = new CreateIndexModel<DiscDocument>(
+                Builders<DiscDocument>.IndexKeys.Ascending(d => d.Serial)
+            );
+
+            _discsCollection.Indexes.CreateMany(new[] { discIdIndexModel, systemIndexModel, regionIndexModel, titleIndexModel, serialIndexModel });
         }
         catch (Exception ex)
         {
@@ -121,6 +126,45 @@ public class RedumpMongoDbService
     }
 
     /// <summary>
+    /// Search discs by serial number
+    /// </summary>
+    public async Task<List<DiscDocument>> SearchBySerialAsync(string serial)
+    {
+        var filter = Builders<DiscDocument>.Filter.Regex(d => d.Serial, new MongoDB.Bson.BsonRegularExpression(serial, "i"));
+        return await _discsCollection.Find(filter).ToListAsync();
+    }
+
+    /// <summary>
+    /// Search discs by CRC32 hash in tracks
+    /// </summary>
+    public async Task<List<DiscDocument>> SearchByCrc32Async(string crc32)
+    {
+        var filter = Builders<DiscDocument>.Filter.ElemMatch(d => d.Tracks, 
+            Builders<TrackDocument>.Filter.Regex(t => t.Crc32, new MongoDB.Bson.BsonRegularExpression(crc32, "i")));
+        return await _discsCollection.Find(filter).ToListAsync();
+    }
+
+    /// <summary>
+    /// Search discs by MD5 hash in tracks
+    /// </summary>
+    public async Task<List<DiscDocument>> SearchByMd5Async(string md5)
+    {
+        var filter = Builders<DiscDocument>.Filter.ElemMatch(d => d.Tracks, 
+            Builders<TrackDocument>.Filter.Regex(t => t.Md5, new MongoDB.Bson.BsonRegularExpression(md5, "i")));
+        return await _discsCollection.Find(filter).ToListAsync();
+    }
+
+    /// <summary>
+    /// Search discs by SHA1 hash in tracks
+    /// </summary>
+    public async Task<List<DiscDocument>> SearchBySha1Async(string sha1)
+    {
+        var filter = Builders<DiscDocument>.Filter.ElemMatch(d => d.Tracks, 
+            Builders<TrackDocument>.Filter.Regex(t => t.Sha1, new MongoDB.Bson.BsonRegularExpression(sha1, "i")));
+        return await _discsCollection.Find(filter).ToListAsync();
+    }
+
+    /// <summary>
     /// Get all discs with LibCrypt protection
     /// </summary>
     public async Task<List<DiscDocument>> GetDiscsWithLibCryptAsync()
@@ -160,10 +204,14 @@ public class RedumpMongoDbService
     }
 
     /// <summary>
-    /// Get discs by multiple filters including title search
+    /// Get discs by multiple filters including title, serial, and hash searches
     /// </summary>
     public async Task<List<DiscDocument>> GetDiscsByMultipleFiltersAsync(
         string? title = null,
+        string? serial = null,
+        string? crc32 = null,
+        string? md5 = null,
+        string? sha1 = null,
         string? system = null, 
         string? region = null, 
         bool? hasLibCrypt = null)
@@ -172,6 +220,21 @@ public class RedumpMongoDbService
 
         if (!string.IsNullOrEmpty(title))
             filters.Add(Builders<DiscDocument>.Filter.Text(title));
+
+        if (!string.IsNullOrEmpty(serial))
+            filters.Add(Builders<DiscDocument>.Filter.Regex(d => d.Serial, new MongoDB.Bson.BsonRegularExpression(serial, "i")));
+
+        if (!string.IsNullOrEmpty(crc32))
+            filters.Add(Builders<DiscDocument>.Filter.ElemMatch(d => d.Tracks, 
+                Builders<TrackDocument>.Filter.Regex(t => t.Crc32, new MongoDB.Bson.BsonRegularExpression(crc32, "i"))));
+
+        if (!string.IsNullOrEmpty(md5))
+            filters.Add(Builders<DiscDocument>.Filter.ElemMatch(d => d.Tracks, 
+                Builders<TrackDocument>.Filter.Regex(t => t.Md5, new MongoDB.Bson.BsonRegularExpression(md5, "i"))));
+
+        if (!string.IsNullOrEmpty(sha1))
+            filters.Add(Builders<DiscDocument>.Filter.ElemMatch(d => d.Tracks, 
+                Builders<TrackDocument>.Filter.Regex(t => t.Sha1, new MongoDB.Bson.BsonRegularExpression(sha1, "i"))));
 
         if (!string.IsNullOrEmpty(system))
             filters.Add(Builders<DiscDocument>.Filter.Eq(d => d.System, system));

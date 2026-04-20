@@ -182,6 +182,18 @@ dotnet run --project RedumpDbLoader -- add 27824
 # Search discs by title
 dotnet run --project RedumpDbLoader -- search "Disney"
 
+# Search discs by serial number
+dotnet run --project RedumpDbLoader -- serial "SCES-01518"
+
+# Search discs by CRC32 hash
+dotnet run --project RedumpDbLoader -- crc32 "985c5153"
+
+# Search discs by MD5 hash
+dotnet run --project RedumpDbLoader -- md5 "d4f95f37c5e91494fbeaf83b2fad23c3"
+
+# Search discs by SHA1 hash
+dotnet run --project RedumpDbLoader -- sha1 "2e5d4c8f9e7c8b6a5d4c8b6a5d4c8b6a"
+
 # List all discs for a specific system
 dotnet run --project RedumpDbLoader -- system "Sony PlayStation"
 
@@ -194,8 +206,29 @@ dotnet run --project RedumpDbLoader -- libcrypt
 # Advanced filter with multiple criteria
 dotnet run --project RedumpDbLoader -- filter title "Disney" system "Sony PlayStation"
 
+# Filter by serial
+dotnet run --project RedumpDbLoader -- filter serial "SCES"
+
+# Filter by serial and system
+dotnet run --project RedumpDbLoader -- filter serial "SCES-01518" system "Sony PlayStation"
+
+# Filter by CRC32 hash
+dotnet run --project RedumpDbLoader -- filter crc32 "985c5153"
+
+# Filter by MD5 hash
+dotnet run --project RedumpDbLoader -- filter md5 "d4f95f37c5e91494fbeaf83b2fad23c3"
+
+# Filter by SHA1 hash
+dotnet run --project RedumpDbLoader -- filter sha1 "2e5d4c8f9e7c8b6a5d4c8b6a5d4c8b6a"
+
+# Filter by hash and system
+dotnet run --project RedumpDbLoader -- filter crc32 "985c" system "Sony PlayStation"
+
 # Filter by region and LibCrypt
 dotnet run --project RedumpDbLoader -- filter region "Italy" libcrypt
+
+# Filter by title and CRC32
+dotnet run --project RedumpDbLoader -- filter title "Crash" crc32 "985c"
 
 # Any combination of filters
 dotnet run --project RedumpDbLoader -- filter title "Crash" system "Sony PlayStation" region "USA"
@@ -218,6 +251,18 @@ var disc = await dbService.GetDiscByIdAsync("27824");
 // Search discs by title
 var results = await dbService.SearchDiscsByTitleAsync("Tarzan");
 
+// Search discs by serial number
+var serialResults = await dbService.SearchBySerialAsync("SCES-01518");
+
+// Search discs by CRC32 hash
+var crc32Results = await dbService.SearchByCrc32Async("985c5153");
+
+// Search discs by MD5 hash
+var md5Results = await dbService.SearchByMd5Async("d4f95f37c5e91494fbeaf83b2fad23c3");
+
+// Search discs by SHA1 hash
+var sha1Results = await dbService.SearchBySha1Async("2e5d4c8f9e7c8b6a5d4c8b6a5d4c8b6a");
+
 // Get discs by system
 var psDiscs = await dbService.GetDiscsBySystemAsync("Sony PlayStation");
 
@@ -227,9 +272,25 @@ var libcryptDiscs = await dbService.GetDiscsWithLibCryptAsync();
 // Advanced filtering with multiple criteria
 var filteredDiscs = await dbService.GetDiscsByMultipleFiltersAsync(
     title: "Disney",
+    serial: null,
+    crc32: null,
+    md5: null,
+    sha1: null,
     system: "Sony PlayStation",
     region: null,
     hasLibCrypt: null
+);
+
+// Filter by serial and system
+var serialSystemDiscs = await dbService.GetDiscsByMultipleFiltersAsync(
+    serial: "SCES",
+    system: "Sony PlayStation"
+);
+
+// Filter by hash and system
+var hashDiscs = await dbService.GetDiscsByMultipleFiltersAsync(
+    crc32: "985c5153",
+    system: "Sony PlayStation"
 );
 
 // Filter by system and LibCrypt
