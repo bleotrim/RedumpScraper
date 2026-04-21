@@ -457,6 +457,36 @@ public class Scraper
             disc.Comments = HtmlEntity.DeEntitize(Regex.Replace(cleanComments, @"<[^>]*>", "")).Trim();
         }
 
+        var headerTable = doc.DocumentNode.SelectSingleNode("//table[@class='header']");
+        if (headerTable != null)
+        {
+            var headerRows = headerTable.SelectNodes(".//tr[td]");
+            if (headerRows != null)
+            {
+                foreach (var row in headerRows)
+                {
+                    var cols = row.SelectNodes("td");
+                    if (cols?.Count >= 3)
+                    {
+                        // Decode HTML entities and normalize non-breaking spaces to regular spaces
+                        var firstCol = HtmlEntity.DeEntitize(cols[0].InnerText.Trim()).Replace("\u00A0", " ");
+                        if (firstCol == "Row" || string.IsNullOrEmpty(firstCol))
+                            continue;
+
+                        // Skip the "Total" row
+                        if (firstCol.Contains("Total"))
+                            continue;
+
+                        disc.HeaderEntries.Add(new HeaderEntry(
+                            firstCol,
+                            HtmlEntity.DeEntitize(cols[1].InnerText.Trim()).Replace("\u00A0", " "),
+                            HtmlEntity.DeEntitize(cols[2].InnerText.Trim()).Replace("\u00A0", " ")
+                        ));
+                    }
+                }
+            }
+        }
+
         return disc;
     }
 }
