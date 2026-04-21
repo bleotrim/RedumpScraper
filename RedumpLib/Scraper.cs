@@ -381,6 +381,42 @@ public class Scraper
             }
         }
 
+
+        // Parse Security sector ranges
+        var ssrTable = doc.DocumentNode.SelectSingleNode("//table[contains(@class,'ssranges')]");
+        if (ssrTable != null)
+        {
+            var ssrRows = ssrTable.SelectNodes(".//tr[td]");
+            if (ssrRows != null)
+            {
+                foreach (var row in ssrRows)
+                {
+                    var cols = row.SelectNodes("td");
+                    if (cols != null && cols.Count >= 3)
+                    {
+                        // Try to parse number, start, end
+                        if (int.TryParse(cols[0].InnerText.Trim(), out int number) &&
+                            int.TryParse(cols[1].InnerText.Trim(), out int start) &&
+                            int.TryParse(cols[2].InnerText.Trim(), out int end))
+                        {
+                            disc.SecuritySectorRanges.Add(new SecuritySectorRange(number, start, end));
+                        }
+                    }
+                }
+            }
+            // Check for a note row (e.g., XGD2 (Wave 2))
+            var noteRow = ssrTable.SelectSingleNode(".//tr[th or td][@colspan]");
+            if (noteRow != null)
+            {
+                var note = noteRow.InnerText.Trim();
+                if (!string.IsNullOrEmpty(note) && disc.SecuritySectorRanges.Count > 0)
+                {
+                    // Attach note to last range
+                    disc.SecuritySectorRanges[disc.SecuritySectorRanges.Count - 1].Note = note;
+                }
+            }
+        }
+
         var pvdTable = doc.DocumentNode.SelectSingleNode("//table[@class='pvd']");
         if (pvdTable != null)
         {

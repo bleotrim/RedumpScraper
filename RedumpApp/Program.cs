@@ -256,6 +256,20 @@ try
         }
     }
     
+    // SECURITY SECTOR RANGES
+    if (disc.SecuritySectorRanges.Count > 0)
+    {
+        Console.WriteLine("\n" + new string('=', 70));
+        Console.WriteLine($"SECURITY SECTOR RANGES ({disc.SecuritySectorRanges.Count})".PadRight(70));
+        Console.WriteLine(new string('=', 70));
+        foreach (var ssr in disc.SecuritySectorRanges)
+        {
+            Console.WriteLine($"Range {ssr.Number}: Start={ssr.Start}, End={ssr.End}");
+            if (!string.IsNullOrWhiteSpace(ssr.Note))
+                Console.WriteLine($"  Note: {ssr.Note}");
+        }
+    }
+
     Console.WriteLine("\n" + new string('=', 70));
 }
 catch (Exception ex)
