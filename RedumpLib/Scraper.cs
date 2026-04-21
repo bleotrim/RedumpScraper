@@ -463,6 +463,25 @@ public class Scraper
             var headerRows = headerTable.SelectNodes(".//tr[td]");
             if (headerRows != null)
             {
+                var h3Node = headerTable.SelectSingleNode(".//h3");
+            if (h3Node != null)
+            {
+                var images = h3Node.SelectNodes(".//img");
+                if (images != null && images.Count > 0)
+                {
+                    var statusParts = new List<string>();
+                    foreach (var img in images)
+                    {
+                        var alt = img.GetAttributeValue("alt", "");
+                        if (!string.IsNullOrEmpty(alt))
+                        {
+                            statusParts.Add(alt);
+                        }
+                    }
+                    disc.HeaderStatus = string.Join(" | ", statusParts);
+                }
+            }
+
                 foreach (var row in headerRows)
                 {
                     var cols = row.SelectNodes("td");

@@ -31,4 +31,5 @@ public class RedumpDisc
     public List<PvdRecord> PvdEntries { get; set; } = new();
     public List<LibCryptSector> LibCryptSectors { get; set; } = new();
     public List<HeaderEntry> HeaderEntries { get; set; } = new();
+    public string HeaderStatus { get; set; } = "";
 }
