@@ -27,13 +27,13 @@ public class Scraper
         var web = new HtmlWeb { UserAgent = _userAgent };
         var doc = web.Load(url);
         var disc = ParseDocument(doc);
-        
+
         var idMatch = Regex.Match(url, @"/disc/(\d+)/");
         if (idMatch.Success)
         {
             disc.Id = idMatch.Groups[1].Value;
         }
-        
+
         return disc;
     }
 
@@ -69,11 +69,11 @@ public class Scraper
             var response = await client.PostAsync("http://redump.org/results/", content);
 
             // Step 2: Follow redirect to /discs/quicksearch/{query}/
-            if (response.StatusCode != System.Net.HttpStatusCode.Found && 
+            if (response.StatusCode != System.Net.HttpStatusCode.Found &&
                 response.StatusCode != System.Net.HttpStatusCode.Moved)
                 throw new Exception($"Unexpected response from search: {response.StatusCode}");
 
-            var redirectUrl = response.Content.Headers.ContentLocation?.AbsoluteUri ?? 
+            var redirectUrl = response.Content.Headers.ContentLocation?.AbsoluteUri ??
                              response.Headers.Location?.AbsoluteUri;
 
             if (string.IsNullOrEmpty(redirectUrl))
@@ -81,28 +81,28 @@ public class Scraper
 
             // Step 3: Get the search results page
             var resultsResponse = await client.GetAsync(redirectUrl);
-            
+
             // Check if we got a redirect (single result case - redirects directly to disc page)
-            if (resultsResponse.StatusCode == System.Net.HttpStatusCode.Found || 
+            if (resultsResponse.StatusCode == System.Net.HttpStatusCode.Found ||
                 resultsResponse.StatusCode == System.Net.HttpStatusCode.Moved)
             {
                 // Single result - follows redirect to disc page
-                var discUrl = resultsResponse.Content.Headers.ContentLocation?.AbsoluteUri ?? 
+                var discUrl = resultsResponse.Content.Headers.ContentLocation?.AbsoluteUri ??
                              resultsResponse.Headers.Location?.AbsoluteUri;
-                
+
                 if (string.IsNullOrEmpty(discUrl))
                     throw new Exception("No redirect to disc page found");
-                
+
                 // Return single result in container
                 var results = new SearchResultsContainer { SearchQuery = query };
-                
+
                 // Parse the disc page to get the ID
                 var discResponse = await client.GetAsync(discUrl);
                 if (discResponse.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     var discHtml = await discResponse.Content.ReadAsStringAsync();
                     var discIdMatch = Regex.Match(discUrl, @"/disc/(\d+)/");
-                    
+
                     if (discIdMatch.Success)
                     {
                         results.Results.Add(new SearchResult
@@ -112,18 +112,18 @@ public class Scraper
                         });
                     }
                 }
-                
+
                 return results;
             }
-            
+
             if (resultsResponse.StatusCode != System.Net.HttpStatusCode.OK)
                 throw new Exception($"Could not retrieve search results: {resultsResponse.StatusCode}");
 
             var responseContent = await resultsResponse.Content.ReadAsStringAsync();
-            
+
             // Step 4: Parse the results page
             var results2 = ParseSearchResultsPage(responseContent, query);
-            
+
             return results2;
         }
     }
@@ -228,9 +228,9 @@ public class Scraper
         }
 
         // Multiple results - throw exception with formatted list
-        var resultsList = string.Join("\n", searchResults.Results.Select((r, i) => 
+        var resultsList = string.Join("\n", searchResults.Results.Select((r, i) =>
             $"[{r.DiscId}] {r.Title} | {r.System} | {r.Region} | Version: {r.Version} | Edition: {r.Edition}"));
-        
+
         throw new InvalidOperationException($"Multiple results found. Please specify disc ID:\n\n{resultsList}");
     }
 
@@ -283,7 +283,7 @@ public class Scraper
             if (h3Node != null)
             {
                 string h3Html = h3Node.InnerHtml;
-                
+
                 // Extract Track status (before " | Cuesheet")
                 string trackSection = h3Html.Contains(" | Cuesheet")
                     ? h3Html.Split(" | Cuesheet")[0]
@@ -292,7 +292,7 @@ public class Scraper
                 HtmlDocument tempDoc = new HtmlDocument();
                 tempDoc.LoadHtml($"<div>{trackSection}</div>");
                 var trackImages = tempDoc.DocumentNode.SelectNodes(".//img");
-                
+
                 if (trackImages != null && trackImages.Count > 0)
                 {
                     var statusParts = new List<string>();
@@ -306,7 +306,7 @@ public class Scraper
                     }
                     disc.TrackStatus = string.Join(" | ", statusParts);
                 }
-                
+
                 // Extract Cuesheet status (after " | Cuesheet")
                 if (h3Html.Contains(" | Cuesheet"))
                 {
@@ -314,7 +314,7 @@ public class Scraper
                     HtmlDocument cuesheetDoc = new HtmlDocument();
                     cuesheetDoc.LoadHtml($"<div>{cuesheetSection}</div>");
                     var cuesheetImages = cuesheetDoc.DocumentNode.SelectNodes(".//img");
-                    
+
                     if (cuesheetImages != null && cuesheetImages.Count > 0)
                     {
                         var statusParts = new List<string>();
@@ -439,7 +439,7 @@ public class Scraper
                         string contents = cols[2].InnerText.Trim();
                         string xor = cols[3].InnerText.Trim();
                         string comments = cols[4].InnerText.Trim();
-                        
+
                         // Skip the "Total" row
                         if (sector != "" && !sector.StartsWith("Total"))
                         {
@@ -464,23 +464,23 @@ public class Scraper
             if (headerRows != null)
             {
                 var h3Node = headerTable.SelectSingleNode(".//h3");
-            if (h3Node != null)
-            {
-                var images = h3Node.SelectNodes(".//img");
-                if (images != null && images.Count > 0)
+                if (h3Node != null)
                 {
-                    var statusParts = new List<string>();
-                    foreach (var img in images)
+                    var images = h3Node.SelectNodes(".//img");
+                    if (images != null && images.Count > 0)
                     {
-                        var alt = img.GetAttributeValue("alt", "");
-                        if (!string.IsNullOrEmpty(alt))
+                        var statusParts = new List<string>();
+                        foreach (var img in images)
                         {
-                            statusParts.Add(alt);
+                            var alt = img.GetAttributeValue("alt", "");
+                            if (!string.IsNullOrEmpty(alt))
+                            {
+                                statusParts.Add(alt);
+                            }
                         }
+                        disc.HeaderStatus = string.Join(" | ", statusParts);
                     }
-                    disc.HeaderStatus = string.Join(" | ", statusParts);
                 }
-            }
 
                 foreach (var row in headerRows)
                 {

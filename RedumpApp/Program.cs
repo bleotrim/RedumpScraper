@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using RedumpLib;
 
@@ -68,8 +69,8 @@ try
     }
 
     // BASIC INFORMATION
-    if (HasValue(disc.Id) || HasValue(disc.Title) || HasValue(disc.System) || HasValue(disc.Media) || 
-        HasValue(disc.Category) || HasValue(disc.Serial) || HasValue(disc.Region) || HasValue(disc.Edition) || 
+    if (HasValue(disc.Id) || HasValue(disc.Title) || HasValue(disc.System) || HasValue(disc.Media) ||
+        HasValue(disc.Category) || HasValue(disc.Serial) || HasValue(disc.Region) || HasValue(disc.Edition) ||
         HasValue(disc.Version))
     {
         Console.WriteLine("\n" + new string('=', 70));
@@ -99,8 +100,8 @@ try
     }
 
     // TECHNICAL DETAILS
-    if (HasValue(disc.ExeDate) || HasValue(disc.Edc) || HasValue(disc.AntiModchip) || 
-        HasValue(disc.LibCrypt) || HasValue(disc.ErrorsCount) || HasValue(disc.WriteOffset) || 
+    if (HasValue(disc.ExeDate) || HasValue(disc.Edc) || HasValue(disc.AntiModchip) ||
+        HasValue(disc.LibCrypt) || HasValue(disc.ErrorsCount) || HasValue(disc.WriteOffset) ||
         HasValue(disc.NumberOfTracks))
     {
         Console.WriteLine("\n" + new string('=', 70));
@@ -180,9 +181,9 @@ try
         Console.WriteLine(new string('=', 70));
         foreach (var ring in disc.Rings)
         {
-            bool hasRingData = HasValue(ring.MasteringCode) || HasValue(ring.MasteringSidCode) || 
+            bool hasRingData = HasValue(ring.MasteringCode) || HasValue(ring.MasteringSidCode) ||
                               HasValue(ring.Toolstamp) || HasValue(ring.MouldSidCode) || HasValue(ring.Status);
-            
+
             if (hasRingData)
             {
                 Console.WriteLine($"\nRing {ring.Number}:");
@@ -208,7 +209,7 @@ try
         foreach (var pvd in disc.PvdEntries)
         {
             bool hasPvdData = HasValue(pvd.Contents) || HasValue(pvd.Date) || HasValue(pvd.Time) || HasValue(pvd.Gmt);
-            
+
             if (hasPvdData)
             {
                 Console.WriteLine($"\n{pvd.Entry}:");
@@ -236,6 +237,25 @@ try
         }
     }
 
+    // HEADER ENTRIES
+    if (disc.HeaderEntries.Count > 0)
+    {        
+        Console.WriteLine("\n" + new string('=', 70));
+        Console.WriteLine($"HEADER ENTRIES ({disc.HeaderEntries.Count})".PadRight(70));
+        Console.WriteLine(new string('=', 70));
+                if (HasValue(disc.HeaderStatus))
+        {
+            Console.WriteLine($"Status: {disc.HeaderStatus}\n");
+        }
+        foreach (var entry in disc.HeaderEntries)
+        {
+            Console.WriteLine($"\n");
+            if (HasValue(entry.Row)) Console.WriteLine($"  Row:      {entry.Row}");
+            if (HasValue(entry.Contents)) Console.WriteLine($"  Contents: {entry.Contents}");
+            if (HasValue(entry.Ascii)) Console.WriteLine($"  ASCII:    {entry.Ascii}");
+        }
+    }
+    
     Console.WriteLine("\n" + new string('=', 70));
 }
 catch (Exception ex)
