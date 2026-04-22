@@ -404,15 +404,19 @@ public class Scraper
                     }
                 }
             }
-            // Check for a note row (e.g., XGD2 (Wave 2))
-            var noteRow = ssrTable.SelectSingleNode(".//tr[th or td][@colspan]");
+            // Check for a note row with a th element and colspan
+            var noteRow = ssrTable.SelectSingleNode(".//tr[th[@colspan='3']]");
             if (noteRow != null)
             {
-                var note = noteRow.InnerText.Trim();
-                if (!string.IsNullOrEmpty(note) && disc.SecuritySectorRanges.Count > 0)
+                var noteCell = noteRow.SelectSingleNode(".//th[@colspan='3']");
+                if (noteCell != null)
                 {
-                    // Attach note to last range
-                    disc.SecuritySectorRanges[disc.SecuritySectorRanges.Count - 1].Note = note;
+                    var note = noteCell.InnerText.Trim();
+                    if (!string.IsNullOrEmpty(note) && disc.SecuritySectorRanges.Count > 0)
+                    {
+                        // Attach note to last range
+                        disc.SecuritySectorRanges[disc.SecuritySectorRanges.Count - 1].Note = note;
+                    }
                 }
             }
         }
