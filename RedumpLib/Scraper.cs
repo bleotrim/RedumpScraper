@@ -546,6 +546,48 @@ public class Scraper
             }
         }
 
+        // Parse Metadata section
+        var metadataTables = doc.DocumentNode.SelectNodes("//table[@class='rings']");
+        if (metadataTables != null)
+        {
+            foreach (var table in metadataTables)
+            {
+                var h3Node = table.SelectSingleNode(".//h3");
+                if (h3Node != null && h3Node.InnerText.Trim() == "Metadata")
+                {
+                    // Find all rows that have data (tr with td, not th)
+                    var allRows = table.SelectNodes(".//tr");
+                    if (allRows != null && allRows.Count > 0)
+                    {
+                        // Skip header row(s) with th elements, find data row(s) with td
+                        foreach (var row in allRows)
+                        {
+                            var hasTh = row.SelectSingleNode(".//th") != null;
+                            var hasTd = row.SelectSingleNode(".//td") != null;
+                            
+                            // Skip header rows, only process data rows
+                            if (hasTh || !hasTd)
+                                continue;
+                            
+                            var cols = row.SelectNodes("td");
+                            if (cols?.Count >= 3)
+                            {
+                                string discKey = cols[0].InnerText.Trim();
+                                string discId = cols[1].InnerText.Trim();
+                                // For PIC, replace <br> tags with newlines and clean up
+                                string pic = Regex.Replace(cols[2].InnerHtml, @"<br\s*/?>", "\n", RegexOptions.IgnoreCase);
+                                pic = HtmlEntity.DeEntitize(Regex.Replace(pic, @"<[^>]*>", "")).Trim();
+                                
+                                disc.Metadata = new Metadata(discKey, discId, pic);
+                                break; // Found the data row, exit loop
+                            }
+                        }
+                    }
+                    break; // Found metadata, no need to continue
+                }
+            }
+        }
+
         return disc;
     }
 }

@@ -270,6 +270,23 @@ try
         }
     }
 
+    // METADATA
+    if (disc.Metadata != null)
+    {
+        Console.WriteLine("\n" + new string('=', 70));
+        Console.WriteLine("METADATA".PadRight(70));
+        Console.WriteLine(new string('=', 70));
+        if (HasValue(disc.Metadata.DiscKey))
+            Console.WriteLine($"Disc Key: {disc.Metadata.DiscKey}");
+        if (HasValue(disc.Metadata.DiscId))
+            Console.WriteLine($"Disc ID:  {disc.Metadata.DiscId}");
+        if (HasValue(disc.Metadata.Pic))
+        {
+            Console.WriteLine($"Permanent Information & Control (PIC):");
+            Console.WriteLine(disc.Metadata.Pic);
+        }
+    }
+
     Console.WriteLine("\n" + new string('=', 70));
 }
 catch (Exception ex)
