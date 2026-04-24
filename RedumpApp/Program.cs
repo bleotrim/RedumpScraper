@@ -100,13 +100,14 @@ try
     }
 
     // TECHNICAL DETAILS
-    if (HasValue(disc.ExeDate) || HasValue(disc.Edc) || HasValue(disc.AntiModchip) ||
+    if (HasValue(disc.BuildDate) || HasValue(disc.ExeDate) || HasValue(disc.Edc) || HasValue(disc.AntiModchip) ||
         HasValue(disc.LibCrypt) || HasValue(disc.ErrorsCount) || HasValue(disc.WriteOffset) ||
         HasValue(disc.NumberOfTracks))
     {
         Console.WriteLine("\n" + new string('=', 70));
         Console.WriteLine("TECHNICAL DETAILS".PadRight(70));
         Console.WriteLine(new string('=', 70));
+        if (HasValue(disc.BuildDate)) Console.WriteLine($"Build Date:      {disc.BuildDate}");
         if (HasValue(disc.ExeDate)) Console.WriteLine($"EXE Date:        {disc.ExeDate}");
         if (HasValue(disc.Edc)) Console.WriteLine($"EDC:             {disc.Edc}");
         if (HasValue(disc.AntiModchip)) Console.WriteLine($"Anti-modchip:    {disc.AntiModchip}");

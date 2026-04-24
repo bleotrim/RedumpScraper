@@ -261,6 +261,7 @@ public class Scraper
                     case "Languages":
                         disc.Languages = td.SelectNodes("img")?.Select(i => i.GetAttributeValue("title", "")).ToList() ?? new();
                         break;
+                    case "Build date": disc.BuildDate = val; break;
                     case "EXE date": disc.ExeDate = val; break;
                     case "Version": disc.Version = val; break;
                     case "Edition": disc.Edition = val; break;

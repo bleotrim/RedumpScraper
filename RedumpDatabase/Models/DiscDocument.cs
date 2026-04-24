@@ -30,6 +30,9 @@ public class DiscDocument
     [BsonElement("serial")]
     public string Serial { get; set; } = string.Empty;
 
+    [BsonElement("build_date")]
+    public string BuildDate { get; set; } = string.Empty;
+
     [BsonElement("region")]
     public string Region { get; set; } = string.Empty;
 
