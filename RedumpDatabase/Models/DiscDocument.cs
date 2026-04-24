@@ -96,11 +96,65 @@ public class DiscDocument
     [BsonElement("libcrypt_sectors")]
     public List<LibCryptSectorDocument> LibCryptSectors { get; set; } = new();
 
+    [BsonElement("header_entries")]
+    public List<HeaderEntryDocument> HeaderEntries { get; set; } = new();
+
+    [BsonElement("header_status")]
+    public string HeaderStatus { get; set; } = string.Empty;
+
+    [BsonElement("security_sector_ranges")]
+    public List<SecuritySectorRangeDocument> SecuritySectorRanges { get; set; } = new();
+
+    [BsonElement("metadata")]
+    public MetadataDocument? Metadata { get; set; }
+
     [BsonElement("created_at")]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     [BsonElement("updated_at")]
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+}
+
+[BsonIgnoreExtraElements]
+public class HeaderEntryDocument
+{
+    [BsonElement("row")]
+    public string Row { get; set; } = string.Empty;
+
+    [BsonElement("contents")]
+    public string Contents { get; set; } = string.Empty;
+
+    [BsonElement("ascii")]
+    public string Ascii { get; set; } = string.Empty;
+}
+
+[BsonIgnoreExtraElements]
+public class SecuritySectorRangeDocument
+{
+    [BsonElement("number")]
+    public int Number { get; set; }
+
+    [BsonElement("start")]
+    public int Start { get; set; }
+
+    [BsonElement("end")]
+    public int End { get; set; }
+
+    [BsonElement("note")]
+    public string? Note { get; set; }
+}
+
+[BsonIgnoreExtraElements]
+public class MetadataDocument
+{
+    [BsonElement("disc_key")]
+    public string DiscKey { get; set; } = string.Empty;
+
+    [BsonElement("disc_id")]
+    public string DiscId { get; set; } = string.Empty;
+
+    [BsonElement("pic")]
+    public string Pic { get; set; } = string.Empty;
 }
 
 [BsonIgnoreExtraElements]

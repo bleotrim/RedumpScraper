@@ -105,6 +105,26 @@ public static class DiscMapper
                 Xor = l.Xor ?? string.Empty,
                 Comments = l.Comments ?? string.Empty
             }).ToList(),
+            HeaderEntries = disc.HeaderEntries.Select(h => new HeaderEntryDocument
+            {
+                Row = h.Row ?? string.Empty,
+                Contents = h.Contents ?? string.Empty,
+                Ascii = h.Ascii ?? string.Empty
+            }).ToList(),
+            HeaderStatus = disc.HeaderStatus ?? string.Empty,
+            SecuritySectorRanges = disc.SecuritySectorRanges.Select(s => new SecuritySectorRangeDocument
+            {
+                Number = s.Number,
+                Start = s.Start,
+                End = s.End,
+                Note = s.Note
+            }).ToList(),
+            Metadata = disc.Metadata != null ? new MetadataDocument
+            {
+                DiscKey = disc.Metadata.DiscKey ?? string.Empty,
+                DiscId = disc.Metadata.DiscId ?? string.Empty,
+                Pic = disc.Metadata.Pic ?? string.Empty
+            } : null,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
@@ -149,7 +169,17 @@ public static class DiscMapper
             )).ToList(),
             LibCryptSectors = doc.LibCryptSectors.Select(l => new LibCryptSector(
                 l.Sector, l.Msf, l.Contents, l.Xor, l.Comments
-            )).ToList()
+            )).ToList(),
+            HeaderEntries = doc.HeaderEntries.Select(h => new HeaderEntry(
+                h.Row, h.Contents, h.Ascii
+            )).ToList(),
+            HeaderStatus = doc.HeaderStatus,
+            SecuritySectorRanges = doc.SecuritySectorRanges.Select(s => new SecuritySectorRange(
+                s.Number, s.Start, s.End, s.Note
+            )).ToList(),
+            Metadata = doc.Metadata != null ? new Metadata(
+                doc.Metadata.DiscKey, doc.Metadata.DiscId, doc.Metadata.Pic
+            ) : null
         };
     }
 }
