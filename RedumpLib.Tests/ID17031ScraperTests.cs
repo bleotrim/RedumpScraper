@@ -163,7 +163,8 @@ public void Barcode_ShouldBeCorrect() => Assert.Equal("3 546430 014486, 3 546430
 public void Comments_ShouldMatchExpectedText()
 {
     var expected = "French Title: Une faim de Loup\n\nItalian Title: Ralph il Lupo all'attacco\n\nSpanish Title: Looney Tunes: Perro & Lobo";
-    Assert.Equal(expected, _disc.Comments);
+    Assert.NotNull(_disc.GameComments);
+    Assert.Equal(expected, _disc.GameComments.Comments);
 }
 
 [Fact]

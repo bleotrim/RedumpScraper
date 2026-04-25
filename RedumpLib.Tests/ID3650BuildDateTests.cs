@@ -109,4 +109,101 @@ public class ID3650BuildDateTests : IClassFixture<ID3650Fixture>
     {
         Assert.Equal("+684", _disc.WriteOffset);
     }
+
+    [Fact]
+    public void GameComments_ShouldNotBeNull()
+    {
+        Assert.NotNull(_disc.GameComments);
+    }
+
+    [Fact]
+    public void GameComments_Metadata_ShouldNotBeEmpty()
+    {
+        Assert.NotNull(_disc.GameComments);
+        Assert.False(string.IsNullOrWhiteSpace(_disc.GameComments.Metadata));
+    }
+
+    [Fact]
+    public void GameComments_Metadata_ShouldContainCatalogNumber()
+    {
+        Assert.NotNull(_disc.GameComments);
+        Assert.Contains("CATALOG", _disc.GameComments.Metadata);
+    }
+
+    [Fact]
+    public void GameComments_Metadata_ShouldBeCatalogValue()
+    {
+        Assert.NotNull(_disc.GameComments);
+        Assert.Equal("CATALOG 0000000000000", _disc.GameComments.Metadata);
+    }
+
+    [Fact]
+    public void GameComments_Comments_ShouldNotBeEmpty()
+    {
+        Assert.NotNull(_disc.GameComments);
+        Assert.False(string.IsNullOrWhiteSpace(_disc.GameComments.Comments));
+    }
+
+    [Fact]
+    public void GameComments_Comments_ShouldContainInternalSerial()
+    {
+        Assert.NotNull(_disc.GameComments);
+        Assert.Contains("Internal Serial", _disc.GameComments.Comments);
+    }
+
+    [Fact]
+    public void GameComments_Comments_ShouldContainVolumeLabel()
+    {
+        Assert.NotNull(_disc.GameComments);
+        Assert.Contains("Volume Label", _disc.GameComments.Comments);
+    }
+
+    [Fact]
+    public void GameComments_Comments_ShouldContainT1232G()
+    {
+        Assert.NotNull(_disc.GameComments);
+        Assert.Contains("T-1232G", _disc.GameComments.Comments);
+    }
+
+    [Fact]
+    public void GameComments_Comments_ShouldContainCapcomGenerationVolume()
+    {
+        Assert.NotNull(_disc.GameComments);
+        Assert.Contains("CAPCOM_GENERATION_VOL1", _disc.GameComments.Comments);
+    }
+
+    [Fact]
+    public void GameComments_Contents_ShouldNotBeEmpty()
+    {
+        Assert.NotNull(_disc.GameComments);
+        Assert.False(string.IsNullOrWhiteSpace(_disc.GameComments.Contents));
+    }
+
+    [Fact]
+    public void GameComments_Contents_ShouldContainGames()
+    {
+        Assert.NotNull(_disc.GameComments);
+        Assert.Contains("Games", _disc.GameComments.Contents);
+    }
+
+    [Fact]
+    public void GameComments_Contents_ShouldContain1942()
+    {
+        Assert.NotNull(_disc.GameComments);
+        Assert.Contains("1942", _disc.GameComments.Contents);
+    }
+
+    [Fact]
+    public void GameComments_Contents_ShouldContain1943()
+    {
+        Assert.NotNull(_disc.GameComments);
+        Assert.Contains("1943", _disc.GameComments.Contents);
+    }
+
+    [Fact]
+    public void GameComments_Contents_ShouldContain1943Kai()
+    {
+        Assert.NotNull(_disc.GameComments);
+        Assert.Contains("1943 Kai", _disc.GameComments.Contents);
+    }
 }

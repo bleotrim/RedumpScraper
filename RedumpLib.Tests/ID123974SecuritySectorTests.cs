@@ -130,15 +130,23 @@ public class ID123974SecuritySectorTests : IClassFixture<ID123974Fixture>
     }
 
     [Fact]
-    public void Comments_ShouldContainXeMID()
+    public void GameComments_ShouldNotBeNull()
     {
-        Assert.Contains("XeMID", _disc.Comments);
+        Assert.NotNull(_disc.GameComments);
     }
 
     [Fact]
-    public void Comments_ShouldContainDMI()
+    public void GameComments_Comments_ShouldContainXeMID()
     {
-        Assert.Contains("DMI", _disc.Comments);
+        Assert.NotNull(_disc.GameComments);
+        Assert.Contains("XeMID", _disc.GameComments.Comments);
+    }
+
+    [Fact]
+    public void GameComments_Comments_ShouldContainDMI()
+    {
+        Assert.NotNull(_disc.GameComments);
+        Assert.Contains("DMI", _disc.GameComments.Comments);
     }
 
     [Fact]
