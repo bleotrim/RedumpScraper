@@ -23,7 +23,7 @@ public class RedumpDisc
     public string AddedDate { get; set; } = "";
     public string LastModifiedDate { get; set; } = "";
     public string Barcode { get; set; } = "";
-    public string Comments { get; set; } = "";
+    public GameComments? GameComments { get; set; }
     public string TrackStatus { get; set; } = "";
     public string CuesheetStatus { get; set; } = "";
     public string PvdStatus { get; set; } = "";

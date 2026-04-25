@@ -136,13 +136,35 @@ try
         Console.WriteLine(disc.Barcode);
     }
 
-    // COMMENTS
-    if (HasValue(disc.Comments))
+    // GAME COMMENTS
+    if (disc.GameComments != null)
     {
-        Console.WriteLine("\n" + new string('=', 70));
-        Console.WriteLine("COMMENTS".PadRight(70));
-        Console.WriteLine(new string('=', 70));
-        Console.WriteLine(disc.Comments);
+        // Metadata
+        if (HasValue(disc.GameComments.Metadata))
+        {
+            Console.WriteLine("\n" + new string('=', 70));
+            Console.WriteLine("METADATA".PadRight(70));
+            Console.WriteLine(new string('=', 70));
+            Console.WriteLine(disc.GameComments.Metadata);
+        }
+
+        // Comments
+        if (HasValue(disc.GameComments.Comments))
+        {
+            Console.WriteLine("\n" + new string('=', 70));
+            Console.WriteLine("COMMENTS".PadRight(70));
+            Console.WriteLine(new string('=', 70));
+            Console.WriteLine(disc.GameComments.Comments);
+        }
+
+        // Contents
+        if (HasValue(disc.GameComments.Contents))
+        {
+            Console.WriteLine("\n" + new string('=', 70));
+            Console.WriteLine("CONTENTS".PadRight(70));
+            Console.WriteLine(new string('=', 70));
+            Console.WriteLine(disc.GameComments.Contents);
+        }
     }
 
     // TRACKS

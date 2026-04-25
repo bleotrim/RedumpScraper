@@ -69,8 +69,8 @@ public class DiscDocument
     [BsonElement("barcode")]
     public string Barcode { get; set; } = string.Empty;
 
-    [BsonElement("comments")]
-    public string Comments { get; set; } = string.Empty;
+    [BsonElement("game_comments")]
+    public GameCommentsDocument? GameComments { get; set; }
 
     [BsonElement("track_status")]
     public string TrackStatus { get; set; } = string.Empty;
@@ -158,6 +158,19 @@ public class MetadataDocument
 
     [BsonElement("pic")]
     public string Pic { get; set; } = string.Empty;
+}
+
+[BsonIgnoreExtraElements]
+public class GameCommentsDocument
+{
+    [BsonElement("metadata")]
+    public string Metadata { get; set; } = string.Empty;
+
+    [BsonElement("comments")]
+    public string Comments { get; set; } = string.Empty;
+
+    [BsonElement("contents")]
+    public string Contents { get; set; } = string.Empty;
 }
 
 [BsonIgnoreExtraElements]

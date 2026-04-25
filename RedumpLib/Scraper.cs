@@ -491,11 +491,55 @@ public class Scraper
             }
         }
 
-        var commentsNode = doc.DocumentNode.SelectSingleNode("//th[text()='Comments']/../following-sibling::tr/td");
-        if (commentsNode != null)
+        // Parse gamecomments table for Metadata, Comments, and Contents
+        var gamecommentsTable = doc.DocumentNode.SelectSingleNode("//table[@class='gamecomments']");
+        if (gamecommentsTable != null)
         {
-            string cleanComments = Regex.Replace(commentsNode.InnerHtml, @"<br\s*/?>", Environment.NewLine, RegexOptions.IgnoreCase);
-            disc.Comments = HtmlEntity.DeEntitize(Regex.Replace(cleanComments, @"<[^>]*>", "")).Trim();
+            var gameComments = new GameComments();
+
+            // Extract Metadata
+            var metadataHeader = gamecommentsTable.SelectSingleNode(".//th[text()='Metadata']");
+            if (metadataHeader != null)
+            {
+                var metadataNode = metadataHeader.SelectSingleNode("./../following-sibling::tr/td");
+                if (metadataNode != null)
+                {
+                    gameComments.Metadata = HtmlEntity.DeEntitize(metadataNode.InnerText).Trim();
+                }
+            }
+
+            // Extract Comments
+            var commentsHeader = gamecommentsTable.SelectSingleNode(".//th[text()='Comments']");
+            if (commentsHeader != null)
+            {
+                var commentsNode = commentsHeader.SelectSingleNode("./../following-sibling::tr/td");
+                if (commentsNode != null)
+                {
+                    string cleanComments = Regex.Replace(commentsNode.InnerHtml, @"<br\s*/?>", Environment.NewLine, RegexOptions.IgnoreCase);
+                    gameComments.Comments = HtmlEntity.DeEntitize(Regex.Replace(cleanComments, @"<[^>]*>", "")).Trim();
+                }
+            }
+
+            // Extract Contents
+            var contentsHeader = gamecommentsTable.SelectSingleNode(".//th[text()='Contents']");
+            if (contentsHeader != null)
+            {
+                var contentsNode = contentsHeader.SelectSingleNode("./../following-sibling::tr/td");
+                if (contentsNode != null)
+                {
+                    string cleanContents = Regex.Replace(contentsNode.InnerHtml, @"<br\s*/?>", Environment.NewLine, RegexOptions.IgnoreCase);
+                    string strippedContents = Regex.Replace(cleanContents, @"<div[^>]*>", "").Replace("</div>", "").Replace("[+]", "");
+                    gameComments.Contents = HtmlEntity.DeEntitize(Regex.Replace(strippedContents, @"<[^>]*>", "")).Trim();
+                }
+            }
+
+            // Only set GameComments if at least one field has a value
+            if (!string.IsNullOrWhiteSpace(gameComments.Metadata) || 
+                !string.IsNullOrWhiteSpace(gameComments.Comments) || 
+                !string.IsNullOrWhiteSpace(gameComments.Contents))
+            {
+                disc.GameComments = gameComments;
+            }
         }
 
         var headerTable = doc.DocumentNode.SelectSingleNode("//table[@class='header']");

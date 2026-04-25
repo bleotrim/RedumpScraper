@@ -66,7 +66,12 @@ public static class DiscMapper
             NumberOfTracks = disc.NumberOfTracks ?? string.Empty,
             WriteOffset = disc.WriteOffset ?? string.Empty,
             Barcode = disc.Barcode ?? string.Empty,
-            Comments = disc.Comments ?? string.Empty,
+            GameComments = disc.GameComments != null ? new GameCommentsDocument
+            {
+                Metadata = disc.GameComments.Metadata ?? string.Empty,
+                Comments = disc.GameComments.Comments ?? string.Empty,
+                Contents = disc.GameComments.Contents ?? string.Empty
+            } : null,
             TrackStatus = disc.TrackStatus ?? string.Empty,
             CuesheetStatus = disc.CuesheetStatus ?? string.Empty,
             PvdStatus = disc.PvdStatus ?? string.Empty,
@@ -154,7 +159,11 @@ public static class DiscMapper
             NumberOfTracks = doc.NumberOfTracks,
             WriteOffset = doc.WriteOffset,
             Barcode = doc.Barcode,
-            Comments = doc.Comments,
+            GameComments = doc.GameComments != null ? new RedumpLib.GameComments(
+                doc.GameComments.Metadata,
+                doc.GameComments.Comments,
+                doc.GameComments.Contents
+            ) : null,
             TrackStatus = doc.TrackStatus,
             CuesheetStatus = doc.CuesheetStatus,
             PvdStatus = doc.PvdStatus,
