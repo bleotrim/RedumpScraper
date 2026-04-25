@@ -59,43 +59,6 @@ By using this tool, you agree to:
 
 ---
 
-## Project Structure
-
-```
-RedumpScraper/
-├── RedumpApp/              # Console application for disc lookup
-│   ├── Program.cs          # Main entry point with formatted output
-│   └── RedumpApp.csproj
-├── RedumpLib/              # Core scraping library
-│   ├── Scraper.cs          # HTML parsing logic
-│   ├── RedumpDisc.cs       # Main disc data model
-│   ├── DiscTrack.cs        # Track information
-│   ├── DiscRing.cs         # Ring information
-│   ├── PvdRecord.cs        # PVD record model
-│   ├── LibCryptSector.cs   # LibCrypt sector data
-│   └── RedumpLib.csproj
-├── RedumpDatabase/         # MongoDB database library
-│   ├── Models/             # MongoDB document models
-│   │   └── DiscDocument.cs # Disc, Track, Ring, PVD, LibCrypt documents
-│   ├── Services/
-│   │   └── RedumpMongoDbService.cs # Database operations
-│   ├── Mappers/
-│   │   └── DiscMapper.cs   # RedumpDisc ↔ DiscDocument conversion
-│   └── RedumpDatabase.csproj
-├── RedumpDbLoader/         # Database population CLI tool
-│   ├── Program.cs          # Add discs, search, list by system/region
-│   └── RedumpDbLoader.csproj
-└── RedumpLib.Tests/        # Unit tests (69 tests total)
-    ├── ID17031Fixture.cs           # Fixture for Sheep, Dog 'n' Wolf disc
-    ├── ID17031ScraperTests.cs      # 36 tests for basic disc parsing
-    ├── ID27824Fixture.cs           # Fixture for Disney Tarzan disc
-    ├── ID27824LibCryptTests.cs     # 33 tests for LibCrypt validation
-    ├── TestData/                   # Sample HTML files for testing
-    │   ├── ID_17031.html           # Sheep, Dog 'n' Wolf (no LibCrypt)
-    │   └── ID_27824.html           # Disney Tarzan (32 LibCrypt sectors)
-    └── RedumpLib.Tests.csproj
-```
-
 ## Requirements
 
 - **.NET 10.0** or later
