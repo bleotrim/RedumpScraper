@@ -70,12 +70,12 @@ public static class DiscMapper
                 AntiModchip = disc.GameInfo.AntiModchip ?? string.Empty,
                 LibCrypt = disc.GameInfo.LibCrypt ?? string.Empty
             } : null,
-            Barcode = disc.Barcode ?? string.Empty,
             GameComments = disc.GameComments != null ? new GameCommentsDocument
             {
                 Metadata = disc.GameComments.Metadata ?? string.Empty,
                 Comments = disc.GameComments.Comments ?? string.Empty,
-                Contents = disc.GameComments.Contents ?? string.Empty
+                Contents = disc.GameComments.Contents ?? string.Empty,
+                Barcode = disc.GameComments.Barcode ?? string.Empty
             } : null,
             TrackStatus = disc.TrackStatus ?? string.Empty,
             CuesheetStatus = disc.CuesheetStatus ?? string.Empty,
@@ -165,11 +165,11 @@ public static class DiscMapper
                 doc.GameInfo.AntiModchip,
                 doc.GameInfo.LibCrypt
             ) : null,
-            Barcode = doc.Barcode,
             GameComments = doc.GameComments != null ? new RedumpLib.GameComments(
                 doc.GameComments.Metadata,
                 doc.GameComments.Comments,
-                doc.GameComments.Contents
+                doc.GameComments.Contents,
+                doc.GameComments.Barcode
             ) : null,
             TrackStatus = doc.TrackStatus,
             CuesheetStatus = doc.CuesheetStatus,

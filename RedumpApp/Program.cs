@@ -77,76 +77,67 @@ try
         Console.WriteLine("\n" + new string('=', 70));
         Console.WriteLine("GAME INFO".PadRight(70));
         Console.WriteLine(new string('=', 70));
-        if (HasValue(disc.Id)) Console.WriteLine($"ID:            {disc.Id}");
-        if (HasValue(disc.Title)) Console.WriteLine($"Title:         {disc.Title}");
+        if (HasValue(disc.Id)) Console.WriteLine($"ID:               {disc.Id}");
+        if (HasValue(disc.Title)) Console.WriteLine($"Title:            {disc.Title}");
         if (disc.GameInfo != null)
         {
-            if (HasValue(disc.GameInfo.System)) Console.WriteLine($"System:        {disc.GameInfo.System}");
-            if (HasValue(disc.GameInfo.Media)) Console.WriteLine($"Media:         {disc.GameInfo.Media}");
-            if (HasValue(disc.GameInfo.Category)) Console.WriteLine($"Category:      {disc.GameInfo.Category}");
-            if (HasValue(disc.GameInfo.Serial)) Console.WriteLine($"Serial:        {disc.GameInfo.Serial}");
-            if (HasValue(disc.GameInfo.Region)) Console.WriteLine($"Region:        {disc.GameInfo.Region}");
-            if (HasValue(disc.GameInfo.Edition)) Console.WriteLine($"Edition:       {disc.GameInfo.Edition}");
-            if (HasValue(disc.GameInfo.Version)) Console.WriteLine($"Version:       {disc.GameInfo.Version}");
+            if (HasValue(disc.GameInfo.System)) Console.WriteLine($"System:           {disc.GameInfo.System}");
+            if (HasValue(disc.GameInfo.Media)) Console.WriteLine($"Media:            {disc.GameInfo.Media}");
+            if (HasValue(disc.GameInfo.Category)) Console.WriteLine($"Category:         {disc.GameInfo.Category}");
+            if (HasValue(disc.GameInfo.Serial)) Console.WriteLine($"Serial:           {disc.GameInfo.Serial}");
+            if (HasValue(disc.GameInfo.Region)) Console.WriteLine($"Region:           {disc.GameInfo.Region}");
+            if (HasValue(disc.GameInfo.Edition)) Console.WriteLine($"Edition:          {disc.GameInfo.Edition}");
+            if (HasValue(disc.GameInfo.Version)) Console.WriteLine($"Version:          {disc.GameInfo.Version}");
             if (disc.GameInfo != null && disc.GameInfo.Languages.Count > 0)
             {
-                Console.WriteLine("Languages:");
-                foreach (var lang in disc.GameInfo.Languages)
+                if (disc.GameInfo.Languages.Count > 1)
                 {
-                    Console.WriteLine($"               • {lang}");
+                    Console.WriteLine("Languages:");
+                    foreach (var lang in disc.GameInfo.Languages)
+                    {
+                        Console.WriteLine($"                  • {lang}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Language:         {disc.GameInfo.Languages[0]}");
                 }
             }
             if (HasValue(disc.GameInfo.BuildDate)) Console.WriteLine($"Build Date:     {disc.GameInfo.BuildDate}");
-            if (HasValue(disc.GameInfo.ExeDate)) Console.WriteLine($"EXE Date:      {disc.GameInfo.ExeDate}");
-            if (HasValue(disc.GameInfo.Edc)) Console.WriteLine($"EDC:     {disc.GameInfo.Edc}");
+            if (HasValue(disc.GameInfo.ExeDate)) Console.WriteLine($"EXE Date:         {disc.GameInfo.ExeDate}");
+            if (HasValue(disc.GameInfo.Edc)) Console.WriteLine($"EDC:              {disc.GameInfo.Edc}");
             if (HasValue(disc.GameInfo.AntiModchip)) Console.WriteLine($"Anti-modchip:     {disc.GameInfo.AntiModchip}");
-            if (HasValue(disc.GameInfo.LibCrypt)) Console.WriteLine($"LibCrypt:     {disc.GameInfo.LibCrypt}");
+            if (HasValue(disc.GameInfo.LibCrypt)) Console.WriteLine($"LibCrypt:         {disc.GameInfo.LibCrypt}");
             if (HasValue(disc.GameInfo.ErrorsCount)) Console.WriteLine($"Errors Count:     {disc.GameInfo.ErrorsCount}");
             if (HasValue(disc.GameInfo.WriteOffset)) Console.WriteLine($"Write Offset:     {disc.GameInfo.WriteOffset}");
-            if (HasValue(disc.GameInfo.NumberOfTracks)) Console.WriteLine($"Number of Tracks:       {disc.GameInfo.NumberOfTracks}");
-            if (HasValue(disc.GameInfo.AddedDate)) Console.WriteLine($"Added:         {disc.GameInfo.AddedDate}");
-            if (HasValue(disc.GameInfo.LastModifiedDate)) Console.WriteLine($"Last Modified: {disc.GameInfo.LastModifiedDate}");
+            if (HasValue(disc.GameInfo.NumberOfTracks)) Console.WriteLine($"Number of Tracks: {disc.GameInfo.NumberOfTracks}");
+            if (HasValue(disc.GameInfo.AddedDate)) Console.WriteLine($"Added:            {disc.GameInfo.AddedDate}");
+            if (HasValue(disc.GameInfo.LastModifiedDate)) Console.WriteLine($"Last Modified:    {disc.GameInfo.LastModifiedDate}");
         }
-    }
-
-    // BARCODE
-    if (HasValue(disc.Barcode))
-    {
-        Console.WriteLine("\n" + new string('=', 70));
-        Console.WriteLine("BARCODE".PadRight(70));
-        Console.WriteLine(new string('=', 70));
-        Console.WriteLine(disc.Barcode);
     }
 
     // GAME COMMENTS
-    if (disc.GameComments != null)
+    if (disc.GameComments != null &&
+        (HasValue(disc.GameComments.Metadata) ||
+         HasValue(disc.GameComments.Comments) ||
+         HasValue(disc.GameComments.Contents) ||
+         HasValue(disc.GameComments.Barcode)))
     {
+        Console.WriteLine("\n" + new string('=', 70));
+        Console.WriteLine("GAME COMMENTS".PadRight(70));
+        Console.WriteLine(new string('=', 70));
+
         // Metadata
-        if (HasValue(disc.GameComments.Metadata))
-        {
-            Console.WriteLine("\n" + new string('=', 70));
-            Console.WriteLine("METADATA".PadRight(70));
-            Console.WriteLine(new string('=', 70));
-            Console.WriteLine(disc.GameComments.Metadata);
-        }
+        if (HasValue(disc.GameComments.Metadata)) Console.WriteLine($"Metadata: {disc.GameComments.Metadata}\n");
 
         // Comments
-        if (HasValue(disc.GameComments.Comments))
-        {
-            Console.WriteLine("\n" + new string('=', 70));
-            Console.WriteLine("COMMENTS".PadRight(70));
-            Console.WriteLine(new string('=', 70));
-            Console.WriteLine(disc.GameComments.Comments);
-        }
+        if (HasValue(disc.GameComments.Comments)) Console.WriteLine($"Comments: {disc.GameComments.Comments}\n");
 
         // Contents
-        if (HasValue(disc.GameComments.Contents))
-        {
-            Console.WriteLine("\n" + new string('=', 70));
-            Console.WriteLine("CONTENTS".PadRight(70));
-            Console.WriteLine(new string('=', 70));
-            Console.WriteLine(disc.GameComments.Contents);
-        }
+        if (HasValue(disc.GameComments.Contents)) Console.WriteLine($"Contents: {disc.GameComments.Contents}\n");
+
+        // Barcode (if not already displayed in its own section)
+        if (HasValue(disc.GameComments.Barcode)) Console.WriteLine($"Barcode: {disc.GameComments.Barcode}\n");
     }
 
     // TRACKS

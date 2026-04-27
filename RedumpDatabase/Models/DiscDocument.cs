@@ -21,9 +21,6 @@ public class DiscDocument
     [BsonElement("game_info")]
     public GameInfoDocument? GameInfo { get; set; }
 
-    [BsonElement("barcode")]
-    public string Barcode { get; set; } = string.Empty;
-
     [BsonElement("game_comments")]
     public GameCommentsDocument? GameComments { get; set; }
 
@@ -120,6 +117,9 @@ public class GameCommentsDocument
 
     [BsonElement("contents")]
     public string Contents { get; set; } = string.Empty;
+
+    [BsonElement("barcode")]
+    public string Barcode { get; set; } = string.Empty;
 }
 
 [BsonIgnoreExtraElements]

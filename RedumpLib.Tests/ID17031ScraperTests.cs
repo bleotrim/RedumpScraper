@@ -173,7 +173,7 @@ public void LastModifiedDate_ShouldBeCorrect()
     Assert.Equal("2019-07-05 19:14", _disc.GameInfo.LastModifiedDate);
 }
 [Fact] 
-public void Barcode_ShouldBeCorrect() => Assert.Equal("3 546430 014486, 3 546430 014493", _disc.Barcode);
+public void Barcode_ShouldBeCorrect() => Assert.Equal("3 546430 014486, 3 546430 014493", _disc.GameComments.Barcode);
 [Fact]
 public void Comments_ShouldMatchExpectedText()
 {

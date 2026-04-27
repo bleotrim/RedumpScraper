@@ -465,9 +465,6 @@ public class Scraper
             }
         }
 
-        var barcodeNode = doc.DocumentNode.SelectSingleNode("//th[text()='Barcode']/../following-sibling::tr/td");
-        if (barcodeNode != null) disc.Barcode = barcodeNode.InnerText.Trim();
-
         var libcryptTable = doc.DocumentNode.SelectSingleNode("//table[@class='libcrypt']");
         if (libcryptTable != null)
         {
@@ -537,10 +534,15 @@ public class Scraper
                 }
             }
 
+            // Extract Barcode
+            var barcodeNode = doc.DocumentNode.SelectSingleNode("//th[text()='Barcode']/../following-sibling::tr/td");
+            if (barcodeNode != null) gameComments.Barcode = barcodeNode.InnerText.Trim();
+
             // Only set GameComments if at least one field has a value
             if (!string.IsNullOrWhiteSpace(gameComments.Metadata) || 
                 !string.IsNullOrWhiteSpace(gameComments.Comments) || 
-                !string.IsNullOrWhiteSpace(gameComments.Contents))
+                !string.IsNullOrWhiteSpace(gameComments.Contents) ||
+                !string.IsNullOrWhiteSpace(gameComments.Barcode))
             {
                 disc.GameComments = gameComments;
             }

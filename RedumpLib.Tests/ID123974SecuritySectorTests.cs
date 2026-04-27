@@ -132,7 +132,7 @@ public class ID123974SecuritySectorTests : IClassFixture<ID123974Fixture>
     [Fact]
     public void Barcode_ShouldBeCorrect()
     {
-        Assert.Equal("4 988648 539471", _disc.Barcode);
+        Assert.Equal("4 988648 539471", _disc.GameComments.Barcode);
     }
 
     [Fact]

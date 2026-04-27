@@ -14,12 +14,16 @@ public class GameComments
     /// <summary>Contents listing (games, files, etc.)</summary>
     public string Contents { get; set; } = "";
 
+    /// <summary>Barcode information, if available</summary>
+    public string Barcode { get; set; } = "";
+
     public GameComments() { }
 
-    public GameComments(string metadata, string comments, string contents)
+    public GameComments(string metadata, string comments, string contents, string barcode)
     {
         Metadata = metadata;
         Comments = comments;
         Contents = contents;
+        Barcode = barcode;
     }
 }
