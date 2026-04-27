@@ -4,10 +4,6 @@ public class RedumpDisc
 {
     public string Id { get; set; } = "";
     public string Title { get; set; } = "";
-    public string ExeDate { get; set; } = "";
-    public string Edc { get; set; } = "";
-    public string AntiModchip { get; set; } = "";
-    public string LibCrypt { get; set; } = "";
     public GameInfo? GameInfo { get; set; }
     public string Barcode { get; set; } = "";
     public GameComments? GameComments { get; set; }

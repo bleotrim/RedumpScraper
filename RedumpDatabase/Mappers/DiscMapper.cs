@@ -64,12 +64,12 @@ public static class DiscMapper
                 NumberOfTracks = disc.GameInfo.NumberOfTracks ?? string.Empty,
                 WriteOffset = disc.GameInfo.WriteOffset ?? string.Empty,
                 AddedDate = disc.GameInfo.AddedDate ?? string.Empty,
-                LastModifiedDate = disc.GameInfo.LastModifiedDate ?? string.Empty
+                LastModifiedDate = disc.GameInfo.LastModifiedDate ?? string.Empty,
+                ExeDate = disc.GameInfo.ExeDate ?? string.Empty,
+                Edc = disc.GameInfo.Edc ?? string.Empty,
+                AntiModchip = disc.GameInfo.AntiModchip ?? string.Empty,
+                LibCrypt = disc.GameInfo.LibCrypt ?? string.Empty
             } : null,
-            ExeDate = disc.ExeDate ?? string.Empty,
-            Edc = disc.Edc ?? string.Empty,
-            AntiModchip = disc.AntiModchip ?? string.Empty,
-            LibCrypt = disc.LibCrypt ?? string.Empty,
             Barcode = disc.Barcode ?? string.Empty,
             GameComments = disc.GameComments != null ? new GameCommentsDocument
             {
@@ -159,12 +159,12 @@ public static class DiscMapper
                 doc.GameInfo.NumberOfTracks,
                 doc.GameInfo.WriteOffset,
                 doc.GameInfo.AddedDate,
-                doc.GameInfo.LastModifiedDate
+                doc.GameInfo.LastModifiedDate,
+                doc.GameInfo.ExeDate,
+                doc.GameInfo.Edc,
+                doc.GameInfo.AntiModchip,
+                doc.GameInfo.LibCrypt
             ) : null,
-            ExeDate = doc.ExeDate,
-            Edc = doc.Edc,
-            AntiModchip = doc.AntiModchip,
-            LibCrypt = doc.LibCrypt,
             Barcode = doc.Barcode,
             GameComments = doc.GameComments != null ? new RedumpLib.GameComments(
                 doc.GameComments.Metadata,

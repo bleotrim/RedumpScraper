@@ -106,7 +106,8 @@ public class ID17031ScraperTests : IClassFixture<ID17031Fixture>
     [Fact]
     public void ExeDate_ShouldBeCorrect()
     {
-        Assert.Equal("2001-04-26", _disc.ExeDate);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.Equal("2001-04-26", _disc.GameInfo.ExeDate);
     }
     
     [Fact]
@@ -125,18 +126,20 @@ public class ID17031ScraperTests : IClassFixture<ID17031Fixture>
     [Fact]
     public void Edc_ShouldBeYes()
     {
-        Assert.Equal("Yes", _disc.Edc);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.Equal("Yes", _disc.GameInfo.Edc);
     }
     [Fact]
     public void AntiModchip_ShouldBeNo()
     {
-        Assert.Equal("No", _disc.AntiModchip);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.Equal("No", _disc.GameInfo.AntiModchip);
     }
 
     [Fact]
 public void LibCrypt_ShouldBeNo()
 {
-    Assert.Equal("No", _disc.LibCrypt);
+    Assert.Equal("No", _disc.GameInfo!.LibCrypt);
 }
 
 [Fact]

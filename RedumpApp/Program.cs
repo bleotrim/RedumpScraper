@@ -68,7 +68,7 @@ try
         disc = scraper.ParseRedumpPage(url);
     }
 
-    // BASIC INFORMATION
+    // GAME INFO
     if (HasValue(disc.Id) || HasValue(disc.Title) || 
         (disc.GameInfo != null && (HasValue(disc.GameInfo.System) || HasValue(disc.GameInfo.Media) ||
         HasValue(disc.GameInfo.Category) || HasValue(disc.GameInfo.Serial) || HasValue(disc.GameInfo.Region) || 
@@ -104,8 +104,8 @@ try
     }
 
     // TECHNICAL DETAILS
-    if (HasValue(disc.ExeDate) || HasValue(disc.Edc) || HasValue(disc.AntiModchip) ||
-        HasValue(disc.LibCrypt) || 
+    if (HasValue(disc.GameInfo.ExeDate) || HasValue(disc.GameInfo.Edc) || HasValue(disc.GameInfo.AntiModchip) ||
+        HasValue(disc.GameInfo.LibCrypt) || 
         (disc.GameInfo != null && (HasValue(disc.GameInfo.BuildDate) || HasValue(disc.GameInfo.ErrorsCount) || 
         HasValue(disc.GameInfo.WriteOffset) || HasValue(disc.GameInfo.NumberOfTracks))))
     {
@@ -116,10 +116,10 @@ try
         {
             if (HasValue(disc.GameInfo.BuildDate)) Console.WriteLine($"Build Date:      {disc.GameInfo.BuildDate}");
         }
-        if (HasValue(disc.ExeDate)) Console.WriteLine($"EXE Date:        {disc.ExeDate}");
-        if (HasValue(disc.Edc)) Console.WriteLine($"EDC:             {disc.Edc}");
-        if (HasValue(disc.AntiModchip)) Console.WriteLine($"Anti-modchip:    {disc.AntiModchip}");
-        if (HasValue(disc.LibCrypt)) Console.WriteLine($"LibCrypt:        {disc.LibCrypt}");
+        if (HasValue(disc.GameInfo.ExeDate)) Console.WriteLine($"EXE Date:        {disc.GameInfo.ExeDate}");
+        if (HasValue(disc.GameInfo.Edc)) Console.WriteLine($"EDC:             {disc.GameInfo.Edc}");
+        if (HasValue(disc.GameInfo.AntiModchip)) Console.WriteLine($"Anti-modchip:    {disc.GameInfo.AntiModchip}");
+        if (HasValue(disc.GameInfo.LibCrypt)) Console.WriteLine($"LibCrypt:        {disc.GameInfo.LibCrypt}");
         if (disc.GameInfo != null)
         {
             if (HasValue(disc.GameInfo.ErrorsCount)) Console.WriteLine($"Errors Count:    {disc.GameInfo.ErrorsCount}");

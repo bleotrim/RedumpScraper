@@ -20,7 +20,11 @@ public class GameInfo
     public string WriteOffset { get; set; } = "";
     public string AddedDate { get; set; } = "";
     public string LastModifiedDate { get; set; } = "";
-
+    public string ExeDate { get; set; } = "";
+    public string Edc { get; set; } = "";
+    public string AntiModchip { get; set; } = "";
+    public string LibCrypt { get; set; } = "";
+    
     public GameInfo() { }
 
     public GameInfo(
@@ -37,7 +41,11 @@ public class GameInfo
         string numberOfTracks,
         string writeOffset,
         string addedDate,
-        string lastModifiedDate)
+        string lastModifiedDate,
+        string exeDate,
+        string edc,
+        string antiModchip,
+        string libCrypt)
     {
         System = system;
         Media = media;
@@ -53,5 +61,9 @@ public class GameInfo
         WriteOffset = writeOffset;
         AddedDate = addedDate;
         LastModifiedDate = lastModifiedDate;
+        ExeDate = exeDate;
+        Edc = edc;
+        AntiModchip = antiModchip;
+        LibCrypt = libCrypt;
     }
 }

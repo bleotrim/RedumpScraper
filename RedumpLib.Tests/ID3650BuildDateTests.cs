@@ -99,7 +99,8 @@ public class ID3650BuildDateTests : IClassFixture<ID3650Fixture>
     public void ExeDate_ShouldBeEmpty()
     {
         // This disc does not have an EXE date field in the HTML
-        Assert.True(string.IsNullOrWhiteSpace(_disc.ExeDate));
+        Assert.NotNull(_disc.GameInfo);
+        Assert.True(string.IsNullOrWhiteSpace(_disc.GameInfo.ExeDate));
     }
 
     [Fact]

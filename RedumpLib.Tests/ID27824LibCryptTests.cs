@@ -22,7 +22,8 @@ public class ID27824LibCryptTests : IClassFixture<ID27824Fixture>
     [Fact]
     public void LibCryptStatus_ShouldBeYes()
     {
-        Assert.Equal("Yes", _disc.LibCrypt);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.Equal("Yes", _disc.GameInfo.LibCrypt);
     }
 
     [Fact]

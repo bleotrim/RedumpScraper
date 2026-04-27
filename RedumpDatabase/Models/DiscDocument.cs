@@ -21,18 +21,6 @@ public class DiscDocument
     [BsonElement("game_info")]
     public GameInfoDocument? GameInfo { get; set; }
 
-    [BsonElement("exe_date")]
-    public string ExeDate { get; set; } = string.Empty;
-
-    [BsonElement("edc")]
-    public string Edc { get; set; } = string.Empty;
-
-    [BsonElement("anti_modchip")]
-    public string AntiModchip { get; set; } = string.Empty;
-
-    [BsonElement("libcrypt")]
-    public string LibCrypt { get; set; } = string.Empty;
-
     [BsonElement("barcode")]
     public string Barcode { get; set; } = string.Empty;
 
@@ -178,6 +166,18 @@ public class GameInfoDocument
 
     [BsonElement("last_modified_date")]
     public string LastModifiedDate { get; set; } = string.Empty;
+
+    [BsonElement("exe_date")]
+    public string ExeDate { get; set; } = string.Empty;
+
+    [BsonElement("edc")]
+    public string Edc { get; set; } = string.Empty;
+
+    [BsonElement("anti_modchip")]
+    public string AntiModchip { get; set; } = string.Empty;
+
+    [BsonElement("libcrypt")]
+    public string LibCrypt { get; set; } = string.Empty;
 }
 
 [BsonIgnoreExtraElements]

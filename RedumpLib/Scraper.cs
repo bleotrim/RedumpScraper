@@ -264,12 +264,12 @@ public class Scraper
                         gameInfo.Languages = td.SelectNodes("img")?.Select(i => i.GetAttributeValue("title", "")).ToList() ?? new();
                         break;
                     case "Build date": gameInfo.BuildDate = val; break;
-                    case "EXE date": disc.ExeDate = val; break;
+                    case "EXE date": gameInfo.ExeDate = val; break;
                     case "Version": gameInfo.Version = val; break;
                     case "Edition": gameInfo.Edition = val; break;
-                    case "EDC": disc.Edc = val; break;
-                    case "Anti-modchip": disc.AntiModchip = val; break;
-                    case "LibCrypt": disc.LibCrypt = val; break;
+                    case "EDC": gameInfo.Edc = val; break;
+                    case "Anti-modchip": gameInfo.AntiModchip = val; break;
+                    case "LibCrypt": gameInfo.LibCrypt = val; break;
                     case "Errors count": gameInfo.ErrorsCount = val; break;
                     case "Number of tracks": gameInfo.NumberOfTracks = val; break;
                     case "Write offset": gameInfo.WriteOffset = val; break;
