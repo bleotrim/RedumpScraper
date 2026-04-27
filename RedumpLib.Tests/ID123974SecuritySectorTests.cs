@@ -28,37 +28,43 @@ public class ID123974SecuritySectorTests : IClassFixture<ID123974Fixture>
     [Fact]
     public void System_ShouldBeXbox360()
     {
-        Assert.Equal("Microsoft Xbox 360", _disc.System);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.Equal("Microsoft Xbox 360", _disc.GameInfo.System);
     }
 
     [Fact]
     public void Media_ShouldBeDVD9()
     {
-        Assert.Equal("DVD-9", _disc.Media);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.Equal("DVD-9", _disc.GameInfo.Media);
     }
 
     [Fact]
     public void Category_ShouldBeGames()
     {
-        Assert.Equal("Games", _disc.Category);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.Equal("Games", _disc.GameInfo.Category);
     }
 
     [Fact]
     public void Serial_ShouldBeEA2077()
     {
-        Assert.Equal("EA-2077", _disc.Serial);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.Equal("EA-2077", _disc.GameInfo.Serial);
     }
 
     [Fact]
     public void Region_ShouldBeJapan()
     {
-        Assert.Equal("Japan", _disc.Region);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.Equal("Japan", _disc.GameInfo.Region);
     }
 
     [Fact]
     public void Edition_ShouldBeOriginal()
     {
-        Assert.Equal("Original", _disc.Edition);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.Equal("Original", _disc.GameInfo.Edition);
     }
 
     [Fact]

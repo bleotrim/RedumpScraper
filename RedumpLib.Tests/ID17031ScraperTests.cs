@@ -60,25 +60,29 @@ public class ID17031ScraperTests : IClassFixture<ID17031Fixture>
     [Fact]
     public void System_ShouldBePlayStation()
     {
-        Assert.Equal("Sony PlayStation", _disc.System);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.Equal("Sony PlayStation", _disc.GameInfo.System);
     }
 
     [Fact]
     public void Media_ShouldBeCD()
     {
-        Assert.Equal("CD", _disc.Media);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.Equal("CD", _disc.GameInfo.Media);
     }
 
     [Fact]
     public void Category_ShouldBeGames()
     {
-        Assert.Equal("Games", _disc.Category);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.Equal("Games", _disc.GameInfo.Category);
     }
 
     [Fact]
     public void Region_ShouldBeEurope()
     {
-        Assert.Equal("Europe", _disc.Region);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.Equal("Europe", _disc.GameInfo.Region);
     }
 
     [Fact]
@@ -89,13 +93,15 @@ public class ID17031ScraperTests : IClassFixture<ID17031Fixture>
             "Italian", "English", "French", "German", "Spanish", "Dutch"
         };
 
-        Assert.Equal(6, _disc.Languages.Count);
-        Assert.Equivalent(expectedLanguages, _disc.Languages);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.Equal(6, _disc.GameInfo.Languages.Count);
+        Assert.Equivalent(expectedLanguages, _disc.GameInfo.Languages);
     }
     [Fact]
     public void Serial_ShouldBeCorrect()
     {
-        Assert.Equal("SLES-02895", _disc.Serial);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.Equal("SLES-02895", _disc.GameInfo.Serial);
     }
     [Fact]
     public void ExeDate_ShouldBeCorrect()
@@ -106,13 +112,15 @@ public class ID17031ScraperTests : IClassFixture<ID17031Fixture>
     [Fact]
     public void Version_ShouldBeOptional()
     {
-        Assert.NotNull(_disc.Version);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.NotNull(_disc.GameInfo.Version);
     }
     
     [Fact]
     public void Edition_ShouldBeOriginal()
     {
-        Assert.Equal("Original", _disc.Edition);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.Equal("Original", _disc.GameInfo.Edition);
     }
     [Fact]
     public void Edc_ShouldBeYes()
@@ -134,7 +142,8 @@ public void LibCrypt_ShouldBeNo()
 [Fact]
 public void ErrorsCount_ShouldBeZero()
 {
-    Assert.Equal("0", _disc.ErrorsCount);
+    Assert.NotNull(_disc.GameInfo);
+    Assert.Equal("0", _disc.GameInfo.ErrorsCount);
 }
 
 [Fact]
@@ -145,17 +154,20 @@ public void NumberOfTracks_ShouldBeOne()
 [Fact]
 public void WriteOffset_ShouldBeCorrect()
 {
-    Assert.Equal("-647", _disc.WriteOffset);
+    Assert.NotNull(_disc.GameInfo);
+    Assert.Equal("-647", _disc.GameInfo.WriteOffset);
 }
 [Fact]
 public void AddedDate_ShouldBeCorrect()
 {
-    Assert.Equal("2010-11-28 11:00", _disc.AddedDate);
+    Assert.NotNull(_disc.GameInfo);
+    Assert.Equal("2010-11-28 11:00", _disc.GameInfo.AddedDate);
 }
 [Fact]
 public void LastModifiedDate_ShouldBeCorrect()
 {
-    Assert.Equal("2019-07-05 19:14", _disc.LastModifiedDate);
+    Assert.NotNull(_disc.GameInfo);
+    Assert.Equal("2019-07-05 19:14", _disc.GameInfo.LastModifiedDate);
 }
 [Fact] 
 public void Barcode_ShouldBeCorrect() => Assert.Equal("3 546430 014486, 3 546430 014493", _disc.Barcode);

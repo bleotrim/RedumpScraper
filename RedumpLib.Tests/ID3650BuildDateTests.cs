@@ -28,61 +28,71 @@ public class ID3650BuildDateTests : IClassFixture<ID3650Fixture>
     [Fact]
     public void System_ShouldBeSegaSaturn()
     {
-        Assert.Equal("Sega Saturn", _disc.System);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.Equal("Sega Saturn", _disc.GameInfo.System);
     }
 
     [Fact]
     public void Media_ShouldBeCD()
     {
-        Assert.Equal("CD", _disc.Media);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.Equal("CD", _disc.GameInfo.Media);
     }
 
     [Fact]
     public void Category_ShouldBeGames()
     {
-        Assert.Equal("Games", _disc.Category);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.Equal("Games", _disc.GameInfo.Category);
     }
 
     [Fact]
     public void Serial_ShouldBeT1232G()
     {
-        Assert.Equal("T-1232G", _disc.Serial);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.Equal("T-1232G", _disc.GameInfo.Serial);
     }
 
     [Fact]
     public void Region_ShouldBeJapan()
     {
-        Assert.Equal("Japan", _disc.Region);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.Equal("Japan", _disc.GameInfo.Region);
     }
 
     [Fact]
     public void Edition_ShouldBeOriginal()
     {
-        Assert.Equal("Original", _disc.Edition);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.Equal("Original", _disc.GameInfo.Edition);
     }
 
     [Fact]
     public void BuildDate_ShouldNotBeEmpty()
     {
-        Assert.False(string.IsNullOrWhiteSpace(_disc.BuildDate));
+        Assert.NotNull(_disc.GameInfo);
+        Assert.False(string.IsNullOrWhiteSpace(_disc.GameInfo.BuildDate));
     }
 
     [Fact]
     public void BuildDate_ShouldBe19980627()
     {
-        Assert.Equal("1998-06-27", _disc.BuildDate);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.Equal("1998-06-27", _disc.GameInfo.BuildDate);
     }
 
     [Fact]
     public void BuildDate_ShouldHaveValidDateFormat()
     {
-        Assert.Matches(@"^\d{4}-\d{2}-\d{2}$", _disc.BuildDate);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.Matches(@"^\d{4}-\d{2}-\d{2}$", _disc.GameInfo.BuildDate);
     }
 
     [Fact]
     public void Version_ShouldBe1002()
     {
-        Assert.Equal("1.002", _disc.Version);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.Equal("1.002", _disc.GameInfo.Version);
     }
 
     [Fact]
@@ -95,19 +105,22 @@ public class ID3650BuildDateTests : IClassFixture<ID3650Fixture>
     [Fact]
     public void ErrorsCount_ShouldBeZero()
     {
-        Assert.Equal("0", _disc.ErrorsCount);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.Equal("0", _disc.GameInfo.ErrorsCount);
     }
 
     [Fact]
     public void NumberOfTracks_ShouldBeTwo()
     {
-        Assert.Equal("2", _disc.NumberOfTracks);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.Equal("2", _disc.GameInfo.NumberOfTracks);
     }
 
     [Fact]
     public void WriteOffset_ShouldBePositive684()
     {
-        Assert.Equal("+684", _disc.WriteOffset);
+        Assert.NotNull(_disc.GameInfo);
+        Assert.Equal("+684", _disc.GameInfo.WriteOffset);
     }
 
     [Fact]

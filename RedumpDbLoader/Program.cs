@@ -193,9 +193,12 @@ async Task AdvancedFilter(string[] filterArgs)
     foreach (var disc in results)
     {
         Console.WriteLine($"  [{disc.DiscId}] {disc.Title}");
-        if (!string.IsNullOrEmpty(disc.System)) Console.WriteLine($"    System: {disc.System}");
-        if (!string.IsNullOrEmpty(disc.Region)) Console.WriteLine($"    Region: {disc.Region}");
-        if (!string.IsNullOrEmpty(disc.Serial)) Console.WriteLine($"    Serial: {disc.Serial}");
+        if (disc.GameInfo != null)
+        {
+            if (!string.IsNullOrEmpty(disc.GameInfo.System)) Console.WriteLine($"    System: {disc.GameInfo.System}");
+            if (!string.IsNullOrEmpty(disc.GameInfo.Region)) Console.WriteLine($"    Region: {disc.GameInfo.Region}");
+            if (!string.IsNullOrEmpty(disc.GameInfo.Serial)) Console.WriteLine($"    Serial: {disc.GameInfo.Serial}");
+        }
         if (disc.LibCryptSectors.Count > 0) Console.WriteLine($"    LibCrypt Sectors: {disc.LibCryptSectors.Count}");
         Console.WriteLine();
     }
@@ -258,8 +261,11 @@ async Task SearchDiscs(string query)
     foreach (var disc in results)
     {
         Console.WriteLine($"  [{disc.DiscId}] {disc.Title}");
-        Console.WriteLine($"    System: {disc.System}");
-        Console.WriteLine($"    Region: {disc.Region}");
+        if (disc.GameInfo != null)
+        {
+            Console.WriteLine($"    System: {disc.GameInfo.System}");
+            Console.WriteLine($"    Region: {disc.GameInfo.Region}");
+        }
         Console.WriteLine();
     }
 }
@@ -285,9 +291,12 @@ async Task SearchBySerial(string serial)
     foreach (var disc in results)
     {
         Console.WriteLine($"  [{disc.DiscId}] {disc.Title}");
-        Console.WriteLine($"    Serial: {disc.Serial}");
-        Console.WriteLine($"    System: {disc.System}");
-        Console.WriteLine($"    Region: {disc.Region}");
+        if (disc.GameInfo != null)
+        {
+            Console.WriteLine($"    Serial: {disc.GameInfo.Serial}");
+            Console.WriteLine($"    System: {disc.GameInfo.System}");
+            Console.WriteLine($"    Region: {disc.GameInfo.Region}");
+        }
         Console.WriteLine();
     }
 }
@@ -403,8 +412,11 @@ async Task ListBySystem(string system)
     foreach (var disc in results)
     {
         Console.WriteLine($"  [{disc.DiscId}] {disc.Title}");
-        Console.WriteLine($"    Region: {disc.Region}");
-        Console.WriteLine($"    Serial: {disc.Serial}");
+        if (disc.GameInfo != null)
+        {
+            Console.WriteLine($"    Region: {disc.GameInfo.Region}");
+            Console.WriteLine($"    Serial: {disc.GameInfo.Serial}");
+        }
         Console.WriteLine();
     }
 }
@@ -430,7 +442,10 @@ async Task ListByRegion(string region)
     foreach (var disc in results)
     {
         Console.WriteLine($"  [{disc.DiscId}] {disc.Title}");
-        Console.WriteLine($"    System: {disc.System}");
+        if (disc.GameInfo != null)
+        {
+            Console.WriteLine($"    System: {disc.GameInfo.System}");
+        }
         Console.WriteLine();
     }
 }
@@ -450,7 +465,10 @@ async Task ListLibCryptDiscs()
     foreach (var disc in results)
     {
         Console.WriteLine($"  [{disc.DiscId}] {disc.Title}");
-        Console.WriteLine($"    System: {disc.System}");
+        if (disc.GameInfo != null)
+        {
+            Console.WriteLine($"    System: {disc.GameInfo.System}");
+        }
         Console.WriteLine($"    LibCrypt Sectors: {disc.LibCryptSectors.Count}");
         Console.WriteLine();
     }

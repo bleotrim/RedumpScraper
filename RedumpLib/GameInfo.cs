@@ -1,0 +1,57 @@
+namespace RedumpLib;
+
+/// <summary>
+/// Encapsulates general game information and metadata about a Redump disc.
+/// Contains system details, release information, and administrative dates.
+/// </summary>
+public class GameInfo
+{
+    public string System { get; set; } = "";
+    public string Media { get; set; } = "";
+    public string Category { get; set; } = "";
+    public string Region { get; set; } = "";
+    public List<string> Languages { get; set; } = new();
+    public string Serial { get; set; } = "";
+    public string BuildDate { get; set; } = "";
+    public string Version { get; set; } = "";
+    public string Edition { get; set; } = "";
+    public string ErrorsCount { get; set; } = "";
+    public string NumberOfTracks { get; set; } = "";
+    public string WriteOffset { get; set; } = "";
+    public string AddedDate { get; set; } = "";
+    public string LastModifiedDate { get; set; } = "";
+
+    public GameInfo() { }
+
+    public GameInfo(
+        string system,
+        string media,
+        string category,
+        string region,
+        List<string> languages,
+        string serial,
+        string buildDate,
+        string version,
+        string edition,
+        string errorsCount,
+        string numberOfTracks,
+        string writeOffset,
+        string addedDate,
+        string lastModifiedDate)
+    {
+        System = system;
+        Media = media;
+        Category = category;
+        Region = region;
+        Languages = languages;
+        Serial = serial;
+        BuildDate = buildDate;
+        Version = version;
+        Edition = edition;
+        ErrorsCount = errorsCount;
+        NumberOfTracks = numberOfTracks;
+        WriteOffset = writeOffset;
+        AddedDate = addedDate;
+        LastModifiedDate = lastModifiedDate;
+    }
+}

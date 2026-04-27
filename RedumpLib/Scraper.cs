@@ -244,6 +244,8 @@ public class Scraper
         var gameInfoRows = doc.DocumentNode.SelectNodes("//table[@class='gameinfo']//tr");
         if (gameInfoRows != null)
         {
+            var gameInfo = new GameInfo();
+            
             foreach (var row in gameInfoRows)
             {
                 var header = row.SelectSingleNode("th")?.InnerText.Trim();
@@ -253,28 +255,30 @@ public class Scraper
 
                 switch (header)
                 {
-                    case "System": disc.System = val; break;
-                    case "Media": disc.Media = val; break;
-                    case "Category": disc.Category = val; break;
-                    case "Serial": disc.Serial = val; break;
-                    case "Region": disc.Region = td.SelectSingleNode(".//img")?.GetAttributeValue("title", "") ?? ""; break;
+                    case "System": gameInfo.System = val; break;
+                    case "Media": gameInfo.Media = val; break;
+                    case "Category": gameInfo.Category = val; break;
+                    case "Serial": gameInfo.Serial = val; break;
+                    case "Region": gameInfo.Region = td.SelectSingleNode(".//img")?.GetAttributeValue("title", "") ?? ""; break;
                     case "Languages":
-                        disc.Languages = td.SelectNodes("img")?.Select(i => i.GetAttributeValue("title", "")).ToList() ?? new();
+                        gameInfo.Languages = td.SelectNodes("img")?.Select(i => i.GetAttributeValue("title", "")).ToList() ?? new();
                         break;
-                    case "Build date": disc.BuildDate = val; break;
+                    case "Build date": gameInfo.BuildDate = val; break;
                     case "EXE date": disc.ExeDate = val; break;
-                    case "Version": disc.Version = val; break;
-                    case "Edition": disc.Edition = val; break;
+                    case "Version": gameInfo.Version = val; break;
+                    case "Edition": gameInfo.Edition = val; break;
                     case "EDC": disc.Edc = val; break;
                     case "Anti-modchip": disc.AntiModchip = val; break;
                     case "LibCrypt": disc.LibCrypt = val; break;
-                    case "Errors count": disc.ErrorsCount = val; break;
-                    case "Number of tracks": disc.NumberOfTracks = val; break;
-                    case "Write offset": disc.WriteOffset = val; break;
-                    case "Added": disc.AddedDate = val; break;
-                    case "Last modified": disc.LastModifiedDate = val; break;
+                    case "Errors count": gameInfo.ErrorsCount = val; break;
+                    case "Number of tracks": gameInfo.NumberOfTracks = val; break;
+                    case "Write offset": gameInfo.WriteOffset = val; break;
+                    case "Added": gameInfo.AddedDate = val; break;
+                    case "Last modified": gameInfo.LastModifiedDate = val; break;
                 }
             }
+            
+            disc.GameInfo = gameInfo;
         }
 
         var tracksTable = doc.DocumentNode.SelectSingleNode("//table[@class='tracks']");

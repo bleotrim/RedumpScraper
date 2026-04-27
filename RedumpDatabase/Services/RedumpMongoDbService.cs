@@ -34,12 +34,12 @@ public class RedumpMongoDbService
 
             // Index on system for filtering
             var systemIndexModel = new CreateIndexModel<DiscDocument>(
-                Builders<DiscDocument>.IndexKeys.Ascending(d => d.System)
+                Builders<DiscDocument>.IndexKeys.Ascending("game_info.system")
             );
 
             // Index on region for filtering
             var regionIndexModel = new CreateIndexModel<DiscDocument>(
-                Builders<DiscDocument>.IndexKeys.Ascending(d => d.Region)
+                Builders<DiscDocument>.IndexKeys.Ascending("game_info.region")
             );
 
             // Index on title for text search
@@ -49,7 +49,7 @@ public class RedumpMongoDbService
 
             // Index on serial for search
             var serialIndexModel = new CreateIndexModel<DiscDocument>(
-                Builders<DiscDocument>.IndexKeys.Ascending(d => d.Serial)
+                Builders<DiscDocument>.IndexKeys.Ascending("game_info.serial")
             );
 
             _discsCollection.Indexes.CreateMany(new[] { discIdIndexModel, systemIndexModel, regionIndexModel, titleIndexModel, serialIndexModel });
@@ -103,7 +103,7 @@ public class RedumpMongoDbService
     /// </summary>
     public async Task<List<DiscDocument>> GetDiscsBySystemAsync(string system)
     {
-        var filter = Builders<DiscDocument>.Filter.Eq(d => d.System, system);
+        var filter = Builders<DiscDocument>.Filter.Eq("game_info.system", system);
         return await _discsCollection.Find(filter).ToListAsync();
     }
 
@@ -112,7 +112,7 @@ public class RedumpMongoDbService
     /// </summary>
     public async Task<List<DiscDocument>> GetDiscsByRegionAsync(string region)
     {
-        var filter = Builders<DiscDocument>.Filter.Eq(d => d.Region, region);
+        var filter = Builders<DiscDocument>.Filter.Eq("game_info.region", region);
         return await _discsCollection.Find(filter).ToListAsync();
     }
 
@@ -130,7 +130,7 @@ public class RedumpMongoDbService
     /// </summary>
     public async Task<List<DiscDocument>> SearchBySerialAsync(string serial)
     {
-        var filter = Builders<DiscDocument>.Filter.Regex(d => d.Serial, new MongoDB.Bson.BsonRegularExpression(serial, "i"));
+        var filter = Builders<DiscDocument>.Filter.Regex("game_info.serial", new MongoDB.Bson.BsonRegularExpression(serial, "i"));
         return await _discsCollection.Find(filter).ToListAsync();
     }
 
@@ -222,7 +222,7 @@ public class RedumpMongoDbService
             filters.Add(Builders<DiscDocument>.Filter.Text(title));
 
         if (!string.IsNullOrEmpty(serial))
-            filters.Add(Builders<DiscDocument>.Filter.Regex(d => d.Serial, new MongoDB.Bson.BsonRegularExpression(serial, "i")));
+            filters.Add(Builders<DiscDocument>.Filter.Regex("game_info.serial", new MongoDB.Bson.BsonRegularExpression(serial, "i")));
 
         if (!string.IsNullOrEmpty(crc32))
             filters.Add(Builders<DiscDocument>.Filter.ElemMatch(d => d.Tracks, 
@@ -237,10 +237,10 @@ public class RedumpMongoDbService
                 Builders<TrackDocument>.Filter.Regex(t => t.Sha1, new MongoDB.Bson.BsonRegularExpression(sha1, "i"))));
 
         if (!string.IsNullOrEmpty(system))
-            filters.Add(Builders<DiscDocument>.Filter.Eq(d => d.System, system));
+            filters.Add(Builders<DiscDocument>.Filter.Eq("game_info.system", system));
 
         if (!string.IsNullOrEmpty(region))
-            filters.Add(Builders<DiscDocument>.Filter.Eq(d => d.Region, region));
+            filters.Add(Builders<DiscDocument>.Filter.Eq("game_info.region", region));
 
         if (hasLibCrypt.HasValue)
             filters.Add(Builders<DiscDocument>.Filter.Eq(d => d.LibCrypt, hasLibCrypt.Value ? "Yes" : "No"));
