@@ -342,12 +342,51 @@ public class Scraper
                 foreach (var row in trackRows)
                 {
                     var cols = row.SelectNodes("td");
-                    if (cols?.Count >= 9)
+                    if (cols?.Count >= 6)
                     {
-                        disc.Tracks.Add(new DiscTrack(
-                            cols[0].InnerText.Trim(), cols[1].InnerText.Trim(), cols[5].InnerText.Trim(),
-                            cols[6].InnerText.Trim(), cols[7].InnerText.Trim(), cols[8].InnerText.Trim()
-                        ));
+                        // Handle two formats:
+                        // Extended (9 cols): #, Type, Pregap, Length, Sectors, Size, CRC-32, MD5, SHA-1
+                        // Simple (6 cols):   #, Sectors, Size, CRC-32, MD5, SHA-1
+                        
+                        string number = cols[0].InnerText.Trim();
+                        string type = "";
+                        string pregap = "";
+                        string length = "";
+                        string sectors = "";
+                        string size = "";
+                        string crc32 = "";
+                        string md5 = "";
+                        string sha1 = "";
+
+                        if (cols.Count >= 9)
+                        {
+                            // Extended format
+                            type = cols[1].InnerText.Trim();
+                            pregap = cols[2].InnerText.Trim();
+                            length = cols[3].InnerText.Trim();
+                            sectors = cols[4].InnerText.Trim();
+                            size = cols[5].InnerText.Trim();
+                            crc32 = cols[6].InnerText.Trim();
+                            md5 = cols[7].InnerText.Trim();
+                            sha1 = cols[8].InnerText.Trim();
+                        }
+                        else if (cols.Count == 6)
+                        {
+                            // Simple format (# Sectors, Size, CRC-32, MD5, SHA-1)
+                            type = "Data";
+                            pregap = "";
+                            length = "";
+                            sectors = cols[1].InnerText.Trim();
+                            size = cols[2].InnerText.Trim();
+                            crc32 = cols[3].InnerText.Trim();
+                            md5 = cols[4].InnerText.Trim();
+                            sha1 = cols[5].InnerText.Trim();
+                        }
+
+                        if (!string.IsNullOrEmpty(number) && !string.IsNullOrEmpty(size))
+                        {
+                            disc.Tracks.Add(new DiscTrack(number, type, pregap, length, sectors, size, crc32, md5, sha1));
+                        }
                     }
                 }
             }

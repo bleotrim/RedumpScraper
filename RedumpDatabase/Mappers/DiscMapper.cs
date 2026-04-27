@@ -175,7 +175,7 @@ public static class DiscMapper
             CuesheetStatus = doc.CuesheetStatus,
             PvdStatus = doc.PvdStatus,
             Tracks = doc.Tracks.Select(t => new DiscTrack(
-                t.Number, t.Type, t.Size, t.Crc32, t.Md5, t.Sha1
+                t.Number, t.Type, t.Pregap, t.Length, t.Sectors, t.Size, t.Crc32, t.Md5, t.Sha1
             )).ToList(),
             Rings = doc.Rings.Select(r => new DiscRing(
                 r.Number, r.MasteringCode, r.MasteringSidCode, r.Toolstamp, r.MouldSidCode, r.Status

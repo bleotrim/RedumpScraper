@@ -189,6 +189,15 @@ public class TrackDocument
     [BsonElement("type")]
     public string Type { get; set; } = string.Empty;
 
+    [BsonElement("pregap")]
+    public string Pregap { get; set; } = string.Empty;
+
+    [BsonElement("length")]
+    public string Length { get; set; } = string.Empty;
+
+    [BsonElement("sectors")]
+    public string Sectors { get; set; } = string.Empty;
+
     [BsonElement("size")]
     public string Size { get; set; } = string.Empty;
 
