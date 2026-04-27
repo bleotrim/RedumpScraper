@@ -169,7 +169,7 @@ public class RedumpMongoDbService
     /// </summary>
     public async Task<List<DiscDocument>> GetDiscsWithLibCryptAsync()
     {
-        var filter = Builders<DiscDocument>.Filter.Eq(d => d.GameInfo.LibCrypt, "Yes");
+        var filter = Builders<DiscDocument>.Filter.Eq(d => d.GameInfo != null && d.GameInfo.LibCrypt == "Yes", true);
         return await _discsCollection.Find(filter).ToListAsync();
     }
 
@@ -243,7 +243,7 @@ public class RedumpMongoDbService
             filters.Add(Builders<DiscDocument>.Filter.Eq("game_info.region", region));
 
         if (hasLibCrypt.HasValue)
-            filters.Add(Builders<DiscDocument>.Filter.Eq(d => d.GameInfo.LibCrypt, hasLibCrypt.Value ? "Yes" : "No"));
+            filters.Add(Builders<DiscDocument>.Filter.Where(d => d.GameInfo != null && d.GameInfo.LibCrypt == (hasLibCrypt.Value ? "Yes" : "No")));
 
         var filter = filters.Count > 0 
             ? Builders<DiscDocument>.Filter.And(filters)
