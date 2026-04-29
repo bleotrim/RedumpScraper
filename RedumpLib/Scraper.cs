@@ -34,6 +34,9 @@ public class Scraper
             disc.Id = idMatch.Groups[1].Value;
         }
 
+        // Capture HTML source and clean it
+        disc.HtmlSource = CleanHtmlSource(doc.DocumentNode.OuterHtml);
+
         return disc;
     }
 
@@ -234,6 +237,22 @@ public class Scraper
         throw new InvalidOperationException($"Multiple results found. Please specify disc ID:\n\n{resultsList}");
     }
 
+    /// <summary>
+    /// Clean HTML source by removing online and footer sections
+    /// </summary>
+    private string CleanHtmlSource(string html)
+    {
+        if (string.IsNullOrEmpty(html))
+            return html;
+
+        // Remove the online users section
+        html = Regex.Replace(html, @"<div\s+id=""online""[^>]*>.*?</div>", string.Empty, RegexOptions.IgnoreCase | RegexOptions.Singleline);
+
+        // Remove the footer section
+        html = Regex.Replace(html, @"<div\s+id=""footer""[^>]*>.*?</div>", string.Empty, RegexOptions.IgnoreCase | RegexOptions.Singleline);
+
+        return html;
+    }
 
     private RedumpDisc ParseDocument(HtmlDocument doc)
     {
@@ -268,7 +287,7 @@ public class Scraper
                         gameInfo.Serial = string.IsNullOrWhiteSpace(val) ? null : val;
                         break;
                     case "Region":
-                        gameInfo.Region = td.SelectSingleNode(".//img")?.GetAttributeValue("title", null) is string s && !string.IsNullOrWhiteSpace(s) ? s : null;
+                        gameInfo.Region = td.SelectSingleNode(".//img")?.GetAttributeValue("title", "") is string s && !string.IsNullOrWhiteSpace(s) ? s : null;
                         break;
                     case "Languages":
                         gameInfo.Languages = td.SelectNodes("img")?.Select(i => i.GetAttributeValue("title", "")).ToList() ?? new();
