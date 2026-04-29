@@ -17,4 +17,5 @@ public class RedumpDisc
     public string HeaderStatus { get; set; } = "";
     public List<SecuritySectorRange> SecuritySectorRanges { get; set; } = new();
     public Metadata? Metadata { get; set; }
+    public string HtmlSource { get; set; } = "";
 }

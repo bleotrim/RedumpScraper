@@ -137,6 +137,7 @@ public static class DiscMapper
                 DiscId = disc.Metadata.DiscId ?? string.Empty,
                 Pic = disc.Metadata.Pic ?? string.Empty
             } : null,
+            HtmlSource = disc.HtmlSource ?? string.Empty,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
@@ -198,7 +199,8 @@ public static class DiscMapper
             )).ToList(),
             Metadata = doc.Metadata != null ? new Metadata(
                 doc.Metadata.DiscKey, doc.Metadata.DiscId, doc.Metadata.Pic
-            ) : null
+            ) : null,
+            HtmlSource = doc.HtmlSource ?? string.Empty
         };
     }
 }

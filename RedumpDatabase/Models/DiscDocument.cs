@@ -57,6 +57,9 @@ public class DiscDocument
     [BsonElement("metadata")]
     public MetadataDocument? Metadata { get; set; }
 
+    [BsonElement("html_source")]
+    public string HtmlSource { get; set; } = string.Empty;
+
     [BsonElement("created_at")]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
