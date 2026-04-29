@@ -8,13 +8,13 @@ public class RedumpDisc
     public GameComments? GameComments { get; set; }
     public string? TrackStatus { get; set; } = null;
     public string? CuesheetStatus { get; set; } = null;
-    public string PvdStatus { get; set; } = "";
+    public string? PvdStatus { get; set; } = null;
     public List<DiscTrack> Tracks { get; set; } = new();
     public List<DiscRing> Rings { get; set; } = new();
     public List<PvdRecord> PvdEntries { get; set; } = new();
     public List<LibCryptSector> LibCryptSectors { get; set; } = new();
     public List<HeaderEntry> HeaderEntries { get; set; } = new();
-    public string HeaderStatus { get; set; } = "";
+    public string? HeaderStatus { get; set; } = null;
     public List<SecuritySectorRange> SecuritySectorRanges { get; set; } = new();
     public Metadata? Metadata { get; set; }
     public string HtmlSource { get; set; } = "";

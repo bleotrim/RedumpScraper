@@ -31,7 +31,7 @@ public class DiscDocument
     public string? CuesheetStatus { get; set; } = null;
 
     [BsonElement("pvd_status")]
-    public string PvdStatus { get; set; } = string.Empty;
+    public string? PvdStatus { get; set; } = null;
 
     [BsonElement("tracks")]
     public List<TrackDocument> Tracks { get; set; } = new();
@@ -49,7 +49,7 @@ public class DiscDocument
     public List<HeaderEntryDocument> HeaderEntries { get; set; } = new();
 
     [BsonElement("header_status")]
-    public string HeaderStatus { get; set; } = string.Empty;
+    public string? HeaderStatus { get; set; } = null;
 
     [BsonElement("security_sector_ranges")]
     public List<SecuritySectorRangeDocument> SecuritySectorRanges { get; set; } = new();

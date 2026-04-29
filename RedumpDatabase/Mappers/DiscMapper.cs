@@ -79,7 +79,7 @@ public static class DiscMapper
             } : null,
             TrackStatus = disc.TrackStatus ?? null,
             CuesheetStatus = disc.CuesheetStatus ?? null,
-            PvdStatus = disc.PvdStatus ?? string.Empty,
+            PvdStatus = disc.PvdStatus ?? null,
             Tracks = disc.Tracks.Select(t => new TrackDocument
             {
                 Number = t.Number ?? string.Empty,
@@ -123,7 +123,7 @@ public static class DiscMapper
                 Contents = h.Contents ?? string.Empty,
                 Ascii = h.Ascii ?? string.Empty
             }).ToList(),
-            HeaderStatus = disc.HeaderStatus ?? string.Empty,
+            HeaderStatus = disc.HeaderStatus ?? null,
             SecuritySectorRanges = disc.SecuritySectorRanges.Select(s => new SecuritySectorRangeDocument
             {
                 Number = s.Number,
