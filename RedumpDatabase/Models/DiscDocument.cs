@@ -144,7 +144,7 @@ public class GameInfoDocument
     public string Serial { get; set; } = string.Empty;
 
     [BsonElement("build_date")]
-    public string BuildDate { get; set; } = string.Empty;
+    public string BuildDate { get; set; } = null;
 
     [BsonElement("version")]
     public string Version { get; set; } = string.Empty;

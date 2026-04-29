@@ -263,7 +263,9 @@ public class Scraper
                     case "Languages":
                         gameInfo.Languages = td.SelectNodes("img")?.Select(i => i.GetAttributeValue("title", "")).ToList() ?? new();
                         break;
-                    case "Build date": gameInfo.BuildDate = val; break;
+                    case "Build date":
+                        gameInfo.BuildDate = string.IsNullOrWhiteSpace(val) ? null : val;
+                        break;
                     case "EXE date": gameInfo.ExeDate = val; break;
                     case "Version": gameInfo.Version = val; break;
                     case "Edition": gameInfo.Edition = val; break;

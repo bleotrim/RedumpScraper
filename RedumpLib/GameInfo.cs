@@ -12,7 +12,7 @@ public class GameInfo
     public string Region { get; set; } = "";
     public List<string> Languages { get; set; } = new();
     public string Serial { get; set; } = "";
-    public string BuildDate { get; set; } = "";
+    public string BuildDate { get; set; } = null;
     public string Version { get; set; } = "";
     public string Edition { get; set; } = "";
     public string ErrorsCount { get; set; } = "";
