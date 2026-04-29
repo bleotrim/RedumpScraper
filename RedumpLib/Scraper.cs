@@ -395,6 +395,8 @@ public class Scraper
         var ringRows = doc.DocumentNode.SelectNodes("//table[@class='rings']//tr[td]");
         if (ringRows != null)
         {
+            DiscRing? currentRing = null;
+            
             foreach (var row in ringRows)
             {
                 var cols = row.SelectNodes("td");
@@ -407,20 +409,43 @@ public class Scraper
                         return HtmlEntity.DeEntitize(node.InnerText).Trim();
                     }
 
-                    string status = "";
-                    if (cols.Count >= 7)
+                    // Check if this row is a new ring (first column contains a number)
+                    string firstCol = GetCleanText(cols[0]);
+                    if (int.TryParse(firstCol, out int ringNumber))
                     {
-                        var img = cols[6].SelectSingleNode(".//img");
-                        if (img != null)
+                        // This is a new ring entry
+                        string status = "";
+                        
+                        // Look for status image in column 5 or beyond
+                        if (cols.Count >= 6)
                         {
-                            status = img.GetAttributeValue("alt", "");
+                            var img = cols[5].SelectSingleNode(".//img");
+                            if (img != null)
+                            {
+                                status = img.GetAttributeValue("alt", "");
+                            }
                         }
-                    }
+                        else if (cols.Count >= 7)
+                        {
+                            var img = cols[6].SelectSingleNode(".//img");
+                            if (img != null)
+                            {
+                                status = img.GetAttributeValue("alt", "");
+                            }
+                        }
 
-                    disc.Rings.Add(new DiscRing(
-                        GetCleanText(cols[0]), GetCleanText(cols[1]), GetCleanText(cols[2]),
-                        GetCleanText(cols[3]), GetCleanText(cols[4]), status
-                    ));
+                        currentRing = new DiscRing(
+                            firstCol, GetCleanText(cols[1]), GetCleanText(cols[2]),
+                            GetCleanText(cols[3]), GetCleanText(cols[4]), status
+                        );
+                        disc.Rings.Add(currentRing);
+                    }
+                    else if (currentRing != null && cols.Count >= 4)
+                    {
+                        // This is a continuation row for the current ring (multiple rows per ring)
+                        // Update the current ring with additional data if needed
+                        // For now, we keep the first row's data and status
+                    }
                 }
             }
         }
