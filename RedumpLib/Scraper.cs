@@ -456,6 +456,7 @@ public class Scraper
         var ringRows = doc.DocumentNode.SelectNodes("//table[@class='rings']//tr[td]");
         if (ringRows != null)
         {
+            disc.Rings = new List<DiscRing>();
             DiscRing? currentRing = null;
 
             foreach (var row in ringRows)

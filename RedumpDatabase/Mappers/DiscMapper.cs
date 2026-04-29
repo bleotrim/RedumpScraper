@@ -94,15 +94,17 @@ public static class DiscMapper
                 Sha1 = t.Sha1 ?? string.Empty
             }).ToList()
             : null,
-            Rings = disc.Rings.Select(r => new RingDocument
-            {
-                Number = r.Number ?? string.Empty,
-                MasteringCode = r.MasteringCode ?? string.Empty,
-                MasteringSidCode = r.MasteringSidCode ?? string.Empty,
-                Toolstamp = r.Toolstamp ?? string.Empty,
-                MouldSidCode = r.MouldSidCode ?? string.Empty,
-                Status = r.Status ?? string.Empty
-            }).ToList(),
+            Rings = (disc.Rings != null && disc.Rings.Any()) 
+            ? disc.Rings.Select(r => new RingDocument
+                {
+                    Number = r.Number ?? string.Empty,
+                    MasteringCode = r.MasteringCode ?? string.Empty,
+                    MasteringSidCode = r.MasteringSidCode ?? string.Empty,
+                    Toolstamp = r.Toolstamp ?? string.Empty,
+                    MouldSidCode = r.MouldSidCode ?? string.Empty,
+                    Status = r.Status ?? string.Empty
+                }).ToList() 
+            : null,
             PvdEntries = disc.PvdEntries.Select(p => new PvdRecordDocument
             {
                 Entry = p.Entry ?? string.Empty,

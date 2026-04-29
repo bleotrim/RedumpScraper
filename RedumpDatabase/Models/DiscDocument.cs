@@ -37,7 +37,7 @@ public class DiscDocument
     public List<TrackDocument>? Tracks { get; set; } = null;
 
     [BsonElement("rings")]
-    public List<RingDocument> Rings { get; set; } = new();
+    public List<RingDocument>? Rings { get; set; } = null;
 
     [BsonElement("pvd_entries")]
     public List<PvdRecordDocument> PvdEntries { get; set; } = new();
