@@ -14,7 +14,7 @@ public class GameInfo
     public string Serial { get; set; } = "";
     public string? BuildDate { get; set; } = null;
     public string? Version { get; set; } = null;
-    public string Edition { get; set; } = "";
+    public string? Edition { get; set; } = null;
     public string ErrorsCount { get; set; } = "";
     public int? NumberOfTracks { get; set; } = null;
     public string WriteOffset { get; set; } = "";

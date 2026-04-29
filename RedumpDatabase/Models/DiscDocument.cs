@@ -150,7 +150,7 @@ public class GameInfoDocument
     public string? Version { get; set; } = null;
 
     [BsonElement("edition")]
-    public string Edition { get; set; } = string.Empty;
+    public string? Edition { get; set; } = null;
 
     [BsonElement("errors_count")]
     public string ErrorsCount { get; set; } = string.Empty;

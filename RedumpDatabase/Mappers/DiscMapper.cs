@@ -59,7 +59,7 @@ public static class DiscMapper
                 Serial = disc.GameInfo.Serial ?? string.Empty,
                 BuildDate = disc.GameInfo.BuildDate ?? null,
                 Version = disc.GameInfo.Version ?? null,
-                Edition = disc.GameInfo.Edition ?? string.Empty,
+                Edition = disc.GameInfo.Edition ?? null,
                 ErrorsCount = disc.GameInfo.ErrorsCount ?? string.Empty,
                 NumberOfTracks = disc.GameInfo.NumberOfTracks ?? null,
                 WriteOffset = disc.GameInfo.WriteOffset ?? string.Empty,
