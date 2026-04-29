@@ -66,7 +66,7 @@ public static class DiscMapper
                 AddedDate = disc.GameInfo.AddedDate ?? string.Empty,
                 LastModifiedDate = disc.GameInfo.LastModifiedDate ?? string.Empty,
                 ExeDate = disc.GameInfo.ExeDate ?? string.Empty,
-                Edc = disc.GameInfo.Edc ?? string.Empty,
+                Edc = disc.GameInfo.Edc ?? null,
                 AntiModchip = disc.GameInfo.AntiModchip ?? string.Empty,
                 LibCrypt = disc.GameInfo.LibCrypt ?? string.Empty
             } : null,

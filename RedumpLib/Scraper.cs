@@ -271,8 +271,11 @@ public class Scraper
                         gameInfo.Version = string.IsNullOrWhiteSpace(val) ? null : val;
                         break;
                     case "Edition":
-                        gameInfo.Edition = string.IsNullOrWhiteSpace(val) ? null : val; break;
-                    case "EDC": gameInfo.Edc = val; break;
+                        gameInfo.Edition = string.IsNullOrWhiteSpace(val) ? null : val;
+                        break;
+                    case "EDC": 
+                        gameInfo.Edc = string.IsNullOrWhiteSpace(val) ? null : val; 
+                        break;
                     case "Anti-modchip": gameInfo.AntiModchip = val; break;
                     case "LibCrypt": gameInfo.LibCrypt = val; break;
                     case "Errors count": gameInfo.ErrorsCount = val; break;

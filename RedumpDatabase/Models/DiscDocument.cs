@@ -171,7 +171,7 @@ public class GameInfoDocument
     public string ExeDate { get; set; } = string.Empty;
 
     [BsonElement("edc")]
-    public string Edc { get; set; } = string.Empty;
+    public string? Edc { get; set; } = null;
 
     [BsonElement("anti_modchip")]
     public string AntiModchip { get; set; } = string.Empty;

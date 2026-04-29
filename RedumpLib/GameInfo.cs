@@ -21,7 +21,7 @@ public class GameInfo
     public string AddedDate { get; set; } = "";
     public string LastModifiedDate { get; set; } = "";
     public string ExeDate { get; set; } = "";
-    public string Edc { get; set; } = "";
+    public string? Edc { get; set; } = null;
     public string AntiModchip { get; set; } = "";
     public string LibCrypt { get; set; } = "";
     
