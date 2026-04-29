@@ -141,7 +141,7 @@ public class GameInfoDocument
     public List<string> Languages { get; set; } = new();
 
     [BsonElement("serial")]
-    public string Serial { get; set; } = string.Empty;
+    public string? Serial { get; set; } = null;
 
     [BsonElement("build_date")]
     public string? BuildDate { get; set; } = null;

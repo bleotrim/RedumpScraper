@@ -11,7 +11,7 @@ public class GameInfo
     public string Category { get; set; } = "";
     public string Region { get; set; } = "";
     public List<string> Languages { get; set; } = new();
-    public string Serial { get; set; } = "";
+    public string? Serial { get; set; } = null;
     public string? BuildDate { get; set; } = null;
     public string? Version { get; set; } = null;
     public string? Edition { get; set; } = null;

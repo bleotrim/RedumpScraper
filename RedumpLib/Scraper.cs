@@ -258,7 +258,9 @@ public class Scraper
                     case "System": gameInfo.System = val; break;
                     case "Media": gameInfo.Media = val; break;
                     case "Category": gameInfo.Category = val; break;
-                    case "Serial": gameInfo.Serial = val; break;
+                    case "Serial":
+                        gameInfo.Serial = string.IsNullOrWhiteSpace(val) ? null : val;
+                        break;
                     case "Region": gameInfo.Region = td.SelectSingleNode(".//img")?.GetAttributeValue("title", "") ?? ""; break;
                     case "Languages":
                         gameInfo.Languages = td.SelectNodes("img")?.Select(i => i.GetAttributeValue("title", "")).ToList() ?? new();

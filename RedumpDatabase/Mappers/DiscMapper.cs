@@ -56,7 +56,7 @@ public static class DiscMapper
                 Category = disc.GameInfo.Category ?? string.Empty,
                 Region = disc.GameInfo.Region ?? string.Empty,
                 Languages = disc.GameInfo.Languages ?? new List<string>(),
-                Serial = disc.GameInfo.Serial ?? string.Empty,
+                Serial = disc.GameInfo.Serial ?? null,
                 BuildDate = disc.GameInfo.BuildDate ?? null,
                 Version = disc.GameInfo.Version ?? null,
                 Edition = disc.GameInfo.Edition ?? null,
