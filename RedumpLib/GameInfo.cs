@@ -23,7 +23,7 @@ public class GameInfo
     public string ExeDate { get; set; } = "";
     public string? Edc { get; set; } = null;
     public string? AntiModchip { get; set; } = null;
-    public string LibCrypt { get; set; } = "";
+    public string? LibCrypt { get; set; } = null;
     
     public GameInfo() { }
 

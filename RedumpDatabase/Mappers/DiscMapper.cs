@@ -68,7 +68,7 @@ public static class DiscMapper
                 ExeDate = disc.GameInfo.ExeDate ?? string.Empty,
                 Edc = disc.GameInfo.Edc ?? null,
                 AntiModchip = disc.GameInfo.AntiModchip ?? null,
-                LibCrypt = disc.GameInfo.LibCrypt ?? string.Empty
+                LibCrypt = disc.GameInfo.LibCrypt ?? null
             } : null,
             GameComments = disc.GameComments != null ? new GameCommentsDocument
             {
