@@ -261,7 +261,9 @@ public class Scraper
                     case "Serial":
                         gameInfo.Serial = string.IsNullOrWhiteSpace(val) ? null : val;
                         break;
-                    case "Region": gameInfo.Region = td.SelectSingleNode(".//img")?.GetAttributeValue("title", "") ?? ""; break;
+                    case "Region":
+                        gameInfo.Region = td.SelectSingleNode(".//img")?.GetAttributeValue("title", null) is string s && !string.IsNullOrWhiteSpace(s) ? s : null;
+                        break;
                     case "Languages":
                         gameInfo.Languages = td.SelectNodes("img")?.Select(i => i.GetAttributeValue("title", "")).ToList() ?? new();
                         break;

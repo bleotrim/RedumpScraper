@@ -9,7 +9,7 @@ public class GameInfo
     public string System { get; set; } = "";
     public string Media { get; set; } = "";
     public string Category { get; set; } = "";
-    public string Region { get; set; } = "";
+    public string? Region { get; set; } = null;
     public List<string> Languages { get; set; } = new();
     public string? Serial { get; set; } = null;
     public string? BuildDate { get; set; } = null;

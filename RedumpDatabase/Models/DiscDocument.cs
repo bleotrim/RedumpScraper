@@ -135,7 +135,7 @@ public class GameInfoDocument
     public string Category { get; set; } = string.Empty;
 
     [BsonElement("region")]
-    public string Region { get; set; } = string.Empty;
+    public string? Region { get; set; } = null;
 
     [BsonElement("languages")]
     public List<string> Languages { get; set; } = new();
