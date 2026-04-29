@@ -298,7 +298,9 @@ public class Scraper
                     case "Write offset": 
                         gameInfo.WriteOffset = string.IsNullOrWhiteSpace(val) ? null : val; 
                         break;
-                    case "Added": gameInfo.AddedDate = val; break;
+                    case "Added":
+                        gameInfo.AddedDate = string.IsNullOrWhiteSpace(val) ? null : val; 
+                        break;
                     case "Last modified": gameInfo.LastModifiedDate = val; break;
                 }
             }

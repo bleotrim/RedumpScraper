@@ -162,7 +162,7 @@ public class GameInfoDocument
     public string? WriteOffset { get; set; } = null;
 
     [BsonElement("added_date")]
-    public string AddedDate { get; set; } = string.Empty;
+    public string? AddedDate { get; set; } = null;
 
     [BsonElement("last_modified_date")]
     public string LastModifiedDate { get; set; } = string.Empty;
