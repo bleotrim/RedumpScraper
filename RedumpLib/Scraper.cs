@@ -301,7 +301,9 @@ public class Scraper
                     case "Added":
                         gameInfo.AddedDate = string.IsNullOrWhiteSpace(val) ? null : val; 
                         break;
-                    case "Last modified": gameInfo.LastModifiedDate = val; break;
+                    case "Last modified":
+                        gameInfo.LastModifiedDate = string.IsNullOrWhiteSpace(val) ? null : val; 
+                        break;
                 }
             }
 

@@ -165,7 +165,7 @@ public class GameInfoDocument
     public string? AddedDate { get; set; } = null;
 
     [BsonElement("last_modified_date")]
-    public string LastModifiedDate { get; set; } = string.Empty;
+    public string? LastModifiedDate { get; set; } = null;
 
     [BsonElement("exe_date")]
     public string ExeDate { get; set; } = string.Empty;
