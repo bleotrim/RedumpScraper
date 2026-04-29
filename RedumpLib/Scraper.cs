@@ -291,7 +291,9 @@ public class Scraper
                             gameInfo.NumberOfTracks = null;
                         }
                         break;
-                    case "Write offset": gameInfo.WriteOffset = val; break;
+                    case "Write offset": 
+                        gameInfo.WriteOffset = string.IsNullOrWhiteSpace(val) ? null : val; 
+                        break;
                     case "Added": gameInfo.AddedDate = val; break;
                     case "Last modified": gameInfo.LastModifiedDate = val; break;
                 }

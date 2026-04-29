@@ -159,7 +159,7 @@ public class GameInfoDocument
     public int? NumberOfTracks { get; set; } = null;
 
     [BsonElement("write_offset")]
-    public string WriteOffset { get; set; } = string.Empty;
+    public string? WriteOffset { get; set; } = null;
 
     [BsonElement("added_date")]
     public string AddedDate { get; set; } = string.Empty;

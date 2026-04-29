@@ -17,7 +17,7 @@ public class GameInfo
     public string? Edition { get; set; } = null;
     public string? ErrorsCount { get; set; } = null;
     public int? NumberOfTracks { get; set; } = null;
-    public string WriteOffset { get; set; } = "";
+    public string? WriteOffset { get; set; } = null;
     public string AddedDate { get; set; } = "";
     public string LastModifiedDate { get; set; } = "";
     public string ExeDate { get; set; } = "";
