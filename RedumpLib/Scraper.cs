@@ -304,17 +304,17 @@ public class Scraper
                     case "Edition":
                         gameInfo.Edition = string.IsNullOrWhiteSpace(val) ? null : val;
                         break;
-                    case "EDC": 
-                        gameInfo.Edc = string.IsNullOrWhiteSpace(val) ? null : val; 
+                    case "EDC":
+                        gameInfo.Edc = string.IsNullOrWhiteSpace(val) ? null : val;
                         break;
-                    case "Anti-modchip": 
-                        gameInfo.AntiModchip = string.IsNullOrWhiteSpace(val) ? null : val; 
+                    case "Anti-modchip":
+                        gameInfo.AntiModchip = string.IsNullOrWhiteSpace(val) ? null : val;
                         break;
-                    case "LibCrypt": 
-                        gameInfo.LibCrypt = string.IsNullOrWhiteSpace(val) ? null : val; 
+                    case "LibCrypt":
+                        gameInfo.LibCrypt = string.IsNullOrWhiteSpace(val) ? null : val;
                         break;
-                    case "Errors count": 
-                        gameInfo.ErrorsCount = string.IsNullOrWhiteSpace(val) ? null : val; 
+                    case "Errors count":
+                        gameInfo.ErrorsCount = string.IsNullOrWhiteSpace(val) ? null : val;
                         break;
                     case "Number of tracks":
                         if (int.TryParse(val, out int numTracks))
@@ -326,14 +326,14 @@ public class Scraper
                             gameInfo.NumberOfTracks = null;
                         }
                         break;
-                    case "Write offset": 
-                        gameInfo.WriteOffset = string.IsNullOrWhiteSpace(val) ? null : val; 
+                    case "Write offset":
+                        gameInfo.WriteOffset = string.IsNullOrWhiteSpace(val) ? null : val;
                         break;
                     case "Added":
-                        gameInfo.AddedDate = string.IsNullOrWhiteSpace(val) ? null : val; 
+                        gameInfo.AddedDate = string.IsNullOrWhiteSpace(val) ? null : val;
                         break;
                     case "Last modified":
-                        gameInfo.LastModifiedDate = string.IsNullOrWhiteSpace(val) ? null : val; 
+                        gameInfo.LastModifiedDate = string.IsNullOrWhiteSpace(val) ? null : val;
                         break;
                 }
             }
@@ -399,6 +399,7 @@ public class Scraper
             var trackRows = tracksTable.SelectNodes(".//tr[td]");
             if (trackRows != null)
             {
+                disc.Tracks = new List<DiscTrack>();
                 foreach (var row in trackRows)
                 {
                     var cols = row.SelectNodes("td");

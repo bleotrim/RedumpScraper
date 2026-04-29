@@ -20,24 +20,24 @@ public static class DiscMapper
         // Combine namespace bytes with the disc ID name
         var namespaceBytes = DnsNamespace.ToByteArray();
         var nameBytes = System.Text.Encoding.UTF8.GetBytes(discId);
-        
+
         var combined = new byte[namespaceBytes.Length + nameBytes.Length];
         Buffer.BlockCopy(namespaceBytes, 0, combined, 0, namespaceBytes.Length);
         Buffer.BlockCopy(nameBytes, 0, combined, namespaceBytes.Length, nameBytes.Length);
-        
+
         // Hash using SHA-1
         byte[] hash = SHA1.HashData(combined);
-        
+
         // Take first 16 bytes and set version/variant bits for UUID v5
         var guidBytes = new byte[16];
         Buffer.BlockCopy(hash, 0, guidBytes, 0, 16);
-        
+
         // Set version to 5 (SHA-1)
         guidBytes[6] = (byte)((guidBytes[6] & 0x0f) | 0x50);
-        
+
         // Set variant to RFC 4122
         guidBytes[8] = (byte)((guidBytes[8] & 0x3f) | 0x80);
-        
+
         // Return as string representation
         return new Guid(guidBytes).ToString();
     }
@@ -80,7 +80,8 @@ public static class DiscMapper
             TrackStatus = disc.TrackStatus ?? null,
             CuesheetStatus = disc.CuesheetStatus ?? null,
             PvdStatus = disc.PvdStatus ?? null,
-            Tracks = disc.Tracks.Select(t => new TrackDocument
+            Tracks = (disc.Tracks != null && disc.Tracks.Any())
+            ? disc.Tracks.Select(t => new TrackDocument
             {
                 Number = t.Number ?? string.Empty,
                 Type = t.Type ?? string.Empty,
@@ -91,7 +92,8 @@ public static class DiscMapper
                 Crc32 = t.Crc32 ?? string.Empty,
                 Md5 = t.Md5 ?? string.Empty,
                 Sha1 = t.Sha1 ?? string.Empty
-            }).ToList(),
+            }).ToList()
+            : null,
             Rings = disc.Rings.Select(r => new RingDocument
             {
                 Number = r.Number ?? string.Empty,
