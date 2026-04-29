@@ -116,7 +116,7 @@ public class GameCommentsDocument
     public string? Metadata { get; set; } = null;
 
     [BsonElement("comments")]
-    public string Comments { get; set; } = string.Empty;
+    public string? Comments { get; set; } = null;
 
     [BsonElement("contents")]
     public string Contents { get; set; } = string.Empty;

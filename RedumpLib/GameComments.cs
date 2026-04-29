@@ -9,7 +9,7 @@ public class GameComments
     public string? Metadata { get; set; } = null;
 
     /// <summary>Comments about the disc (internal serial, volume label, etc.)</summary>
-    public string Comments { get; set; } = "";
+    public string? Comments { get; set; } = null;
 
     /// <summary>Contents listing (games, files, etc.)</summary>
     public string Contents { get; set; } = "";

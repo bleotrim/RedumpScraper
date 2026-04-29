@@ -73,7 +73,7 @@ public static class DiscMapper
             GameComments = disc.GameComments != null ? new GameCommentsDocument
             {
                 Metadata = disc.GameComments.Metadata ?? null,
-                Comments = disc.GameComments.Comments ?? string.Empty,
+                Comments = disc.GameComments.Comments ?? null,
                 Contents = disc.GameComments.Contents ?? string.Empty,
                 Barcode = disc.GameComments.Barcode ?? string.Empty
             } : null,
