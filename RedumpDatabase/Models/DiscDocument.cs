@@ -153,7 +153,7 @@ public class GameInfoDocument
     public string? Edition { get; set; } = null;
 
     [BsonElement("errors_count")]
-    public string ErrorsCount { get; set; } = string.Empty;
+    public string? ErrorsCount { get; set; } = null;
 
     [BsonElement("number_of_tracks")]
     public int? NumberOfTracks { get; set; } = null;

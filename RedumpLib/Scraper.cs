@@ -278,7 +278,9 @@ public class Scraper
                         break;
                     case "Anti-modchip": gameInfo.AntiModchip = val; break;
                     case "LibCrypt": gameInfo.LibCrypt = val; break;
-                    case "Errors count": gameInfo.ErrorsCount = val; break;
+                    case "Errors count": 
+                        gameInfo.ErrorsCount = string.IsNullOrWhiteSpace(val) ? null : val; 
+                        break;
                     case "Number of tracks":
                         if (int.TryParse(val, out int numTracks))
                         {
