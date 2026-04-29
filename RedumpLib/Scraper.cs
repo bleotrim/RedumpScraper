@@ -272,9 +272,7 @@ public class Scraper
                     case "LibCrypt": gameInfo.LibCrypt = val; break;
                     case "Errors count": gameInfo.ErrorsCount = val; break;
                     case "Number of tracks":
-                        // Pulizia: prendiamo solo la prima parte se c'è testo (es: "14 tracks" -> "14")
-                        string cleanVal = val.Split(' ')[0];
-                        if (int.TryParse(cleanVal, out int numTracks))
+                        if (int.TryParse(val, out int numTracks))
                         {
                             gameInfo.NumberOfTracks = numTracks;
                         }
