@@ -132,7 +132,7 @@ public class GameInfoDocument
     public string Media { get; set; } = string.Empty;
 
     [BsonElement("category")]
-    public string Category { get; set; } = string.Empty;
+    public string? Category { get; set; } = null;
 
     [BsonElement("region")]
     public string? Region { get; set; } = null;

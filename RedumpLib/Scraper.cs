@@ -257,7 +257,9 @@ public class Scraper
                 {
                     case "System": gameInfo.System = val; break;
                     case "Media": gameInfo.Media = val; break;
-                    case "Category": gameInfo.Category = val; break;
+                    case "Category":
+                        gameInfo.Category = string.IsNullOrWhiteSpace(val) ? null : val;
+                        break;
                     case "Serial":
                         gameInfo.Serial = string.IsNullOrWhiteSpace(val) ? null : val;
                         break;
