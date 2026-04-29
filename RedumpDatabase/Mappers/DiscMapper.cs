@@ -74,7 +74,7 @@ public static class DiscMapper
             {
                 Metadata = disc.GameComments.Metadata ?? null,
                 Comments = disc.GameComments.Comments ?? null,
-                Contents = disc.GameComments.Contents ?? string.Empty,
+                Contents = disc.GameComments.Contents ?? null,
                 Barcode = disc.GameComments.Barcode ?? string.Empty
             } : null,
             TrackStatus = disc.TrackStatus ?? null,

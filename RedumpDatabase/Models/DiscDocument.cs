@@ -119,7 +119,7 @@ public class GameCommentsDocument
     public string? Comments { get; set; } = null;
 
     [BsonElement("contents")]
-    public string Contents { get; set; } = string.Empty;
+    public string? Contents { get; set; } = null;
 
     [BsonElement("barcode")]
     public string Barcode { get; set; } = string.Empty;

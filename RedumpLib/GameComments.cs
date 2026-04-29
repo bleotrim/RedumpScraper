@@ -12,7 +12,7 @@ public class GameComments
     public string? Comments { get; set; } = null;
 
     /// <summary>Contents listing (games, files, etc.)</summary>
-    public string Contents { get; set; } = "";
+    public string? Contents { get; set; } = null;
 
     /// <summary>Barcode information, if available</summary>
     public string Barcode { get; set; } = "";
