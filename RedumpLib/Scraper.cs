@@ -276,7 +276,9 @@ public class Scraper
                     case "EDC": 
                         gameInfo.Edc = string.IsNullOrWhiteSpace(val) ? null : val; 
                         break;
-                    case "Anti-modchip": gameInfo.AntiModchip = val; break;
+                    case "Anti-modchip": 
+                        gameInfo.AntiModchip = string.IsNullOrWhiteSpace(val) ? null : val; 
+                        break;
                     case "LibCrypt": gameInfo.LibCrypt = val; break;
                     case "Errors count": 
                         gameInfo.ErrorsCount = string.IsNullOrWhiteSpace(val) ? null : val; 

@@ -174,7 +174,7 @@ public class GameInfoDocument
     public string? Edc { get; set; } = null;
 
     [BsonElement("anti_modchip")]
-    public string AntiModchip { get; set; } = string.Empty;
+    public string? AntiModchip { get; set; } = null;
 
     [BsonElement("libcrypt")]
     public string LibCrypt { get; set; } = string.Empty;
