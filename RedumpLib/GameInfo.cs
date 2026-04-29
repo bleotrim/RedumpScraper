@@ -6,7 +6,7 @@ namespace RedumpLib;
 /// </summary>
 public class GameInfo
 {
-    public string System { get; set; } = "";
+    public string? System { get; set; } = null;
     public string? Media { get; set; } = null;
     public string? Category { get; set; } = null;
     public string? Region { get; set; } = null;

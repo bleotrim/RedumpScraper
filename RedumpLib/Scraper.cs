@@ -255,7 +255,9 @@ public class Scraper
 
                 switch (header)
                 {
-                    case "System": gameInfo.System = val; break;
+                    case "System":
+                        gameInfo.System = string.IsNullOrWhiteSpace(val) ? null : val;
+                        break;
                     case "Media":
                         gameInfo.Media = string.IsNullOrWhiteSpace(val) ? null : val;
                         break;

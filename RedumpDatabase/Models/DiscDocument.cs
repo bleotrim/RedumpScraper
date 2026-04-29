@@ -126,7 +126,7 @@ public class GameCommentsDocument
 public class GameInfoDocument
 {
     [BsonElement("system")]
-    public string System { get; set; } = string.Empty;
+    public string? System { get; set; } = null;
 
     [BsonElement("media")]
     public string? Media { get; set; } = null;
