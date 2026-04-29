@@ -58,7 +58,7 @@ public class DiscDocument
     public MetadataDocument? Metadata { get; set; }
 
     [BsonElement("html_source")]
-    public string HtmlSource { get; set; } = string.Empty;
+    public string? HtmlSource { get; set; } = null;
 
     [BsonElement("created_at")]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
@@ -113,7 +113,7 @@ public class MetadataDocument
 public class GameCommentsDocument
 {
     [BsonElement("metadata")]
-    public string Metadata { get; set; } = string.Empty;
+    public string? Metadata { get; set; } = null;
 
     [BsonElement("comments")]
     public string Comments { get; set; } = string.Empty;

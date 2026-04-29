@@ -72,7 +72,7 @@ public static class DiscMapper
             } : null,
             GameComments = disc.GameComments != null ? new GameCommentsDocument
             {
-                Metadata = disc.GameComments.Metadata ?? string.Empty,
+                Metadata = disc.GameComments.Metadata ?? null,
                 Comments = disc.GameComments.Comments ?? string.Empty,
                 Contents = disc.GameComments.Contents ?? string.Empty,
                 Barcode = disc.GameComments.Barcode ?? string.Empty
@@ -137,7 +137,7 @@ public static class DiscMapper
                 DiscId = disc.Metadata.DiscId ?? string.Empty,
                 Pic = disc.Metadata.Pic ?? string.Empty
             } : null,
-            HtmlSource = disc.HtmlSource ?? string.Empty,
+            HtmlSource = disc.HtmlSource ?? null,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
@@ -200,7 +200,7 @@ public static class DiscMapper
             Metadata = doc.Metadata != null ? new Metadata(
                 doc.Metadata.DiscKey, doc.Metadata.DiscId, doc.Metadata.Pic
             ) : null,
-            HtmlSource = doc.HtmlSource ?? string.Empty
+            HtmlSource = doc.HtmlSource ?? null
         };
     }
 }

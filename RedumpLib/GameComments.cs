@@ -6,7 +6,7 @@ namespace RedumpLib;
 public class GameComments
 {
     /// <summary>Catalog and metadata information</summary>
-    public string Metadata { get; set; } = "";
+    public string? Metadata { get; set; } = null;
 
     /// <summary>Comments about the disc (internal serial, volume label, etc.)</summary>
     public string Comments { get; set; } = "";
