@@ -111,13 +111,6 @@ public class ID17031ScraperTests : IClassFixture<ID17031Fixture>
     }
     
     [Fact]
-    public void Version_ShouldBeOptional()
-    {
-        Assert.NotNull(_disc.GameInfo);
-        Assert.NotNull(_disc.GameInfo.Version);
-    }
-    
-    [Fact]
     public void Edition_ShouldBeOriginal()
     {
         Assert.NotNull(_disc.GameInfo);

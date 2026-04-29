@@ -267,7 +267,8 @@ public class Scraper
                         gameInfo.BuildDate = string.IsNullOrWhiteSpace(val) ? null : val;
                         break;
                     case "EXE date": gameInfo.ExeDate = val; break;
-                    case "Version": gameInfo.Version = val; break;
+                    case "Version": gameInfo.Version = string.IsNullOrWhiteSpace(val) ? null : val; 
+                        break;
                     case "Edition": gameInfo.Edition = val; break;
                     case "EDC": gameInfo.Edc = val; break;
                     case "Anti-modchip": gameInfo.AntiModchip = val; break;
