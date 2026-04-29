@@ -25,7 +25,7 @@ public class DiscDocument
     public GameCommentsDocument? GameComments { get; set; }
 
     [BsonElement("track_status")]
-    public string TrackStatus { get; set; } = string.Empty;
+    public string? TrackStatus { get; set; } = null;
 
     [BsonElement("cuesheet_status")]
     public string CuesheetStatus { get; set; } = string.Empty;

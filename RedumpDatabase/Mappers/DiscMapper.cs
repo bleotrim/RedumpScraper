@@ -77,7 +77,7 @@ public static class DiscMapper
                 Contents = disc.GameComments.Contents ?? string.Empty,
                 Barcode = disc.GameComments.Barcode ?? string.Empty
             } : null,
-            TrackStatus = disc.TrackStatus ?? string.Empty,
+            TrackStatus = disc.TrackStatus ?? null,
             CuesheetStatus = disc.CuesheetStatus ?? string.Empty,
             PvdStatus = disc.PvdStatus ?? string.Empty,
             Tracks = disc.Tracks.Select(t => new TrackDocument
