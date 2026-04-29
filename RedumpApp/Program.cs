@@ -98,21 +98,21 @@ try
                         Console.WriteLine($"                  • {lang}");
                     }
                 }
-                else
+                else if (disc.GameInfo.Languages.Count > 0)
                 {
                     Console.WriteLine($"Language:         {disc.GameInfo.Languages[0]}");
                 }
             }
-            if (HasValue(disc.GameInfo.BuildDate)) Console.WriteLine($"Build Date:     {disc.GameInfo.BuildDate}");
-            if (HasValue(disc.GameInfo.ExeDate)) Console.WriteLine($"EXE Date:         {disc.GameInfo.ExeDate}");
-            if (HasValue(disc.GameInfo.Edc)) Console.WriteLine($"EDC:              {disc.GameInfo.Edc}");
-            if (HasValue(disc.GameInfo.AntiModchip)) Console.WriteLine($"Anti-modchip:     {disc.GameInfo.AntiModchip}");
-            if (HasValue(disc.GameInfo.LibCrypt)) Console.WriteLine($"LibCrypt:         {disc.GameInfo.LibCrypt}");
-            if (HasValue(disc.GameInfo.ErrorsCount)) Console.WriteLine($"Errors Count:     {disc.GameInfo.ErrorsCount}");
-            if (HasValue(disc.GameInfo.WriteOffset)) Console.WriteLine($"Write Offset:     {disc.GameInfo.WriteOffset}");
-            if (HasValue(disc.GameInfo.NumberOfTracks)) Console.WriteLine($"Number of Tracks: {disc.GameInfo.NumberOfTracks}");
-            if (HasValue(disc.GameInfo.AddedDate)) Console.WriteLine($"Added:            {disc.GameInfo.AddedDate}");
-            if (HasValue(disc.GameInfo.LastModifiedDate)) Console.WriteLine($"Last Modified:    {disc.GameInfo.LastModifiedDate}");
+            if (HasValue(disc.GameInfo?.BuildDate)) Console.WriteLine($"Build Date:     {disc.GameInfo?.BuildDate}");
+            if (HasValue(disc.GameInfo?.ExeDate)) Console.WriteLine($"EXE Date:         {disc.GameInfo?.ExeDate}");
+            if (HasValue(disc.GameInfo?.Edc)) Console.WriteLine($"EDC:              {disc.GameInfo?.Edc}");
+            if (HasValue(disc.GameInfo?.AntiModchip)) Console.WriteLine($"Anti-modchip:     {disc.GameInfo?.AntiModchip}");
+            if (HasValue(disc.GameInfo?.LibCrypt)) Console.WriteLine($"LibCrypt:         {disc.GameInfo?.LibCrypt}");
+            if (HasValue(disc.GameInfo?.ErrorsCount)) Console.WriteLine($"Errors Count:     {disc.GameInfo?.ErrorsCount}");
+            if (HasValue(disc.GameInfo?.WriteOffset)) Console.WriteLine($"Write Offset:     {disc.GameInfo?.WriteOffset}");
+            if (HasValue(disc.GameInfo?.NumberOfTracks)) Console.WriteLine($"Number of Tracks: {disc.GameInfo?.NumberOfTracks}");
+            if (HasValue(disc.GameInfo?.AddedDate)) Console.WriteLine($"Added:            {disc.GameInfo?.AddedDate}");
+            if (HasValue(disc.GameInfo?.LastModifiedDate)) Console.WriteLine($"Last Modified:    {disc.GameInfo?.LastModifiedDate}");
         }
     }
 
@@ -162,6 +162,9 @@ try
         {
             Console.WriteLine($"\nTrack {track.Number}:");
             if (HasValue(track.Type)) Console.WriteLine($"  Type:    {track.Type}");
+            if (HasValue(track.Pregap)) Console.WriteLine($"  Pregap:  {track.Pregap}");
+            if (HasValue(track.Length)) Console.WriteLine($"  Length:  {track.Length}");
+            if (HasValue(track.Sectors)) Console.WriteLine($"  Sectors: {track.Sectors}");
             if (HasValue(track.Size)) Console.WriteLine($"  Size:    {track.Size}");
             if (HasValue(track.Crc32)) Console.WriteLine($"  CRC32:   {track.Crc32}");
             if (HasValue(track.Md5)) Console.WriteLine($"  MD5:     {track.Md5}");

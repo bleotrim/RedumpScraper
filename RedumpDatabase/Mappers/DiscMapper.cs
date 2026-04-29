@@ -84,6 +84,9 @@ public static class DiscMapper
             {
                 Number = t.Number ?? string.Empty,
                 Type = t.Type ?? string.Empty,
+                Pregap = t.Pregap ?? string.Empty,
+                Length = t.Length ?? string.Empty,
+                Sectors = t.Sectors ?? string.Empty,
                 Size = t.Size ?? string.Empty,
                 Crc32 = t.Crc32 ?? string.Empty,
                 Md5 = t.Md5 ?? string.Empty,
