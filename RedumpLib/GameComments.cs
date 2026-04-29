@@ -15,7 +15,7 @@ public class GameComments
     public string? Contents { get; set; } = null;
 
     /// <summary>Barcode information, if available</summary>
-    public string Barcode { get; set; } = "";
+    public string? Barcode { get; set; } = null;
 
     public GameComments() { }
 
