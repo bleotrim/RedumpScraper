@@ -52,7 +52,7 @@ public static class DiscMapper
             GameInfo = disc.GameInfo != null ? new GameInfoDocument
             {
                 System = disc.GameInfo.System ?? string.Empty,
-                Media = disc.GameInfo.Media ?? string.Empty,
+                Media = disc.GameInfo.Media ?? null,
                 Category = disc.GameInfo.Category ?? null,
                 Region = disc.GameInfo.Region ?? null,
                 Languages = disc.GameInfo.Languages ?? new List<string>(),
