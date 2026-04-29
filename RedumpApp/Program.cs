@@ -110,7 +110,10 @@ try
             if (HasValue(disc.GameInfo?.LibCrypt)) Console.WriteLine($"LibCrypt:         {disc.GameInfo?.LibCrypt}");
             if (HasValue(disc.GameInfo?.ErrorsCount)) Console.WriteLine($"Errors Count:     {disc.GameInfo?.ErrorsCount}");
             if (HasValue(disc.GameInfo?.WriteOffset)) Console.WriteLine($"Write Offset:     {disc.GameInfo?.WriteOffset}");
-            if (HasValue(disc.GameInfo?.NumberOfTracks)) Console.WriteLine($"Number of Tracks: {disc.GameInfo?.NumberOfTracks}");
+            if (disc.GameInfo?.NumberOfTracks.HasValue == true)
+            {
+                Console.WriteLine($"Number of Tracks: {disc.GameInfo.NumberOfTracks}");
+            }
             if (HasValue(disc.GameInfo?.AddedDate)) Console.WriteLine($"Added:            {disc.GameInfo?.AddedDate}");
             if (HasValue(disc.GameInfo?.LastModifiedDate)) Console.WriteLine($"Last Modified:    {disc.GameInfo?.LastModifiedDate}");
         }

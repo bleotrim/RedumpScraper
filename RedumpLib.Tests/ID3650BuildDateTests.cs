@@ -114,7 +114,7 @@ public class ID3650BuildDateTests : IClassFixture<ID3650Fixture>
     public void NumberOfTracks_ShouldBeTwo()
     {
         Assert.NotNull(_disc.GameInfo);
-        Assert.Equal("2", _disc.GameInfo.NumberOfTracks);
+        Assert.Equal(2, _disc.GameInfo.NumberOfTracks);
     }
 
     [Fact]

@@ -156,7 +156,7 @@ public class GameInfoDocument
     public string ErrorsCount { get; set; } = string.Empty;
 
     [BsonElement("number_of_tracks")]
-    public string NumberOfTracks { get; set; } = string.Empty;
+    public int? NumberOfTracks { get; set; } = null;
 
     [BsonElement("write_offset")]
     public string WriteOffset { get; set; } = string.Empty;

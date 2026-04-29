@@ -245,7 +245,7 @@ public class Scraper
         if (gameInfoRows != null)
         {
             var gameInfo = new GameInfo();
-            
+
             foreach (var row in gameInfoRows)
             {
                 var header = row.SelectSingleNode("th")?.InnerText.Trim();
@@ -271,13 +271,24 @@ public class Scraper
                     case "Anti-modchip": gameInfo.AntiModchip = val; break;
                     case "LibCrypt": gameInfo.LibCrypt = val; break;
                     case "Errors count": gameInfo.ErrorsCount = val; break;
-                    case "Number of tracks": gameInfo.NumberOfTracks = val; break;
+                    case "Number of tracks":
+                        // Pulizia: prendiamo solo la prima parte se c'è testo (es: "14 tracks" -> "14")
+                        string cleanVal = val.Split(' ')[0];
+                        if (int.TryParse(cleanVal, out int numTracks))
+                        {
+                            gameInfo.NumberOfTracks = numTracks;
+                        }
+                        else
+                        {
+                            gameInfo.NumberOfTracks = null;
+                        }
+                        break;
                     case "Write offset": gameInfo.WriteOffset = val; break;
                     case "Added": gameInfo.AddedDate = val; break;
                     case "Last modified": gameInfo.LastModifiedDate = val; break;
                 }
             }
-            
+
             disc.GameInfo = gameInfo;
         }
 
@@ -347,7 +358,7 @@ public class Scraper
                         // Handle two formats:
                         // Extended (9 cols): #, Type, Pregap, Length, Sectors, Size, CRC-32, MD5, SHA-1
                         // Simple (6 cols):   #, Sectors, Size, CRC-32, MD5, SHA-1
-                        
+
                         string number = cols[0].InnerText.Trim();
                         string type = "";
                         string pregap = "";
@@ -396,7 +407,7 @@ public class Scraper
         if (ringRows != null)
         {
             DiscRing? currentRing = null;
-            
+
             foreach (var row in ringRows)
             {
                 var cols = row.SelectNodes("td");
@@ -415,7 +426,7 @@ public class Scraper
                     {
                         // This is a new ring entry
                         string status = "";
-                        
+
                         // Look for status image in column 5 or beyond
                         if (cols.Count >= 6)
                         {
@@ -603,8 +614,8 @@ public class Scraper
             if (barcodeNode != null) gameComments.Barcode = barcodeNode.InnerText.Trim();
 
             // Only set GameComments if at least one field has a value
-            if (!string.IsNullOrWhiteSpace(gameComments.Metadata) || 
-                !string.IsNullOrWhiteSpace(gameComments.Comments) || 
+            if (!string.IsNullOrWhiteSpace(gameComments.Metadata) ||
+                !string.IsNullOrWhiteSpace(gameComments.Comments) ||
                 !string.IsNullOrWhiteSpace(gameComments.Contents) ||
                 !string.IsNullOrWhiteSpace(gameComments.Barcode))
             {
@@ -679,11 +690,11 @@ public class Scraper
                         {
                             var hasTh = row.SelectSingleNode(".//th") != null;
                             var hasTd = row.SelectSingleNode(".//td") != null;
-                            
+
                             // Skip header rows, only process data rows
                             if (hasTh || !hasTd)
                                 continue;
-                            
+
                             var cols = row.SelectNodes("td");
                             if (cols?.Count >= 3)
                             {
@@ -692,7 +703,7 @@ public class Scraper
                                 // For PIC, replace <br> tags with newlines and clean up
                                 string pic = Regex.Replace(cols[2].InnerHtml, @"<br\s*/?>", "\n", RegexOptions.IgnoreCase);
                                 pic = HtmlEntity.DeEntitize(Regex.Replace(pic, @"<[^>]*>", "")).Trim();
-                                
+
                                 disc.Metadata = new Metadata(discKey, discId, pic);
                                 break; // Found the data row, exit loop
                             }

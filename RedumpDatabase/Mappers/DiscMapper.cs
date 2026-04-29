@@ -61,7 +61,7 @@ public static class DiscMapper
                 Version = disc.GameInfo.Version ?? string.Empty,
                 Edition = disc.GameInfo.Edition ?? string.Empty,
                 ErrorsCount = disc.GameInfo.ErrorsCount ?? string.Empty,
-                NumberOfTracks = disc.GameInfo.NumberOfTracks ?? string.Empty,
+                NumberOfTracks = disc.GameInfo.NumberOfTracks ?? null,
                 WriteOffset = disc.GameInfo.WriteOffset ?? string.Empty,
                 AddedDate = disc.GameInfo.AddedDate ?? string.Empty,
                 LastModifiedDate = disc.GameInfo.LastModifiedDate ?? string.Empty,
