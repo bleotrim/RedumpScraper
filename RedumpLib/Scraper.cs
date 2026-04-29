@@ -266,7 +266,9 @@ public class Scraper
                     case "Build date":
                         gameInfo.BuildDate = string.IsNullOrWhiteSpace(val) ? null : val;
                         break;
-                    case "EXE date": gameInfo.ExeDate = val; break;
+                    case "EXE date":
+                        gameInfo.ExeDate = string.IsNullOrWhiteSpace(val) ? null : val;
+                        break;
                     case "Version":
                         gameInfo.Version = string.IsNullOrWhiteSpace(val) ? null : val;
                         break;

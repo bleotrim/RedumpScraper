@@ -20,7 +20,7 @@ public class GameInfo
     public string? WriteOffset { get; set; } = null;
     public string? AddedDate { get; set; } = null;
     public string? LastModifiedDate { get; set; } = null;
-    public string ExeDate { get; set; } = "";
+    public string? ExeDate { get; set; } = null;
     public string? Edc { get; set; } = null;
     public string? AntiModchip { get; set; } = null;
     public string? LibCrypt { get; set; } = null;
