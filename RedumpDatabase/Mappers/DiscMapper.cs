@@ -78,7 +78,7 @@ public static class DiscMapper
                 Barcode = disc.GameComments.Barcode ?? string.Empty
             } : null,
             TrackStatus = disc.TrackStatus ?? null,
-            CuesheetStatus = disc.CuesheetStatus ?? string.Empty,
+            CuesheetStatus = disc.CuesheetStatus ?? null,
             PvdStatus = disc.PvdStatus ?? string.Empty,
             Tracks = disc.Tracks.Select(t => new TrackDocument
             {

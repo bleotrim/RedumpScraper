@@ -28,7 +28,7 @@ public class DiscDocument
     public string? TrackStatus { get; set; } = null;
 
     [BsonElement("cuesheet_status")]
-    public string CuesheetStatus { get; set; } = string.Empty;
+    public string? CuesheetStatus { get; set; } = null;
 
     [BsonElement("pvd_status")]
     public string PvdStatus { get; set; } = string.Empty;

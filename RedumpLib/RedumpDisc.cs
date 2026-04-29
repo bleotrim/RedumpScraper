@@ -7,7 +7,7 @@ public class RedumpDisc
     public GameInfo? GameInfo { get; set; }
     public GameComments? GameComments { get; set; }
     public string? TrackStatus { get; set; } = null;
-    public string CuesheetStatus { get; set; } = "";
+    public string? CuesheetStatus { get; set; } = null;
     public string PvdStatus { get; set; } = "";
     public List<DiscTrack> Tracks { get; set; } = new();
     public List<DiscRing> Rings { get; set; } = new();
