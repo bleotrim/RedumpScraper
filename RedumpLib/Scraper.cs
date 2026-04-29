@@ -35,7 +35,7 @@ public class Scraper
         }
 
         // Capture HTML source and clean it
-        disc.HtmlSource = CleanHtmlSource(doc.DocumentNode.OuterHtml);
+        disc.HtmlSource = doc.DocumentNode.OuterHtml;
 
         return disc;
     }
