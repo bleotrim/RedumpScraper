@@ -577,6 +577,7 @@ public class Scraper
             var pvdRows = pvdTable.SelectNodes(".//tr[td]");
             if (pvdRows != null)
             {
+                disc.PvdEntries = new List<PvdRecord>();
                 foreach (var row in pvdRows)
                 {
                     var cols = row.SelectNodes("td");

@@ -94,25 +94,27 @@ public static class DiscMapper
                 Sha1 = t.Sha1 ?? string.Empty
             }).ToList()
             : null,
-            Rings = (disc.Rings != null && disc.Rings.Any()) 
+            Rings = (disc.Rings != null && disc.Rings.Any())
             ? disc.Rings.Select(r => new RingDocument
-                {
-                    Number = r.Number ?? string.Empty,
-                    MasteringCode = r.MasteringCode ?? string.Empty,
-                    MasteringSidCode = r.MasteringSidCode ?? string.Empty,
-                    Toolstamp = r.Toolstamp ?? string.Empty,
-                    MouldSidCode = r.MouldSidCode ?? string.Empty,
-                    Status = r.Status ?? string.Empty
-                }).ToList() 
+            {
+                Number = r.Number ?? string.Empty,
+                MasteringCode = r.MasteringCode ?? string.Empty,
+                MasteringSidCode = r.MasteringSidCode ?? string.Empty,
+                Toolstamp = r.Toolstamp ?? string.Empty,
+                MouldSidCode = r.MouldSidCode ?? string.Empty,
+                Status = r.Status ?? string.Empty
+            }).ToList()
             : null,
-            PvdEntries = disc.PvdEntries.Select(p => new PvdRecordDocument
+            PvdEntries = (disc.PvdEntries != null && disc.PvdEntries.Any())
+            ? disc.PvdEntries.Select(p => new PvdRecordDocument
             {
                 Entry = p.Entry ?? string.Empty,
                 Contents = p.Contents ?? string.Empty,
                 Date = p.Date ?? string.Empty,
                 Time = p.Time ?? string.Empty,
                 Gmt = p.Gmt ?? string.Empty
-            }).ToList(),
+            }).ToList()
+            : null,
             LibCryptSectors = disc.LibCryptSectors.Select(l => new LibCryptSectorDocument
             {
                 Sector = l.Sector ?? string.Empty,

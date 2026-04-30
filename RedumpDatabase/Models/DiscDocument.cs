@@ -40,7 +40,7 @@ public class DiscDocument
     public List<RingDocument>? Rings { get; set; } = null;
 
     [BsonElement("pvd_entries")]
-    public List<PvdRecordDocument> PvdEntries { get; set; } = new();
+    public List<PvdRecordDocument>? PvdEntries { get; set; } = null;
 
     [BsonElement("libcrypt_sectors")]
     public List<LibCryptSectorDocument> LibCryptSectors { get; set; } = new();
