@@ -1,6 +1,7 @@
 using Xunit;
 using RedumpLib;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace RedumpLib.Tests;
 
@@ -403,7 +404,11 @@ public class Id96925ScraperTests : IClassFixture<Id96925Fixture>
         var ring = _disc.Rings[0];
         Assert.Equal("1", ring.Number);
         Assert.Equal("HMD-222A", ring.MasteringCode);
+        Assert.Null(ring.MasteringSidCode);
+        Assert.Null(ring.Toolstamp);
+        Assert.Null(ring.MouldSidCode);
         Assert.Equal("Has been confirmed [!]", ring.Status);
+        Assert.Null(ring.AdditionalMouldText);
         Assert.Equal("+1107 ✔", ring.WriteOffset);
     }
 
