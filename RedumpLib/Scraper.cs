@@ -473,6 +473,8 @@ public class Scraper
             }
         }
 
+        // TODO: check id 950. the ring table has 4 rows, but only 3 of them are correctly parsed.
+        // the one which is not parsed is the one without the ring number.
         var ringsTable = doc.DocumentNode.SelectSingleNode("//table[@class='rings'][not(.//h3[text()='Metadata'])]");
         if (ringsTable != null)
         {
