@@ -24,6 +24,7 @@ public class GameInfo
     public string? Edc { get; set; } = null;
     public string? AntiModchip { get; set; } = null;
     public string? LibCrypt { get; set; } = null;
+    public string? Layerbreak { get; set; } = null;
     
     public GameInfo() { }
 
@@ -45,7 +46,8 @@ public class GameInfo
         string exeDate,
         string edc,
         string antiModchip,
-        string libCrypt)
+        string libCrypt,
+        string layerbreak)
     {
         System = system;
         Media = media;
@@ -65,5 +67,6 @@ public class GameInfo
         Edc = edc;
         AntiModchip = antiModchip;
         LibCrypt = libCrypt;
+        Layerbreak = layerbreak;
     }
 }

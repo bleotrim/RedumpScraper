@@ -181,6 +181,9 @@ public class GameInfoDocument
 
     [BsonElement("libcrypt")]
     public string? LibCrypt { get; set; } = null;
+
+    [BsonElement("layerbreak")]
+    public string? Layerbreak { get; set; } = null;
 }
 
 [BsonIgnoreExtraElements]

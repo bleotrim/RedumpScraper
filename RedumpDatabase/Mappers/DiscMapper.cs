@@ -68,7 +68,8 @@ public static class DiscMapper
                 ExeDate = disc.GameInfo.ExeDate ?? null,
                 Edc = disc.GameInfo.Edc ?? null,
                 AntiModchip = disc.GameInfo.AntiModchip ?? null,
-                LibCrypt = disc.GameInfo.LibCrypt ?? null
+                LibCrypt = disc.GameInfo.LibCrypt ?? null,
+                Layerbreak = disc.GameInfo.Layerbreak ?? null
             } : null,
             GameComments = disc.GameComments != null ? new GameCommentsDocument
             {
@@ -181,7 +182,8 @@ public static class DiscMapper
                 doc.GameInfo.ExeDate,
                 doc.GameInfo.Edc,
                 doc.GameInfo.AntiModchip,
-                doc.GameInfo.LibCrypt
+                doc.GameInfo.LibCrypt,
+                doc.GameInfo.Layerbreak
             ) : null,
             GameComments = doc.GameComments != null ? new RedumpLib.GameComments(
                 doc.GameComments.Metadata,

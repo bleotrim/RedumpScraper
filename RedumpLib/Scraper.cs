@@ -356,6 +356,10 @@ public class Scraper
                 {
                     gameInfo.LastModifiedDate = string.IsNullOrWhiteSpace(val) ? null : val;
                 }
+                else if (header.Contains("Layerbreak"))
+                {
+                    gameInfo.Layerbreak = string.IsNullOrWhiteSpace(val) ? null : val;
+                }
             }
 
             disc.GameInfo = gameInfo;
