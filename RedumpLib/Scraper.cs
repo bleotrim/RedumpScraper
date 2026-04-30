@@ -517,6 +517,7 @@ public class Scraper
         var ssrTable = doc.DocumentNode.SelectSingleNode("//table[contains(@class,'ssranges')]");
         if (ssrTable != null)
         {
+            disc.SecuritySectorRanges = new List<SecuritySectorRange>();
             var ssrRows = ssrTable.SelectNodes(".//tr[td]");
             if (ssrRows != null)
             {

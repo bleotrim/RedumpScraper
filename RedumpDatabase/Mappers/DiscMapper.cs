@@ -134,13 +134,15 @@ public static class DiscMapper
                 }).ToList() 
             : null,
             HeaderStatus = disc.HeaderStatus ?? null,
-            SecuritySectorRanges = disc.SecuritySectorRanges.Select(s => new SecuritySectorRangeDocument
-            {
-                Number = s.Number,
-                Start = s.Start,
-                End = s.End,
-                Note = s.Note
-            }).ToList(),
+            SecuritySectorRanges = (disc.SecuritySectorRanges != null && disc.SecuritySectorRanges.Any()) 
+            ? disc.SecuritySectorRanges.Select(s => new SecuritySectorRangeDocument
+                {
+                    Number = s.Number,
+                    Start = s.Start,
+                    End = s.End,
+                    Note = s.Note ?? string.Empty
+                }).ToList() 
+            : null,
             Metadata = disc.Metadata != null ? new MetadataDocument
             {
                 DiscKey = disc.Metadata.DiscKey ?? string.Empty,

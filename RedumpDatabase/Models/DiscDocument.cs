@@ -52,7 +52,7 @@ public class DiscDocument
     public string? HeaderStatus { get; set; } = null;
 
     [BsonElement("security_sector_ranges")]
-    public List<SecuritySectorRangeDocument> SecuritySectorRanges { get; set; } = new();
+    public List<SecuritySectorRangeDocument>? SecuritySectorRanges { get; set; } = null;
 
     [BsonElement("metadata")]
     public MetadataDocument? Metadata { get; set; }

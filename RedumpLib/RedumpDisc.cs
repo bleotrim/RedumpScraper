@@ -15,7 +15,7 @@ public class RedumpDisc
     public List<LibCryptSector>? LibCryptSectors { get; set; } = null;
     public List<HeaderEntry>? HeaderEntries { get; set; } = null;
     public string? HeaderStatus { get; set; } = null;
-    public List<SecuritySectorRange> SecuritySectorRanges { get; set; } = new();
+    public List<SecuritySectorRange>? SecuritySectorRanges { get; set; } = null;
     public Metadata? Metadata { get; set; }
     public string? HtmlSource { get; set; } = null;
 }
