@@ -46,7 +46,7 @@ public class DiscDocument
     public List<LibCryptSectorDocument>? LibCryptSectors { get; set; } = null;
 
     [BsonElement("header_entries")]
-    public List<HeaderEntryDocument> HeaderEntries { get; set; } = new();
+    public List<HeaderEntryDocument>? HeaderEntries { get; set; } = null;
 
     [BsonElement("header_status")]
     public string? HeaderStatus { get; set; } = null;

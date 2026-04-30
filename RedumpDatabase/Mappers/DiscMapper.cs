@@ -125,12 +125,14 @@ public static class DiscMapper
                     Comments = l.Comments ?? string.Empty
                 }).ToList() 
             : null,
-            HeaderEntries = disc.HeaderEntries.Select(h => new HeaderEntryDocument
-            {
-                Row = h.Row ?? string.Empty,
-                Contents = h.Contents ?? string.Empty,
-                Ascii = h.Ascii ?? string.Empty
-            }).ToList(),
+            HeaderEntries = (disc.HeaderEntries != null && disc.HeaderEntries.Any()) 
+            ? disc.HeaderEntries.Select(h => new HeaderEntryDocument
+                {
+                    Row = h.Row ?? string.Empty,
+                    Contents = h.Contents ?? string.Empty,
+                    Ascii = h.Ascii ?? string.Empty
+                }).ToList() 
+            : null,
             HeaderStatus = disc.HeaderStatus ?? null,
             SecuritySectorRanges = disc.SecuritySectorRanges.Select(s => new SecuritySectorRangeDocument
             {

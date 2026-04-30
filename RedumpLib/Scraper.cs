@@ -679,6 +679,7 @@ public class Scraper
         var headerTable = doc.DocumentNode.SelectSingleNode("//table[@class='header']");
         if (headerTable != null)
         {
+            disc.HeaderEntries = new List<HeaderEntry>();
             var headerRows = headerTable.SelectNodes(".//tr[td]");
             if (headerRows != null)
             {
