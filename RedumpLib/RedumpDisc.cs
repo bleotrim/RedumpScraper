@@ -12,7 +12,7 @@ public class RedumpDisc
     public List<DiscTrack>? Tracks { get; set; } = null;
     public List<DiscRing>? Rings { get; set; } = null;
     public List<PvdRecord>? PvdEntries { get; set; } = null;
-    public List<LibCryptSector> LibCryptSectors { get; set; } = new();
+    public List<LibCryptSector>? LibCryptSectors { get; set; } = null;
     public List<HeaderEntry> HeaderEntries { get; set; } = new();
     public string? HeaderStatus { get; set; } = null;
     public List<SecuritySectorRange> SecuritySectorRanges { get; set; } = new();

@@ -598,6 +598,7 @@ public class Scraper
             var libcryptRows = libcryptTable.SelectNodes(".//tr[td]");
             if (libcryptRows != null)
             {
+                disc.LibCryptSectors = new List<LibCryptSector>();
                 foreach (var row in libcryptRows)
                 {
                     var cols = row.SelectNodes("td");

@@ -115,14 +115,16 @@ public static class DiscMapper
                 Gmt = p.Gmt ?? string.Empty
             }).ToList()
             : null,
-            LibCryptSectors = disc.LibCryptSectors.Select(l => new LibCryptSectorDocument
-            {
-                Sector = l.Sector ?? string.Empty,
-                Msf = l.Msf ?? string.Empty,
-                Contents = l.Contents ?? string.Empty,
-                Xor = l.Xor ?? string.Empty,
-                Comments = l.Comments ?? string.Empty
-            }).ToList(),
+            LibCryptSectors = (disc.LibCryptSectors != null && disc.LibCryptSectors.Any()) 
+            ? disc.LibCryptSectors.Select(l => new LibCryptSectorDocument
+                {
+                    Sector = l.Sector ?? string.Empty,
+                    Msf = l.Msf ?? string.Empty,
+                    Contents = l.Contents ?? string.Empty,
+                    Xor = l.Xor ?? string.Empty,
+                    Comments = l.Comments ?? string.Empty
+                }).ToList() 
+            : null,
             HeaderEntries = disc.HeaderEntries.Select(h => new HeaderEntryDocument
             {
                 Row = h.Row ?? string.Empty,
