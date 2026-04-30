@@ -155,12 +155,14 @@ public class Id2BuildDateTests : IClassFixture<Id2Fixture>
     [Fact]
     public void LibCrypt_ShouldBeNo()
     {
+        Assert.NotNull(_disc.GameInfo);
         Assert.Equal("No", _disc.GameInfo!.LibCrypt);
     }
 
     [Fact]
     public void GameComments_ShouldBeNotNull()
-    {
+    {   
+        Assert.NotNull(_disc);    
         Assert.NotNull(_disc.GameComments);
     }
 
