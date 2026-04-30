@@ -589,4 +589,39 @@ public class Id2BuildDateTests : IClassFixture<Id2Fixture>
         Assert.Equal("00:00:00.00", entry.Time);
         Assert.Equal("+00:00", entry.Gmt);
     }
+
+    [Fact]
+    public void LibCryptSectors_ShouldBeNull()
+    {
+        Assert.NotNull(_disc);
+        Assert.Null(_disc.LibCryptSectors);
+    }
+
+    [Fact]
+    public void HeaderEntries_ShouldBeNull()
+    {
+        Assert.NotNull(_disc);
+        Assert.Null(_disc.HeaderEntries);
+    }
+
+    [Fact]
+    public void HeaderStatus_ShouldBeNull()
+    {
+        Assert.NotNull(_disc);
+        Assert.Null(_disc.HeaderStatus);
+    }
+
+    [Fact]
+    public void SecuritySectorRanges_ShouldBeNull()
+    {
+        Assert.NotNull(_disc);
+        Assert.Null(_disc.SecuritySectorRanges);
+    }
+
+    [Fact]
+    public void Metadata_ShouldBeNull()
+    {
+        Assert.NotNull(_disc);
+        Assert.Null(_disc.Metadata);
+    }
 }
