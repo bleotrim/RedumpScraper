@@ -267,74 +267,94 @@ public class Scraper
 
             foreach (var row in gameInfoRows)
             {
-                var header = row.SelectSingleNode("th")?.InnerText.Trim();
+                var headerNode = row.SelectSingleNode("th");
+                if (headerNode == null) continue;
+
+                string header = headerNode.InnerText ?? "";
                 var td = row.SelectSingleNode("td");
                 if (td == null) continue;
                 string val = td.InnerText.Trim();
 
-                switch (header)
+                if (header.Contains("System"))
                 {
-                    case "System":
-                        gameInfo.System = string.IsNullOrWhiteSpace(val) ? null : val;
-                        break;
-                    case "Media":
-                        gameInfo.Media = string.IsNullOrWhiteSpace(val) ? null : val;
-                        break;
-                    case "Category":
-                        gameInfo.Category = string.IsNullOrWhiteSpace(val) ? null : val;
-                        break;
-                    case "Serial":
-                        gameInfo.Serial = string.IsNullOrWhiteSpace(val) ? null : val;
-                        break;
-                    case "Region":
-                        gameInfo.Region = td.SelectSingleNode(".//img")?.GetAttributeValue("title", "") is string s && !string.IsNullOrWhiteSpace(s) ? s : null;
-                        break;
-                    case "Languages":
-                        gameInfo.Languages = td.SelectNodes("img")?.Select(i => i.GetAttributeValue("title", "")).ToList() ?? new();
-                        break;
-                    case "Build date":
-                        gameInfo.BuildDate = string.IsNullOrWhiteSpace(val) ? null : val;
-                        break;
-                    case "EXE date":
-                        gameInfo.ExeDate = string.IsNullOrWhiteSpace(val) ? null : val;
-                        break;
-                    case "Version":
-                        gameInfo.Version = string.IsNullOrWhiteSpace(val) ? null : val;
-                        break;
-                    case "Edition":
-                        gameInfo.Edition = string.IsNullOrWhiteSpace(val) ? null : val;
-                        break;
-                    case "EDC":
-                        gameInfo.Edc = string.IsNullOrWhiteSpace(val) ? null : val;
-                        break;
-                    case "Anti-modchip":
-                        gameInfo.AntiModchip = string.IsNullOrWhiteSpace(val) ? null : val;
-                        break;
-                    case "LibCrypt":
-                        gameInfo.LibCrypt = string.IsNullOrWhiteSpace(val) ? null : val;
-                        break;
-                    case "Errors count":
-                        gameInfo.ErrorsCount = string.IsNullOrWhiteSpace(val) ? null : val;
-                        break;
-                    case "Number of tracks":
-                        if (int.TryParse(val, out int numTracks))
-                        {
-                            gameInfo.NumberOfTracks = numTracks;
-                        }
-                        else
-                        {
-                            gameInfo.NumberOfTracks = null;
-                        }
-                        break;
-                    case "Write offset":
-                        gameInfo.WriteOffset = string.IsNullOrWhiteSpace(val) ? null : val;
-                        break;
-                    case "Added":
-                        gameInfo.AddedDate = string.IsNullOrWhiteSpace(val) ? null : val;
-                        break;
-                    case "Last modified":
-                        gameInfo.LastModifiedDate = string.IsNullOrWhiteSpace(val) ? null : val;
-                        break;
+                    gameInfo.System = string.IsNullOrWhiteSpace(val) ? null : val;
+                }
+                else if (header.Contains("Media"))
+                {
+                    gameInfo.Media = string.IsNullOrWhiteSpace(val) ? null : val;
+                }
+                else if (header.Contains("Category"))
+                {
+                    gameInfo.Category = string.IsNullOrWhiteSpace(val) ? null : val;
+                }
+                else if (header.Contains("Serial"))
+                {
+                    gameInfo.Serial = string.IsNullOrWhiteSpace(val) ? null : val;
+                }
+                else if (header.Contains("Region"))
+                {
+                    gameInfo.Region = td.SelectSingleNode(".//img")?.GetAttributeValue("title", "") is string s && !string.IsNullOrWhiteSpace(s) ? s : null;
+                }
+                else if (header.Contains("Languages"))
+                {
+                    gameInfo.Languages = td.SelectNodes("img")?
+                        .Select(i => i.GetAttributeValue("title", ""))
+                        .ToList() ?? new List<string>();
+                }
+                else if (header.Contains("Build date"))
+                {
+                    gameInfo.BuildDate = string.IsNullOrWhiteSpace(val) ? null : val;
+                }
+                else if (header.Contains("EXE date"))
+                {
+                    gameInfo.ExeDate = string.IsNullOrWhiteSpace(val) ? null : val;
+                }
+                else if (header.Contains("Version"))
+                {
+                    gameInfo.Version = string.IsNullOrWhiteSpace(val) ? null : val;
+                }
+                else if (header.Contains("Edition"))
+                {
+                    gameInfo.Edition = string.IsNullOrWhiteSpace(val) ? null : val;
+                }
+                else if (header.Contains("EDC"))
+                {
+                    gameInfo.Edc = string.IsNullOrWhiteSpace(val) ? null : val;
+                }
+                else if (header.Contains("Anti-modchip"))
+                {
+                    gameInfo.AntiModchip = string.IsNullOrWhiteSpace(val) ? null : val;
+                }
+                else if (header.Contains("LibCrypt"))
+                {
+                    gameInfo.LibCrypt = string.IsNullOrWhiteSpace(val) ? null : val;
+                }
+                else if (header.Contains("Errors count"))
+                {
+                    gameInfo.ErrorsCount = string.IsNullOrWhiteSpace(val) ? null : val;
+                }
+                else if (header.Contains("Number of tracks"))
+                {
+                    if (int.TryParse(val, out int numTracks))
+                    {
+                        gameInfo.NumberOfTracks = numTracks;
+                    }
+                    else
+                    {
+                        gameInfo.NumberOfTracks = null;
+                    }
+                }
+                else if (header.Contains("Write offset"))
+                {
+                    gameInfo.WriteOffset = string.IsNullOrWhiteSpace(val) ? null : val;
+                }
+                else if (header.Contains("Added"))
+                {
+                    gameInfo.AddedDate = string.IsNullOrWhiteSpace(val) ? null : val;
+                }
+                else if (header.Contains("Last modified"))
+                {
+                    gameInfo.LastModifiedDate = string.IsNullOrWhiteSpace(val) ? null : val;
                 }
             }
 
@@ -484,7 +504,7 @@ public class Scraper
             string? GetCol(HtmlNodeCollection cols, string colName)
             {
                 if (!columnIndex.TryGetValue(colName, out int idx)) return null;
-                    if (idx >= cols.Count) return null;
+                if (idx >= cols.Count) return null;
                 return GetCleanText(cols[idx]);
             }
 
@@ -499,12 +519,12 @@ public class Scraper
                     string? firstCol = GetCleanText(cols[0]);
                     if (!int.TryParse(firstCol, out _)) continue;
 
-                    string? masteringCode    = GetCol(cols, "Mastering Code (laser branded/etched)");
+                    string? masteringCode = GetCol(cols, "Mastering Code (laser branded/etched)");
                     string? masteringSidCode = GetCol(cols, "Mastering SID Code");
-                    string? toolstamp        = GetCol(cols, "Toolstamp or Mastering Code (engraved/stamped)");
-                    string? mouldSidCode     = GetCol(cols, "Mould SID Code");
-                    string? additionalMould  = GetCol(cols, "Additional Mould Text");
-                    string? writeOffset      = GetCol(cols, "Write offset");
+                    string? toolstamp = GetCol(cols, "Toolstamp or Mastering Code (engraved/stamped)");
+                    string? mouldSidCode = GetCol(cols, "Mould SID Code");
+                    string? additionalMould = GetCol(cols, "Additional Mould Text");
+                    string? writeOffset = GetCol(cols, "Write offset");
 
                     var namedIndices = new HashSet<int>(columnIndex.Values);
                     string? status = null;
