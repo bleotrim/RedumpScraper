@@ -665,7 +665,7 @@ public class Scraper
             var gameComments = new GameComments();
 
             // Extract Metadata
-            var metadataHeader = gamecommentsTable.SelectSingleNode(".//th[text()='Metadata']");
+            var metadataHeader = gamecommentsTable.SelectSingleNode(".//th[contains(text(), 'Metadata')]");
             if (metadataHeader != null)
             {
                 var metadataNode = metadataHeader.SelectSingleNode("./../following-sibling::tr/td");
