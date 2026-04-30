@@ -84,15 +84,15 @@ public static class DiscMapper
             Tracks = (disc.Tracks != null && disc.Tracks.Any())
             ? disc.Tracks.Select(t => new TrackDocument
             {
-                Number = t.Number ?? string.Empty,
-                Type = t.Type ?? string.Empty,
-                Pregap = t.Pregap ?? string.Empty,
-                Length = t.Length ?? string.Empty,
-                Sectors = t.Sectors ?? string.Empty,
-                Size = t.Size ?? string.Empty,
-                Crc32 = t.Crc32 ?? string.Empty,
-                Md5 = t.Md5 ?? string.Empty,
-                Sha1 = t.Sha1 ?? string.Empty
+                Number = t.Number ?? null,
+                Type = t.Type ?? null,
+                Pregap = t.Pregap ?? null,
+                Length = t.Length ?? null,
+                Sectors = t.Sectors ?? null,
+                Size = t.Size ?? null,
+                Crc32 = t.Crc32 ?? null,
+                Md5 = t.Md5 ?? null,
+                Sha1 = t.Sha1 ?? null
             }).ToList()
             : null,
             Rings = (disc.Rings != null && disc.Rings.Any())

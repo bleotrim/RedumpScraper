@@ -190,31 +190,31 @@ public class GameInfoDocument
 public class TrackDocument
 {
     [BsonElement("number")]
-    public string Number { get; set; } = string.Empty;
+    public string? Number { get; set; } = null;
 
     [BsonElement("type")]
-    public string Type { get; set; } = string.Empty;
+    public string? Type { get; set; } = null;
 
     [BsonElement("pregap")]
-    public string Pregap { get; set; } = string.Empty;
+    public string? Pregap { get; set; } = null;
 
     [BsonElement("length")]
-    public string Length { get; set; } = string.Empty;
+    public string? Length { get; set; } = null;
 
     [BsonElement("sectors")]
-    public string Sectors { get; set; } = string.Empty;
+    public string? Sectors { get; set; } = null;
 
     [BsonElement("size")]
-    public string Size { get; set; } = string.Empty;
+    public string? Size { get; set; } = null;
 
     [BsonElement("crc32")]
-    public string Crc32 { get; set; } = string.Empty;
+    public string? Crc32 { get; set; } = null;
 
     [BsonElement("md5")]
-    public string Md5 { get; set; } = string.Empty;
+    public string? Md5 { get; set; } = null;
 
     [BsonElement("sha1")]
-    public string Sha1 { get; set; } = string.Empty;
+    public string? Sha1 { get; set; } = null;
 }
 
 [BsonIgnoreExtraElements]
