@@ -13,9 +13,8 @@ db.getCollection('discs')
       "title": { $ne: 'N/D' },
       //"libcrypt_sectors": { $eq: null },
       //"pvd_entries": [],
-      //"disc_id": '2'
+      "disc_id": '96925'
       //"rings": null
-      "game_info.languages": []
     },
     {
       /*
