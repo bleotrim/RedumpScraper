@@ -701,7 +701,7 @@ public class Scraper
             }
 
             // Extract Barcode
-            var barcodeNode = doc.DocumentNode.SelectSingleNode("//th[text()='Barcode']/../following-sibling::tr/td");
+            var barcodeNode = doc.DocumentNode.SelectSingleNode("//th[contains(text(), 'Barcode')]/../following-sibling::tr[1]/td");
             if (barcodeNode != null) gameComments.Barcode = barcodeNode.InnerText.Trim();
 
             // Only set GameComments if at least one field has a value
