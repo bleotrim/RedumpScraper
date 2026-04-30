@@ -218,22 +218,28 @@ public class TrackDocument
 public class RingDocument
 {
     [BsonElement("number")]
-    public string Number { get; set; } = string.Empty;
+    public string? Number { get; set; } = null;
 
     [BsonElement("mastering_code")]
-    public string MasteringCode { get; set; } = string.Empty;
+    public string? MasteringCode { get; set; } = null;
 
     [BsonElement("mastering_sid_code")]
-    public string MasteringSidCode { get; set; } = string.Empty;
+    public string? MasteringSidCode { get; set; } = null;
 
     [BsonElement("toolstamp")]
-    public string Toolstamp { get; set; } = string.Empty;
+    public string? Toolstamp { get; set; } = null;
 
     [BsonElement("mould_sid_code")]
-    public string MouldSidCode { get; set; } = string.Empty;
+    public string? MouldSidCode { get; set; } = null;
 
     [BsonElement("status")]
-    public string Status { get; set; } = string.Empty;
+    public string? Status { get; set; } = null;
+
+    [BsonElement("additional_mould_text")]
+    public string? AdditionalMouldText { get; set; } = null;
+
+    [BsonElement("write_offset")]
+    public string? WriteOffset { get; set; } = null;
 }
 
 [BsonIgnoreExtraElements]

@@ -453,61 +453,78 @@ public class Scraper
             }
         }
 
-        var ringRows = doc.DocumentNode.SelectNodes("//table[@class='rings']//tr[td]");
-        if (ringRows != null)
+        var ringsTable = doc.DocumentNode.SelectSingleNode("//table[@class='rings'][not(.//h3[text()='Metadata'])]");
+        if (ringsTable != null)
         {
             disc.Rings = new List<DiscRing>();
-            DiscRing? currentRing = null;
-
-            foreach (var row in ringRows)
+            var headerRow = ringsTable.SelectSingleNode(".//tr[th]");
+            var columnIndex = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            if (headerRow != null)
             {
-                var cols = row.SelectNodes("td");
-                if (cols?.Count >= 5)
+                var headers = headerRow.SelectNodes("th");
+                if (headers != null)
                 {
-                    string GetCleanText(HtmlNode node)
+                    for (int i = 0; i < headers.Count; i++)
                     {
-                        var nullSpan = node.SelectSingleNode("span[@class='null']");
-                        if (nullSpan != null) return "";
-                        return HtmlEntity.DeEntitize(node.InnerText).Trim();
+                        string headerText = headers[i].InnerText.Trim();
+                        if (!string.IsNullOrEmpty(headerText) && !columnIndex.ContainsKey(headerText))
+                            columnIndex[headerText] = i;
                     }
+                }
+            }
 
-                    // Check if this row is a new ring (first column contains a number)
-                    string firstCol = GetCleanText(cols[0]);
-                    if (int.TryParse(firstCol, out int ringNumber))
+            string? GetCleanText(HtmlNode node)
+            {
+                var nullSpan = node.SelectSingleNode("span[@class='null']");
+                if (nullSpan != null) return null;
+                var text = HtmlEntity.DeEntitize(node.InnerText).Trim();
+                return string.IsNullOrEmpty(text) ? null : text;
+            }
+
+            string? GetCol(HtmlNodeCollection cols, string colName)
+            {
+                if (!columnIndex.TryGetValue(colName, out int idx)) return null;
+                    if (idx >= cols.Count) return null;
+                return GetCleanText(cols[idx]);
+            }
+
+            var dataRows = ringsTable.SelectNodes(".//tr[td]");
+            if (dataRows != null)
+            {
+                foreach (var row in dataRows)
+                {
+                    var cols = row.SelectNodes("td");
+                    if (cols == null || cols.Count < 1) continue;
+
+                    string? firstCol = GetCleanText(cols[0]);
+                    if (!int.TryParse(firstCol, out _)) continue;
+
+                    string? masteringCode    = GetCol(cols, "Mastering Code (laser branded/etched)");
+                    string? masteringSidCode = GetCol(cols, "Mastering SID Code");
+                    string? toolstamp        = GetCol(cols, "Toolstamp or Mastering Code (engraved/stamped)");
+                    string? mouldSidCode     = GetCol(cols, "Mould SID Code");
+                    string? additionalMould  = GetCol(cols, "Additional Mould Text");
+                    string? writeOffset      = GetCol(cols, "Write offset");
+
+                    var namedIndices = new HashSet<int>(columnIndex.Values);
+                    string? status = null;
+                    for (int i = 0; i < cols.Count; i++)
                     {
-                        // This is a new ring entry
-                        string status = "";
-
-                        // Look for status image in column 5 or beyond
-                        if (cols.Count >= 6)
+                        if (namedIndices.Contains(i)) continue; // skip data columns
+                        var img = cols[i].SelectSingleNode(".//img");
+                        if (img != null)
                         {
-                            var img = cols[5].SelectSingleNode(".//img");
-                            if (img != null)
-                            {
-                                status = img.GetAttributeValue("alt", "");
-                            }
+                            var alt = img.GetAttributeValue("alt", "");
+                            status = string.IsNullOrEmpty(alt) ? null : alt;
+                            break;
                         }
-                        else if (cols.Count >= 7)
-                        {
-                            var img = cols[6].SelectSingleNode(".//img");
-                            if (img != null)
-                            {
-                                status = img.GetAttributeValue("alt", "");
-                            }
-                        }
+                    }
 
-                        currentRing = new DiscRing(
-                            firstCol, GetCleanText(cols[1]), GetCleanText(cols[2]),
-                            GetCleanText(cols[3]), GetCleanText(cols[4]), status
-                        );
-                        disc.Rings.Add(currentRing);
-                    }
-                    else if (currentRing != null && cols.Count >= 4)
-                    {
-                        // This is a continuation row for the current ring (multiple rows per ring)
-                        // Update the current ring with additional data if needed
-                        // For now, we keep the first row's data and status
-                    }
+                    disc.Rings.Add(new DiscRing(
+                        firstCol, masteringCode, masteringSidCode,
+                        toolstamp, mouldSidCode, status,
+                        additionalMould, writeOffset
+                    ));
                 }
             }
         }

@@ -97,12 +97,14 @@ public static class DiscMapper
             Rings = (disc.Rings != null && disc.Rings.Any())
             ? disc.Rings.Select(r => new RingDocument
             {
-                Number = r.Number ?? string.Empty,
-                MasteringCode = r.MasteringCode ?? string.Empty,
-                MasteringSidCode = r.MasteringSidCode ?? string.Empty,
-                Toolstamp = r.Toolstamp ?? string.Empty,
-                MouldSidCode = r.MouldSidCode ?? string.Empty,
-                Status = r.Status ?? string.Empty
+                Number = r.Number ?? null,
+                MasteringCode = r.MasteringCode ?? null,
+                MasteringSidCode = r.MasteringSidCode ?? null,
+                Toolstamp = r.Toolstamp ?? null,
+                MouldSidCode = r.MouldSidCode ?? null,
+                Status = r.Status ?? null,
+                AdditionalMouldText = r.AdditionalMouldText ?? null,
+                WriteOffset = r.WriteOffset ?? null
             }).ToList()
             : null,
             PvdEntries = (disc.PvdEntries != null && disc.PvdEntries.Any())
