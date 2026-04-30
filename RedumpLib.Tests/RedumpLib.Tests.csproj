@@ -39,6 +39,10 @@
     <None Update="TestData/192.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="TestData/id-2.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  
   </ItemGroup>
 
   <ItemGroup>
