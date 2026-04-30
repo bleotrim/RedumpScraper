@@ -219,73 +219,22 @@ public class Id2BuildDateTests : IClassFixture<Id2Fixture>
     }
 
     [Fact]
-    public void TracksCount_ShouldBeOne()
+    public void Track1Data_ShouldBeCorrect()
     {
         Assert.NotNull(_disc.Tracks);
-        Assert.Equal(1, _disc.Tracks.Count);
-    }
+        Assert.Single(_disc.Tracks); 
+        
+        var track = _disc.Tracks[0];
 
-    [Fact]
-    public void FirstTrackNumber_ShouldBeOne()
-    {
-        Assert.NotNull(_disc.Tracks);
-        Assert.Equal("1", _disc.Tracks[0].Number);
-    }
-
-    [Fact]
-    public void FirstTrackType_ShouldBeDataMode2()
-    {
-        Assert.NotNull(_disc.Tracks);
-        Assert.Equal("Data/Mode 2", _disc.Tracks[0].Type);
-    }
-
-    [Fact]
-    public void FirstTrackPregap_ShouldBe000000()
-    {
-        Assert.NotNull(_disc.Tracks);
-        Assert.Equal("00:00:00", _disc.Tracks[0].Pregap);
-    }
-
-    [Fact]
-    public void FirstTrackLength_ShouldBe443005()
-    {
-        Assert.NotNull(_disc.Tracks);
-        Assert.Equal("44:30:05", _disc.Tracks[0].Length);
-    }
-
-    [Fact]
-    public void FirstTrackSectors_ShouldBe200255()
-    {
-        Assert.NotNull(_disc.Tracks);
-        Assert.Equal("200255", _disc.Tracks[0].Sectors);
-    }
-
-    [Fact]
-    public void FirstTrackSize_ShouldBe470999760()
-    {
-        Assert.NotNull(_disc.Tracks);
-        Assert.Equal("470999760", _disc.Tracks[0].Size);
-    }
-
-    [Fact]
-    public void FirstTrackCrc32_ShouldBe91cad2df()
-    {
-        Assert.NotNull(_disc.Tracks);
-        Assert.Equal("91cad2df", _disc.Tracks[0].Crc32);
-    }
-
-    [Fact]
-    public void FirstTrackMd5_ShouldBe24c2f5a5e43e4bc4c41081f5ef4dc818()
-    {
-        Assert.NotNull(_disc.Tracks);
-        Assert.Equal("24c2f5a5e43e4bc4c41081f5ef4dc818", _disc.Tracks[0].Md5);
-    }
-
-    [Fact]
-    public void FirstTrackSha1_ShouldBe8c215d983ad7d7f5f8aa122981cbd79d846532ec()
-    {
-        Assert.NotNull(_disc.Tracks);
-        Assert.Equal("8c215d983ad7d7f5f8aa122981cbd79d846532ec", _disc.Tracks[0].Sha1);
+        Assert.Equal("1", track.Number);
+        Assert.Equal("Data/Mode 2", track.Type);
+        Assert.Equal("00:00:00", track.Pregap);
+        Assert.Equal("44:30:05", track.Length);
+        Assert.Equal("200255", track.Sectors);
+        Assert.Equal("470999760", track.Size);
+        Assert.Equal("91cad2df", track.Crc32);
+        Assert.Equal("24c2f5a5e43e4bc4c41081f5ef4dc818", track.Md5);
+        Assert.Equal("8c215d983ad7d7f5f8aa122981cbd79d846532ec", track.Sha1);
     }
 
     [Fact]
@@ -296,244 +245,76 @@ public class Id2BuildDateTests : IClassFixture<Id2Fixture>
     }
 
     [Fact]
-    public void Ring1Number_ShouldBe1()
+    public void Ring1Data_ShouldBeCorrect()
     {
         Assert.NotNull(_disc.Rings);
-        Assert.Equal("1", _disc.Rings[0].Number);
+        Assert.NotEmpty(_disc.Rings);
+        
+        var ring = _disc.Rings[0];
+
+        Assert.Equal("1", ring.Number);
+        Assert.Null(ring.MasteringCode);
+        Assert.Null(ring.MasteringSidCode);
+        Assert.Null(ring.Toolstamp);
+        Assert.Equal("IFPI 944Q", ring.MouldSidCode);
+        Assert.Equal("Incomplete or not properly formed", ring.Status);
+        Assert.Null(ring.AdditionalMouldText);
+        Assert.Null(ring.WriteOffset);
     }
 
     [Fact]
-    public void Ring1MasteringCode_ShouldBeNUll()
+    public void Ring2Data_ShouldBeCorrect()
     {
         Assert.NotNull(_disc.Rings);
-        Assert.Null(_disc.Rings[0].MasteringCode);
+        Assert.True(_disc.Rings.Count > 1);
+        
+        var ring = _disc.Rings[1];
+
+        Assert.Equal("2", ring.Number);
+        Assert.Null(ring.MasteringCode);
+        Assert.Null(ring.MasteringSidCode);
+        Assert.Null(ring.Toolstamp);
+        Assert.Equal("IFPI 94Z2", ring.MouldSidCode);
+        Assert.Equal("Incomplete or not properly formed", ring.Status);
+        Assert.Null(ring.AdditionalMouldText);
+        Assert.Null(ring.WriteOffset);
     }
 
     [Fact]
-    public void Ring1MasteringSidCode_ShouldBeNUll()
+    public void Ring3Data_ShouldBeCorrect()
     {
         Assert.NotNull(_disc.Rings);
-        Assert.Null(_disc.Rings[0].MasteringSidCode);
+        Assert.True(_disc.Rings.Count > 2);
+        
+        var ring = _disc.Rings[2];
+
+        Assert.Equal("3", ring.Number);
+        Assert.Equal("DADC   A0100306117-0101   15", ring.MasteringCode);
+        Assert.Equal("IFPI L555", ring.MasteringSidCode);
+        Assert.Equal("A3, A6, B4", ring.Toolstamp);
+        Assert.Equal("IFPI 942R, IFPI 947A, IFPI 948Q", ring.MouldSidCode);
+        Assert.Equal("Has to be confirmed", ring.Status);
+        Assert.Equal("*", ring.AdditionalMouldText);
+        Assert.Equal("-647", ring.WriteOffset);
     }
 
     [Fact]
-    public void Ring1Toolstamp_ShouldBeNUll()
+    public void Ring4Data_ShouldBeCorrect()
     {
         Assert.NotNull(_disc.Rings);
-        Assert.Null(_disc.Rings[0].Toolstamp);
-    }
+        Assert.True(_disc.Rings.Count > 3);
+        
+        var ring = _disc.Rings[3];
 
-    [Fact]
-    public void Ring1MouldSidCode_ShouldBeIFPI944Q()
-    {
-        Assert.NotNull(_disc.Rings);
-        Assert.Equal("IFPI 944Q", _disc.Rings[0].MouldSidCode);
+        Assert.Equal("4", ring.Number);
+        Assert.Equal("DADC   A0100306117-0101   25", ring.MasteringCode);
+        Assert.Equal("IFPI L555", ring.MasteringSidCode);
+        Assert.Equal("A3, A4, B2", ring.Toolstamp);
+        Assert.Equal("IFPI 943P, IFPI 944P, IFPI 947A", ring.MouldSidCode);
+        Assert.Equal("Has to be confirmed", ring.Status);
+        Assert.Equal("*", ring.AdditionalMouldText);
+        Assert.Equal("-647", ring.WriteOffset);
     }
-
-    [Fact]
-    public void Ring1Status_ShouldBeCorrect()
-    {
-        var expected = "Incomplete or not properly formed";
-        Assert.NotNull(_disc.Rings);
-        Assert.Equal(expected, _disc.Rings[0].Status);
-    }
-
-    [Fact]
-    public void Ring1AdditionalMouldText_ShouldBeNUll()
-    {
-        Assert.NotNull(_disc.Rings);
-        Assert.Null(_disc.Rings[0].AdditionalMouldText);
-    }
-    
-    [Fact]
-    public void Ring1WriteOffset_ShouldBeNUll()
-    {
-        Assert.NotNull(_disc.Rings);
-        Assert.Null(_disc.Rings[0].WriteOffset);
-    }
-
-    [Fact]
-    public void Ring2Number_ShouldBe2()
-    {
-        Assert.NotNull(_disc.Rings);
-        Assert.Equal("2", _disc.Rings[1].Number);
-    }
-
-    [Fact]
-    public void Ring2MasteringCode_ShouldBeNull()
-    {
-        Assert.NotNull(_disc.Rings);
-        Assert.Null(_disc.Rings[1].MasteringCode);
-    }
-
-    [Fact]
-    public void Ring2MasteringSidCode_ShouldBeNull()
-    {
-        Assert.NotNull(_disc.Rings);
-        Assert.Null(_disc.Rings[1].MasteringSidCode);
-    }
-
-    [Fact]
-    public void Ring2Toolstamp_ShouldBeNull()
-    {
-        Assert.NotNull(_disc.Rings);
-        Assert.Null(_disc.Rings[1].Toolstamp);
-    }
-
-    [Fact]
-    public void Ring2MouldSidCode_ShouldBeIFPI94Z2()
-    {
-        Assert.NotNull(_disc.Rings);
-        Assert.Equal("IFPI 94Z2", _disc.Rings[1].MouldSidCode);
-    }
-
-    [Fact]
-    public void Ring2Status_ShouldBeCorrect()
-    {
-        var expected = "Incomplete or not properly formed";
-        Assert.NotNull(_disc.Rings);
-        Assert.Equal(expected, _disc.Rings[1].Status);
-    }
-
-    [Fact]
-    public void Ring2AdditionalMouldText_ShouldBeNull()
-    {
-        Assert.NotNull(_disc.Rings);
-        Assert.Null(_disc.Rings[1].AdditionalMouldText);
-    }
-
-    [Fact]
-    public void Ring2WriteOffset_ShouldBeNull()
-    {
-        Assert.NotNull(_disc.Rings);
-        Assert.Null(_disc.Rings[1].WriteOffset);
-    }
-
-    [Fact]
-    public void Ring3Number_ShouldBe3()
-    {
-        Assert.NotNull(_disc.Rings);
-        Assert.Equal("3", _disc.Rings[2].Number);
-    }
-
-    [Fact]
-    public void Ring3MasteringCode_ShouldBeCorrect()
-    {
-        var expected = "DADC   A0100306117-0101   15";
-        Assert.NotNull(_disc.Rings);
-        Assert.Equal(expected, _disc.Rings[2].MasteringCode);
-    }
-
-    [Fact]
-    public void Ring3MasteringSidCode_ShouldBeIFPIL555()
-    {
-        Assert.NotNull(_disc.Rings);
-        Assert.Equal("IFPI L555", _disc.Rings[2].MasteringSidCode);
-    }
-
-    [Fact]
-    public void Ring3Toolstamp_ShouldBeCorrect()
-    {
-        var expected = "A3, A6, B4";
-        Assert.NotNull(_disc.Rings);
-        Assert.Equal(expected, _disc.Rings[2].Toolstamp);
-    }
-
-    [Fact]
-    public void Ring3MouldSidCode_ShouldBeCorrect()
-    {   
-        var expected = "IFPI 942R, IFPI 947A, IFPI 948Q";
-        Assert.NotNull(_disc.Rings);
-        Assert.Equal(expected, _disc.Rings[2].MouldSidCode);
-    }
-
-    [Fact]
-    public void Ring3Status_ShouldBeCorrect()
-    {
-        var expected = "Has to be confirmed";
-        Assert.NotNull(_disc.Rings);
-        Assert.Equal(expected, _disc.Rings[2].Status);
-    }
-
-    [Fact]
-    public void Ring3AdditionalMouldText_ShouldBeCorrect()
-    {
-        var expected = "*";
-        Assert.NotNull(_disc.Rings);
-        Assert.Equal(expected, _disc.Rings[2].AdditionalMouldText);
-    }
-
-    [Fact]
-    public void Ring3WriteOffset_ShouldBeMinus647()
-    {   
-        Assert.NotNull(_disc.Rings);
-        Assert.Equal("-647", _disc.Rings[2].WriteOffset);
-    }
-
-    // Ring 4
-
-    [Fact]
-    public void Ring4Number_ShouldBe4()
-    {
-        Assert.NotNull(_disc.Rings);
-        Assert.Equal("4", _disc.Rings[3].Number);
-    }
-
-    [Fact]
-    public void Ring4MasteringCode_ShouldBeCorrect()
-    {
-        var expected = "DADC   A0100306117-0101   25";
-        Assert.NotNull(_disc.Rings);
-        Assert.Equal(expected, _disc.Rings[3].MasteringCode);
-    }
-
-    [Fact]
-    public void Ring4MasteringSidCode_ShouldBeIFPIL555()
-    {
-        Assert.NotNull(_disc.Rings);
-        Assert.Equal("IFPI L555", _disc.Rings[3].MasteringSidCode);
-    }
-
-    [Fact]
-    public void Ring4Toolstamp_ShouldBeCorrect()
-    {
-        var expected = "A3, A4, B2";
-        Assert.NotNull(_disc.Rings);
-        Assert.Equal(expected, _disc.Rings[3].Toolstamp);
-    }
-
-    [Fact]
-    public void Ring4MouldSidCode_ShouldBeCorrect()
-    {
-        var expected = "IFPI 943P, IFPI 944P, IFPI 947A";
-        Assert.NotNull(_disc.Rings);
-        Assert.Equal(expected, _disc.Rings[3].MouldSidCode);
-    }
-
-    [Fact]
-    public void Ring4Status_ShouldBeCorrect()
-    {
-        var expected = "Has to be confirmed";
-        Assert.NotNull(_disc.Rings);
-        Assert.Equal(expected, _disc.Rings[3].Status);
-    }
-
-    [Fact]
-    public void Ring4AdditionalMouldText_ShouldBeCorrect()
-    {
-        var expected = "*";
-        Assert.NotNull(_disc.Rings);
-        Assert.Equal(expected, _disc.Rings[3].AdditionalMouldText);
-    }
-
-    [Fact]
-    public void Ring4WriteOffset_ShouldBeMinus647()
-    {
-        Assert.NotNull(_disc.Rings);
-        Assert.Equal("-647", _disc.Rings[3].WriteOffset);
-    }
-
-    // PVD entries
 
     [Fact]
     public void PvdEntriesCount_ShouldBeFour()
