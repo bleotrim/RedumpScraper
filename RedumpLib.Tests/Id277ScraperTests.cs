@@ -228,9 +228,9 @@ public class Id277ScraperTests : IClassFixture<Id277Fixture>
         var track = _disc.Tracks[0];
 
         Assert.Equal("1", track.Number);
-        Assert.Equal("Data", track.Type);
-        Assert.Equal(string.Empty, track.Pregap);
-        Assert.Equal(string.Empty, track.Length);
+        Assert.Null(track.Type);
+        Assert.Null(track.Pregap);
+        Assert.Null(track.Length);
         Assert.Equal("2123328", track.Sectors);
         Assert.Equal("4348575744", track.Size);
         Assert.Equal("1136a195", track.Crc32);
