@@ -1,6 +1,7 @@
 using Xunit;
 using RedumpLib;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace RedumpLib.Tests;
 
@@ -17,6 +18,7 @@ public class Id2BuildDateTests : IClassFixture<Id2Fixture>
     public void Title_ShouldBeAceCombat3Electrosphere()
     {
         Assert.NotNull(_disc);
+        Assert.NotNull(_disc.Title);
         Assert.Contains("Ace Combat 3: Electrosphere", _disc.Title);
     }
 
@@ -64,6 +66,7 @@ public class Id2BuildDateTests : IClassFixture<Id2Fixture>
         };
 
         Assert.NotNull(_disc.GameInfo);
+        Assert.NotNull(_disc.GameInfo.Languages);
         Assert.Equal(5, _disc.GameInfo.Languages.Count);
         Assert.Equivalent(expectedLanguages, _disc.GameInfo.Languages);
     }
@@ -106,6 +109,7 @@ public class Id2BuildDateTests : IClassFixture<Id2Fixture>
     [Fact]
     public void NumberOfTracks_ShouldBeOne()
     {
+        Assert.NotNull(_disc.Tracks);
         Assert.NotEmpty(_disc.Tracks);
         Assert.Single(_disc.Tracks);
     }
@@ -156,7 +160,7 @@ public class Id2BuildDateTests : IClassFixture<Id2Fixture>
     public void LibCrypt_ShouldBeNo()
     {
         Assert.NotNull(_disc.GameInfo);
-        Assert.Equal("No", _disc.GameInfo!.LibCrypt);
+        Assert.Equal("No", _disc.GameInfo.LibCrypt);
     }
 
     [Fact]
