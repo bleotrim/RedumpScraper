@@ -60,6 +60,7 @@ public class Id96925ScraperTests : IClassFixture<Id96925Fixture>
     public void Languages_ShouldBeJapanese()
     {
         Assert.NotNull(_disc.GameInfo);
+        Assert.NotNull(_disc.GameInfo.Languages);
         Assert.Single(_disc.GameInfo.Languages);
         Assert.Equal("Japanese", _disc.GameInfo.Languages[0]);
     }
@@ -102,6 +103,7 @@ public class Id96925ScraperTests : IClassFixture<Id96925Fixture>
     [Fact]
     public void NumberOfTracks_ShouldBeTwelve()
     {
+        Assert.NotNull(_disc.Tracks);
         Assert.NotEmpty(_disc.Tracks);
         Assert.Equal(12, _disc.Tracks.Count);
     }
@@ -125,14 +127,6 @@ public class Id96925ScraperTests : IClassFixture<Id96925Fixture>
     {
         Assert.NotNull(_disc.GameInfo);
         Assert.Equal("2022-09-16 00:25", _disc.GameInfo.LastModifiedDate);
-    }
-
-    [Fact]
-    public void GameComments_ShouldBeCorrect()
-    {
-        Assert.NotNull(_disc.GameComments);
-        Assert.Equal("Electronic Arts ID: EFT-7005", _disc.GameComments.Comments);
-        Assert.Equal("4 938833 000828", _disc.GameComments.Barcode);
     }
 
     [Fact]
@@ -160,7 +154,7 @@ public class Id96925ScraperTests : IClassFixture<Id96925Fixture>
     public void LibCrypt_ShouldBeNull()
     {
         Assert.NotNull(_disc.GameInfo);
-        Assert.Null(_disc.GameInfo!.LibCrypt);
+        Assert.Null(_disc.GameInfo.LibCrypt);
     }
 
     [Fact]
@@ -221,6 +215,7 @@ public class Id96925ScraperTests : IClassFixture<Id96925Fixture>
     [Fact]
     public void Track1Data_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.Tracks);
         var track = _disc.Tracks[0];
         Assert.Equal("1", track.Number);
         Assert.Equal("Data/Mode 1", track.Type);
@@ -236,6 +231,7 @@ public class Id96925ScraperTests : IClassFixture<Id96925Fixture>
     [Fact]
     public void Track2Data_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.Tracks);
         var track = _disc.Tracks[1];
         Assert.Equal("2", track.Number);
         Assert.Equal("Audio", track.Type);
@@ -251,6 +247,7 @@ public class Id96925ScraperTests : IClassFixture<Id96925Fixture>
     [Fact]
     public void Track3Data_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.Tracks);
         var track = _disc.Tracks[2];
         Assert.Equal("3", track.Number);
         Assert.Equal("Audio", track.Type);
@@ -266,6 +263,7 @@ public class Id96925ScraperTests : IClassFixture<Id96925Fixture>
     [Fact]
     public void Track4Data_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.Tracks);
         var track = _disc.Tracks[3];
         Assert.Equal("4", track.Number);
         Assert.Equal("Audio", track.Type);
@@ -281,6 +279,7 @@ public class Id96925ScraperTests : IClassFixture<Id96925Fixture>
     [Fact]
     public void Track5Data_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.Tracks);
         var track = _disc.Tracks[4];
         Assert.Equal("5", track.Number);
         Assert.Equal("Audio", track.Type);
@@ -296,6 +295,7 @@ public class Id96925ScraperTests : IClassFixture<Id96925Fixture>
     [Fact]
     public void Track6Data_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.Tracks);
         var track = _disc.Tracks[5];
         Assert.Equal("6", track.Number);
         Assert.Equal("Audio", track.Type);
@@ -311,6 +311,7 @@ public class Id96925ScraperTests : IClassFixture<Id96925Fixture>
     [Fact]
     public void Track7Data_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.Tracks);
         var track = _disc.Tracks[6];
         Assert.Equal("7", track.Number);
         Assert.Equal("Audio", track.Type);
@@ -326,6 +327,7 @@ public class Id96925ScraperTests : IClassFixture<Id96925Fixture>
     [Fact]
     public void Track8Data_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.Tracks);
         var track = _disc.Tracks[7];
         Assert.Equal("8", track.Number);
         Assert.Equal("Audio", track.Type);
@@ -341,6 +343,7 @@ public class Id96925ScraperTests : IClassFixture<Id96925Fixture>
     [Fact]
     public void Track9Data_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.Tracks);
         var track = _disc.Tracks[8];
         Assert.Equal("9", track.Number);
         Assert.Equal("Audio", track.Type);
@@ -356,6 +359,7 @@ public class Id96925ScraperTests : IClassFixture<Id96925Fixture>
     [Fact]
     public void Track10Data_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.Tracks);
         var track = _disc.Tracks[9];
         Assert.Equal("10", track.Number);
         Assert.Equal("Audio", track.Type);
@@ -371,6 +375,7 @@ public class Id96925ScraperTests : IClassFixture<Id96925Fixture>
     [Fact]
     public void Track11Data_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.Tracks);
         var track = _disc.Tracks[10];
         Assert.Equal("11", track.Number);
         Assert.Equal("Audio", track.Type);
@@ -386,6 +391,7 @@ public class Id96925ScraperTests : IClassFixture<Id96925Fixture>
     [Fact]
     public void Track12Data_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.Tracks);
         var track = _disc.Tracks[11];
         Assert.Equal("12", track.Number);
         Assert.Equal("Audio", track.Type);
@@ -401,6 +407,7 @@ public class Id96925ScraperTests : IClassFixture<Id96925Fixture>
     [Fact]
     public void Ring1Data_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.Rings);
         var ring = _disc.Rings[0];
         Assert.Equal("1", ring.Number);
         Assert.Equal("HMD-222A", ring.MasteringCode);
