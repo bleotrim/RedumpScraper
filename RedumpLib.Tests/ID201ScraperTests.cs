@@ -5,27 +5,6 @@ using System.IO;
 
 namespace RedumpLib.Tests;
 
-public class ID201Fixture
-{
-    public RedumpDisc Disc { get; }
-
-    public ID201Fixture()
-    {
-        var scraper = new Scraper();
-        
-        var filePath = Path.Combine(AppContext.BaseDirectory, "TestData", "ID_201.html");
-        
-        if (!File.Exists(filePath))
-        {
-            throw new FileNotFoundException($"Unable to find test file at: {filePath}");
-        }
-        
-        var html = File.ReadAllText(filePath);
-        Disc = scraper.ParseRedumpHtml(html);
-        Disc.Id = "201";
-    }
-}
-
 public class ID201ScraperTests : IClassFixture<ID201Fixture>
 {
     private readonly RedumpDisc _disc;
@@ -45,24 +24,28 @@ public class ID201ScraperTests : IClassFixture<ID201Fixture>
     [Fact]
     public void Id_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc);
         Assert.Equal("201", _disc.Id);
     }
 
     [Fact]
     public void Tracks_ShouldNotBeEmpty()
     {
+        Assert.NotNull(_disc.Tracks);
         Assert.NotEmpty(_disc.Tracks);
     }
 
     [Fact]
     public void Tracks_CountShouldBeOne()
     {
+        Assert.NotNull(_disc.Tracks);
         Assert.Single(_disc.Tracks);
     }
 
     [Fact]
     public void Track1_ShouldHaveCorrectNumber()
     {
+        Assert.NotNull(_disc.Tracks);
         var track = _disc.Tracks[0];
         Assert.Equal("1", track.Number);
     }
@@ -70,6 +53,7 @@ public class ID201ScraperTests : IClassFixture<ID201Fixture>
     [Fact]
     public void Track1_ShouldHaveSectors()
     {
+        Assert.NotNull(_disc.Tracks);
         var track = _disc.Tracks[0];
         Assert.Equal("659728", track.Sectors);
     }
@@ -77,6 +61,7 @@ public class ID201ScraperTests : IClassFixture<ID201Fixture>
     [Fact]
     public void Track1_ShouldHaveSize()
     {
+        Assert.NotNull(_disc.Tracks);
         var track = _disc.Tracks[0];
         Assert.Equal("1351122944", track.Size);
     }
@@ -84,6 +69,7 @@ public class ID201ScraperTests : IClassFixture<ID201Fixture>
     [Fact]
     public void Track1_ShouldHaveCorrectCrc32()
     {
+        Assert.NotNull(_disc.Tracks);
         var track = _disc.Tracks[0];
         Assert.Equal("d7a6034e", track.Crc32);
     }
@@ -91,6 +77,7 @@ public class ID201ScraperTests : IClassFixture<ID201Fixture>
     [Fact]
     public void Track1_ShouldHaveCorrectMd5()
     {
+        Assert.NotNull(_disc.Tracks);
         var track = _disc.Tracks[0];
         Assert.Equal("b5d6353d600fa8ddbb5aed1e666c0b94", track.Md5);
     }
@@ -98,6 +85,7 @@ public class ID201ScraperTests : IClassFixture<ID201Fixture>
     [Fact]
     public void Track1_ShouldHaveCorrectSha1()
     {
+        Assert.NotNull(_disc.Tracks);
         var track = _disc.Tracks[0];
         Assert.Equal("ba1edaeb0163db9c07dc04c7ea60d6a6b48a761f", track.Sha1);
     }
