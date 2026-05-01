@@ -2,6 +2,7 @@ using Xunit;
 using RedumpLib;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Linq; // Aggiunto per .Any() o .Count() se necessario
 
 namespace RedumpLib.Tests;
 
@@ -60,6 +61,7 @@ public class Id625ScraperTests : IClassFixture<Id625Fixture>
     public void Languages_ShouldBeEnglish()
     {
         Assert.NotNull(_disc.GameInfo);
+        Assert.NotNull(_disc.GameInfo.Languages);
         Assert.Single(_disc.GameInfo.Languages);
         Assert.Equal("English", _disc.GameInfo.Languages[0]);
     }
@@ -102,6 +104,7 @@ public class Id625ScraperTests : IClassFixture<Id625Fixture>
     [Fact]
     public void NumberOfTracks_ShouldBeTwo()
     {
+        Assert.NotNull(_disc.Tracks);
         Assert.NotEmpty(_disc.Tracks);
         Assert.Equal(2, _disc.Tracks.Count);
     }
@@ -152,7 +155,7 @@ public class Id625ScraperTests : IClassFixture<Id625Fixture>
     public void LibCrypt_ShouldBeNull()
     {
         Assert.NotNull(_disc.GameInfo);
-        Assert.Null(_disc.GameInfo!.LibCrypt);
+        Assert.Null(_disc.GameInfo.LibCrypt);
     }
 
     [Fact]
@@ -213,6 +216,7 @@ public class Id625ScraperTests : IClassFixture<Id625Fixture>
     [Fact]
     public void Track1Data_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.Tracks);
         var track = _disc.Tracks[0];
         Assert.Equal("1", track.Number);
         Assert.Equal("Data/Mode 1", track.Type);
@@ -228,6 +232,7 @@ public class Id625ScraperTests : IClassFixture<Id625Fixture>
     [Fact]
     public void Track2Data_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.Tracks);
         var track = _disc.Tracks[1];
         Assert.Equal("2", track.Number);
         Assert.Equal("Audio", track.Type);
@@ -243,6 +248,7 @@ public class Id625ScraperTests : IClassFixture<Id625Fixture>
     [Fact]
     public void Ring1Data_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.Rings);
         var ring = _disc.Rings[0];
         Assert.Equal("1", ring.Number);
         Assert.Equal("SEGAT49025 R2C   MFD BY JVC", ring.MasteringCode);
@@ -267,7 +273,7 @@ public class Id625ScraperTests : IClassFixture<Id625Fixture>
         Assert.Null(_disc.LibCryptSectors);
     }
 
-[Fact]
+    [Fact]
     public void HeaderEntries_ShouldHaveSixteenEntries()
     {
         Assert.NotNull(_disc.HeaderEntries);
@@ -277,6 +283,7 @@ public class Id625ScraperTests : IClassFixture<Id625Fixture>
     [Fact]
     public void HeaderEntry_0100_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.HeaderEntries);
         var entry = _disc.HeaderEntries.Find(e => e.Row == "0100");
         Assert.NotNull(entry);
         Assert.Equal("53 45 47 41 20 47 45 4E 45 53 49 53 20 20 20 20", entry.Contents);
@@ -286,6 +293,7 @@ public class Id625ScraperTests : IClassFixture<Id625Fixture>
     [Fact]
     public void HeaderEntry_0110_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.HeaderEntries);
         var entry = _disc.HeaderEntries.Find(e => e.Row == "0110");
         Assert.NotNull(entry);
         Assert.Equal("28 43 29 54 2D 34 39 20 31 39 39 33 2E 41 50 52", entry.Contents);
@@ -295,6 +303,7 @@ public class Id625ScraperTests : IClassFixture<Id625Fixture>
     [Fact]
     public void HeaderEntry_0120_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.HeaderEntries);
         var entry = _disc.HeaderEntries.Find(e => e.Row == "0120");
         Assert.NotNull(entry);
         Assert.Equal("54 49 4D 45 20 47 41 4C 20 20 20 20 20 20 20 20", entry.Contents);
@@ -304,6 +313,7 @@ public class Id625ScraperTests : IClassFixture<Id625Fixture>
     [Fact]
     public void HeaderEntry_0130_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.HeaderEntries);
         var entry = _disc.HeaderEntries.Find(e => e.Row == "0130");
         Assert.NotNull(entry);
         Assert.Equal("20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20", entry.Contents);
@@ -313,6 +323,7 @@ public class Id625ScraperTests : IClassFixture<Id625Fixture>
     [Fact]
     public void HeaderEntry_0140_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.HeaderEntries);
         var entry = _disc.HeaderEntries.Find(e => e.Row == "0140");
         Assert.NotNull(entry);
         Assert.Equal("20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20", entry.Contents);
@@ -322,6 +333,7 @@ public class Id625ScraperTests : IClassFixture<Id625Fixture>
     [Fact]
     public void HeaderEntry_0150_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.HeaderEntries);
         var entry = _disc.HeaderEntries.Find(e => e.Row == "0150");
         Assert.NotNull(entry);
         Assert.Equal("54 49 4D 45 20 47 41 4C 20 20 20 20 20 20 20 20", entry.Contents);
@@ -331,6 +343,7 @@ public class Id625ScraperTests : IClassFixture<Id625Fixture>
     [Fact]
     public void HeaderEntry_0160_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.HeaderEntries);
         var entry = _disc.HeaderEntries.Find(e => e.Row == "0160");
         Assert.NotNull(entry);
         Assert.Equal("20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20", entry.Contents);
@@ -340,6 +353,7 @@ public class Id625ScraperTests : IClassFixture<Id625Fixture>
     [Fact]
     public void HeaderEntry_0170_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.HeaderEntries);
         var entry = _disc.HeaderEntries.Find(e => e.Row == "0170");
         Assert.NotNull(entry);
         Assert.Equal("20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20", entry.Contents);
@@ -349,6 +363,7 @@ public class Id625ScraperTests : IClassFixture<Id625Fixture>
     [Fact]
     public void HeaderEntry_0180_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.HeaderEntries);
         var entry = _disc.HeaderEntries.Find(e => e.Row == "0180");
         Assert.NotNull(entry);
         Assert.Equal("47 4D 20 54 2D 36 32 31 34 20 2D 30 30 20 20 20", entry.Contents);
@@ -358,6 +373,7 @@ public class Id625ScraperTests : IClassFixture<Id625Fixture>
     [Fact]
     public void HeaderEntry_0190_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.HeaderEntries);
         var entry = _disc.HeaderEntries.Find(e => e.Row == "0190");
         Assert.NotNull(entry);
         Assert.Equal("4A 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20", entry.Contents);
@@ -367,6 +383,7 @@ public class Id625ScraperTests : IClassFixture<Id625Fixture>
     [Fact]
     public void HeaderEntry_01A0_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.HeaderEntries);
         var entry = _disc.HeaderEntries.Find(e => e.Row == "01A0");
         Assert.NotNull(entry);
         Assert.Equal("20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20", entry.Contents);
@@ -376,6 +393,7 @@ public class Id625ScraperTests : IClassFixture<Id625Fixture>
     [Fact]
     public void HeaderEntry_01B0_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.HeaderEntries);
         var entry = _disc.HeaderEntries.Find(e => e.Row == "01B0");
         Assert.NotNull(entry);
         Assert.Equal("20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20", entry.Contents);
@@ -385,6 +403,7 @@ public class Id625ScraperTests : IClassFixture<Id625Fixture>
     [Fact]
     public void HeaderEntry_01C0_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.HeaderEntries);
         var entry = _disc.HeaderEntries.Find(e => e.Row == "01C0");
         Assert.NotNull(entry);
         Assert.Equal("20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20", entry.Contents);
@@ -394,6 +413,7 @@ public class Id625ScraperTests : IClassFixture<Id625Fixture>
     [Fact]
     public void HeaderEntry_01D0_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.HeaderEntries);
         var entry = _disc.HeaderEntries.Find(e => e.Row == "01D0");
         Assert.NotNull(entry);
         Assert.Equal("20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20", entry.Contents);
@@ -403,6 +423,7 @@ public class Id625ScraperTests : IClassFixture<Id625Fixture>
     [Fact]
     public void HeaderEntry_01E0_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.HeaderEntries);
         var entry = _disc.HeaderEntries.Find(e => e.Row == "01E0");
         Assert.NotNull(entry);
         Assert.Equal("20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20", entry.Contents);
@@ -412,6 +433,7 @@ public class Id625ScraperTests : IClassFixture<Id625Fixture>
     [Fact]
     public void HeaderEntry_01F0_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.HeaderEntries);
         var entry = _disc.HeaderEntries.Find(e => e.Row == "01F0");
         Assert.NotNull(entry);
         Assert.Equal("4A 55 20 20 20 20 20 20 20 20 20 20 20 20 20 20", entry.Contents);
