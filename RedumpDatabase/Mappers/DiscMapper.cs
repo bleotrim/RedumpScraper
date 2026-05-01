@@ -51,61 +51,61 @@ public static class DiscMapper
             Title = disc.Title ?? string.Empty,
             GameInfo = disc.GameInfo != null ? new GameInfoDocument
             {
-                System = disc.GameInfo.System ?? null,
-                Media = disc.GameInfo.Media ?? null,
-                Category = disc.GameInfo.Category ?? null,
-                Region = disc.GameInfo.Region ?? null,
+                System = disc.GameInfo.System,
+                Media = disc.GameInfo.Media,
+                Category = disc.GameInfo.Category,
+                Region = disc.GameInfo.Region,
                 Languages = disc.GameInfo.Languages ?? new List<string>(),
-                Serial = disc.GameInfo.Serial ?? null,
-                BuildDate = disc.GameInfo.BuildDate ?? null,
-                Version = disc.GameInfo.Version ?? null,
-                Edition = disc.GameInfo.Edition ?? null,
-                ErrorsCount = disc.GameInfo.ErrorsCount ?? null,
-                NumberOfTracks = disc.GameInfo.NumberOfTracks ?? null,
-                WriteOffset = disc.GameInfo.WriteOffset ?? null,
-                AddedDate = disc.GameInfo.AddedDate ?? null,
-                LastModifiedDate = disc.GameInfo.LastModifiedDate ?? null,
-                ExeDate = disc.GameInfo.ExeDate ?? null,
-                Edc = disc.GameInfo.Edc ?? null,
-                AntiModchip = disc.GameInfo.AntiModchip ?? null,
-                LibCrypt = disc.GameInfo.LibCrypt ?? null,
-                Layerbreak = disc.GameInfo.Layerbreak ?? null
+                Serial = disc.GameInfo.Serial,
+                BuildDate = disc.GameInfo.BuildDate,
+                Version = disc.GameInfo.Version,
+                Edition = disc.GameInfo.Edition,
+                ErrorsCount = disc.GameInfo.ErrorsCount,
+                NumberOfTracks = disc.GameInfo.NumberOfTracks,
+                WriteOffset = disc.GameInfo.WriteOffset,
+                AddedDate = disc.GameInfo.AddedDate,
+                LastModifiedDate = disc.GameInfo.LastModifiedDate,
+                ExeDate = disc.GameInfo.ExeDate,
+                Edc = disc.GameInfo.Edc,
+                AntiModchip = disc.GameInfo.AntiModchip,
+                LibCrypt = disc.GameInfo.LibCrypt,
+                Layerbreak = disc.GameInfo.Layerbreak
             } : null,
             GameComments = disc.GameComments != null ? new GameCommentsDocument
             {
-                Metadata = disc.GameComments.Metadata ?? null,
-                Comments = disc.GameComments.Comments ?? null,
-                Contents = disc.GameComments.Contents ?? null,
-                Barcode = disc.GameComments.Barcode ?? null
+                Metadata = disc.GameComments.Metadata,
+                Comments = disc.GameComments.Comments,
+                Contents = disc.GameComments.Contents,
+                Barcode = disc.GameComments.Barcode
             } : null,
-            TrackStatus = disc.TrackStatus ?? null,
-            CuesheetStatus = disc.CuesheetStatus ?? null,
-            PvdStatus = disc.PvdStatus ?? null,
+            TrackStatus = disc.TrackStatus,
+            CuesheetStatus = disc.CuesheetStatus,
+            PvdStatus = disc.PvdStatus,
             Tracks = (disc.Tracks != null && disc.Tracks.Any())
             ? disc.Tracks.Select(t => new TrackDocument
             {
-                Number = t.Number ?? null,
-                Type = t.Type ?? null,
-                Pregap = t.Pregap ?? null,
-                Length = t.Length ?? null,
-                Sectors = t.Sectors ?? null,
-                Size = t.Size ?? null,
-                Crc32 = t.Crc32 ?? null,
-                Md5 = t.Md5 ?? null,
-                Sha1 = t.Sha1 ?? null
+                Number = t.Number,
+                Type = t.Type,
+                Pregap = t.Pregap,
+                Length = t.Length,
+                Sectors = t.Sectors,
+                Size = t.Size,
+                Crc32 = t.Crc32,
+                Md5 = t.Md5,
+                Sha1 = t.Sha1
             }).ToList()
             : null,
             Rings = (disc.Rings != null && disc.Rings.Any())
             ? disc.Rings.Select(r => new RingDocument
             {
-                Number = r.Number ?? null,
-                MasteringCode = r.MasteringCode ?? null,
-                MasteringSidCode = r.MasteringSidCode ?? null,
-                Toolstamp = r.Toolstamp ?? null,
-                MouldSidCode = r.MouldSidCode ?? null,
-                Status = r.Status ?? null,
-                AdditionalMouldText = r.AdditionalMouldText ?? null,
-                WriteOffset = r.WriteOffset ?? null
+                Number = r.Number,
+                MasteringCode = r.MasteringCode,
+                MasteringSidCode = r.MasteringSidCode,
+                Toolstamp = r.Toolstamp,
+                MouldSidCode = r.MouldSidCode,
+                Status = r.Status,
+                AdditionalMouldText = r.AdditionalMouldText,
+                WriteOffset = r.WriteOffset
             }).ToList()
             : null,
             PvdEntries = (disc.PvdEntries != null && disc.PvdEntries.Any())
@@ -136,7 +136,7 @@ public static class DiscMapper
                     Ascii = h.Ascii ?? string.Empty
                 }).ToList() 
             : null,
-            HeaderStatus = disc.HeaderStatus ?? null,
+            HeaderStatus = disc.HeaderStatus,
             SecuritySectorRanges = (disc.SecuritySectorRanges != null && disc.SecuritySectorRanges.Any()) 
             ? disc.SecuritySectorRanges.Select(s => new SecuritySectorRangeDocument
                 {
@@ -152,7 +152,7 @@ public static class DiscMapper
                 DiscId = disc.Metadata.DiscId ?? string.Empty,
                 Pic = disc.Metadata.Pic ?? string.Empty
             } : null,
-            HtmlSource = disc.HtmlSource ?? null,
+            HtmlSource = disc.HtmlSource,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
@@ -165,58 +165,70 @@ public static class DiscMapper
             Id = doc.DiscId,
             Title = doc.Title,
             GameInfo = doc.GameInfo != null ? new RedumpLib.GameInfo(
-                doc.GameInfo.System,
-                doc.GameInfo.Media,
-                doc.GameInfo.Category,
-                doc.GameInfo.Region,
-                doc.GameInfo.Languages,
-                doc.GameInfo.Serial,
-                doc.GameInfo.BuildDate,
-                doc.GameInfo.Version,
-                doc.GameInfo.Edition,
-                doc.GameInfo.ErrorsCount,
+                doc.GameInfo.System ?? string.Empty,
+                doc.GameInfo.Media ?? string.Empty,
+                doc.GameInfo.Category ?? string.Empty,
+                doc.GameInfo.Region ?? string.Empty,
+                doc.GameInfo.Languages ?? new List<string>(),
+                doc.GameInfo.Serial ?? string.Empty,
+                doc.GameInfo.BuildDate ?? string.Empty,
+                doc.GameInfo.Version ?? string.Empty,
+                doc.GameInfo.Edition ?? string.Empty,
+                doc.GameInfo.ErrorsCount ?? string.Empty,
                 doc.GameInfo.NumberOfTracks,
-                doc.GameInfo.WriteOffset,
-                doc.GameInfo.AddedDate,
-                doc.GameInfo.LastModifiedDate,
-                doc.GameInfo.ExeDate,
-                doc.GameInfo.Edc,
-                doc.GameInfo.AntiModchip,
-                doc.GameInfo.LibCrypt,
-                doc.GameInfo.Layerbreak
+                doc.GameInfo.WriteOffset ?? string.Empty,
+                doc.GameInfo.AddedDate ?? string.Empty,
+                doc.GameInfo.LastModifiedDate ?? string.Empty,
+                doc.GameInfo.ExeDate ?? string.Empty,
+                doc.GameInfo.Edc ?? string.Empty,
+                doc.GameInfo.AntiModchip ?? string.Empty,
+                doc.GameInfo.LibCrypt ?? string.Empty,
+                doc.GameInfo.Layerbreak ?? string.Empty
             ) : null,
             GameComments = doc.GameComments != null ? new RedumpLib.GameComments(
-                doc.GameComments.Metadata,
-                doc.GameComments.Comments,
-                doc.GameComments.Contents,
-                doc.GameComments.Barcode
+                doc.GameComments.Metadata ?? string.Empty,
+                doc.GameComments.Comments ?? string.Empty,
+                doc.GameComments.Contents ?? string.Empty,
+                doc.GameComments.Barcode ?? string.Empty
             ) : null,
             TrackStatus = doc.TrackStatus,
             CuesheetStatus = doc.CuesheetStatus,
             PvdStatus = doc.PvdStatus,
-            Tracks = doc.Tracks.Select(t => new DiscTrack(
+            Tracks = doc.Tracks?.Select(t => new DiscTrack(
                 t.Number, t.Type, t.Pregap, t.Length, t.Sectors, t.Size, t.Crc32, t.Md5, t.Sha1
             )).ToList(),
-            Rings = doc.Rings.Select(r => new DiscRing(
+            Rings = doc.Rings?.Select(r => new DiscRing(
                 r.Number, r.MasteringCode, r.MasteringSidCode, r.Toolstamp, r.MouldSidCode, r.Status
             )).ToList(),
-            PvdEntries = doc.PvdEntries.Select(p => new PvdRecord(
-                p.Entry, p.Contents, p.Date, p.Time, p.Gmt
+            PvdEntries = doc.PvdEntries?.Select(p => new PvdRecord(
+                p.Entry ?? string.Empty, 
+                p.Contents ?? string.Empty, 
+                p.Date ?? string.Empty, 
+                p.Time ?? string.Empty, 
+                p.Gmt ?? string.Empty
             )).ToList(),
-            LibCryptSectors = doc.LibCryptSectors.Select(l => new LibCryptSector(
-                l.Sector, l.Msf, l.Contents, l.Xor, l.Comments
+            LibCryptSectors = doc.LibCryptSectors?.Select(l => new LibCryptSector(
+                l.Sector ?? string.Empty, 
+                l.Msf ?? string.Empty, 
+                l.Contents ?? string.Empty, 
+                l.Xor ?? string.Empty, 
+                l.Comments ?? string.Empty
             )).ToList(),
-            HeaderEntries = doc.HeaderEntries.Select(h => new HeaderEntry(
-                h.Row, h.Contents, h.Ascii
+            HeaderEntries = doc.HeaderEntries?.Select(h => new HeaderEntry(
+                h.Row ?? string.Empty, 
+                h.Contents ?? string.Empty, 
+                h.Ascii ?? string.Empty
             )).ToList(),
             HeaderStatus = doc.HeaderStatus,
-            SecuritySectorRanges = doc.SecuritySectorRanges.Select(s => new SecuritySectorRange(
-                s.Number, s.Start, s.End, s.Note
+            SecuritySectorRanges = doc.SecuritySectorRanges?.Select(s => new SecuritySectorRange(
+                s.Number, s.Start, s.End, s.Note ?? string.Empty
             )).ToList(),
             Metadata = doc.Metadata != null ? new Metadata(
-                doc.Metadata.DiscKey, doc.Metadata.DiscId, doc.Metadata.Pic
+                doc.Metadata.DiscKey ?? string.Empty, 
+                doc.Metadata.DiscId ?? string.Empty, 
+                doc.Metadata.Pic ?? string.Empty
             ) : null,
-            HtmlSource = doc.HtmlSource ?? null
+            HtmlSource = doc.HtmlSource
         };
     }
 }
