@@ -1,7 +1,6 @@
 using Xunit;
 using RedumpLib;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace RedumpLib.Tests;
 
@@ -60,6 +59,7 @@ public class Id2509ScraperTests : IClassFixture<Id2509Fixture>
     public void Languages_ShouldBeCorrect()
     {
         Assert.NotNull(_disc.GameInfo);
+        Assert.NotNull(_disc.GameInfo.Languages);
         Assert.Equal(6, _disc.GameInfo.Languages.Count);
         Assert.Equal("English", _disc.GameInfo.Languages[0]);
         Assert.Equal("French", _disc.GameInfo.Languages[1]);
@@ -206,12 +206,14 @@ public class Id2509ScraperTests : IClassFixture<Id2509Fixture>
     [Fact]
     public void TrackStatus_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc);
         Assert.Equal("2 and more dumps from original media [!]", _disc.TrackStatus);
     }
 
     [Fact]
     public void CuesheetStatus_ShouldBeNull()
     {
+        Assert.NotNull(_disc);
         Assert.Null(_disc.CuesheetStatus);
     }
 
@@ -225,6 +227,7 @@ public class Id2509ScraperTests : IClassFixture<Id2509Fixture>
     [Fact]
     public void Track1Data_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.Tracks);
         Assert.Single(_disc.Tracks);
         var track = _disc.Tracks[0];
         Assert.Equal("1", track.Number);
@@ -241,12 +244,14 @@ public class Id2509ScraperTests : IClassFixture<Id2509Fixture>
     [Fact]
     public void Rings_ShouldHaveThreeEntries()
     {
+        Assert.NotNull(_disc.Rings);
         Assert.Equal(3, _disc.Rings.Count);
     }
 
     [Fact]
     public void Ring1Data_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.Rings);
         var ring = _disc.Rings[0];
         Assert.Equal("1", ring.Number);
         Assert.Equal("Sony DADC   A0100791099-A911   27", ring.MasteringCode);
@@ -261,6 +266,7 @@ public class Id2509ScraperTests : IClassFixture<Id2509Fixture>
     [Fact]
     public void Ring2Data_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.Rings);
         var ring = _disc.Rings[1];
         Assert.Equal("2", ring.Number);
         Assert.Equal("Sony DADC   A0100791099-A911   37", ring.MasteringCode);
@@ -275,6 +281,7 @@ public class Id2509ScraperTests : IClassFixture<Id2509Fixture>
     [Fact]
     public void Ring3Data_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.Rings);
         var ring = _disc.Rings[2];
         Assert.Equal("3", ring.Number);
         Assert.Equal("Sony DADC   A0100791099-A911   37", ring.MasteringCode);
@@ -296,6 +303,7 @@ public class Id2509ScraperTests : IClassFixture<Id2509Fixture>
     [Fact]
     public void PvdEntry_Creation_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.PvdEntries);
         var entry = _disc.PvdEntries.Find(e => e.Entry == "Creation");
         Assert.NotNull(entry);
         Assert.Equal("32 30 30 37 30 31 30 32 31 38 34 32 34 33 30 30 24", entry.Contents);
@@ -307,6 +315,7 @@ public class Id2509ScraperTests : IClassFixture<Id2509Fixture>
     [Fact]
     public void PvdEntry_Modification_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.PvdEntries);
         var entry = _disc.PvdEntries.Find(e => e.Entry == "Modification");
         Assert.NotNull(entry);
         Assert.Equal("30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 00", entry.Contents);
@@ -318,6 +327,7 @@ public class Id2509ScraperTests : IClassFixture<Id2509Fixture>
     [Fact]
     public void PvdEntry_Expiration_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.PvdEntries);
         var entry = _disc.PvdEntries.Find(e => e.Entry == "Expiration");
         Assert.NotNull(entry);
         Assert.Equal("30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 00", entry.Contents);
@@ -329,6 +339,7 @@ public class Id2509ScraperTests : IClassFixture<Id2509Fixture>
     [Fact]
     public void PvdEntry_Effective_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.PvdEntries);
         var entry = _disc.PvdEntries.Find(e => e.Entry == "Effective");
         Assert.NotNull(entry);
         Assert.Equal("30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 30 00", entry.Contents);
@@ -340,30 +351,35 @@ public class Id2509ScraperTests : IClassFixture<Id2509Fixture>
     [Fact]
     public void LibCryptSectors_ShouldBeNull()
     {
+        Assert.NotNull(_disc);
         Assert.Null(_disc.LibCryptSectors);
     }
 
     [Fact]
     public void HeaderEntries_ShouldBeNull()
     {
+        Assert.NotNull(_disc);
         Assert.Null(_disc.HeaderEntries);
     }
 
     [Fact]
     public void HeaderStatus_ShouldBeNull()
     {
+        Assert.NotNull(_disc);
         Assert.Null(_disc.HeaderStatus);
     }
 
     [Fact]
     public void SecuritySectorRanges_ShouldBeNull()
     {
+        Assert.NotNull(_disc);
         Assert.Null(_disc.SecuritySectorRanges);
     }
 
     [Fact]
     public void Metadata_ShouldBeNull()
     {
+        Assert.NotNull(_disc);
         Assert.Null(_disc.Metadata);
     }
 }
