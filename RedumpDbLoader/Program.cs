@@ -199,7 +199,7 @@ async Task AdvancedFilter(string[] filterArgs)
             if (!string.IsNullOrEmpty(disc.GameInfo.Region)) Console.WriteLine($"    Region: {disc.GameInfo.Region}");
             if (!string.IsNullOrEmpty(disc.GameInfo.Serial)) Console.WriteLine($"    Serial: {disc.GameInfo.Serial}");
         }
-        if (disc.LibCryptSectors.Count > 0) Console.WriteLine($"    LibCrypt Sectors: {disc.LibCryptSectors.Count}");
+        if (disc.LibCryptSectors != null && disc.LibCryptSectors.Count > 0) Console.WriteLine($"    LibCrypt Sectors: {disc.LibCryptSectors.Count}");
         Console.WriteLine();
     }
 }
@@ -322,10 +322,13 @@ async Task SearchByCrc32(string crc32)
     foreach (var disc in results)
     {
         Console.WriteLine($"  [{disc.DiscId}] {disc.Title}");
-        var matchingTracks = disc.Tracks.Where(t => t.Crc32.Contains(crc32, StringComparison.OrdinalIgnoreCase)).ToList();
-        foreach (var track in matchingTracks)
+        if (disc.Tracks != null)
         {
-            Console.WriteLine($"    Track {track.Number}: {track.Crc32}");
+            var matchingTracks = disc.Tracks.Where(t => t.Crc32 != null && t.Crc32.Contains(crc32, StringComparison.OrdinalIgnoreCase)).ToList();
+            foreach (var track in matchingTracks)
+            {
+                Console.WriteLine($"    Track {track.Number}: {track.Crc32}");
+            }
         }
         Console.WriteLine();
     }
@@ -352,10 +355,13 @@ async Task SearchByMd5(string md5)
     foreach (var disc in results)
     {
         Console.WriteLine($"  [{disc.DiscId}] {disc.Title}");
-        var matchingTracks = disc.Tracks.Where(t => t.Md5.Contains(md5, StringComparison.OrdinalIgnoreCase)).ToList();
-        foreach (var track in matchingTracks)
+        if (disc.Tracks != null)
         {
-            Console.WriteLine($"    Track {track.Number}: {track.Md5}");
+            var matchingTracks = disc.Tracks.Where(t => t.Md5 != null && t.Md5.Contains(md5, StringComparison.OrdinalIgnoreCase)).ToList();
+            foreach (var track in matchingTracks)
+            {
+                Console.WriteLine($"    Track {track.Number}: {track.Md5}");
+            }
         }
         Console.WriteLine();
     }
@@ -382,10 +388,13 @@ async Task SearchBySha1(string sha1)
     foreach (var disc in results)
     {
         Console.WriteLine($"  [{disc.DiscId}] {disc.Title}");
-        var matchingTracks = disc.Tracks.Where(t => t.Sha1.Contains(sha1, StringComparison.OrdinalIgnoreCase)).ToList();
-        foreach (var track in matchingTracks)
+        if (disc.Tracks != null)
         {
-            Console.WriteLine($"    Track {track.Number}: {track.Sha1}");
+            var matchingTracks = disc.Tracks.Where(t => t.Sha1 != null && t.Sha1.Contains(sha1, StringComparison.OrdinalIgnoreCase)).ToList();
+            foreach (var track in matchingTracks)
+            {
+                Console.WriteLine($"    Track {track.Number}: {track.Sha1}");
+            }
         }
         Console.WriteLine();
     }
@@ -469,7 +478,7 @@ async Task ListLibCryptDiscs()
         {
             Console.WriteLine($"    System: {disc.GameInfo.System}");
         }
-        Console.WriteLine($"    LibCrypt Sectors: {disc.LibCryptSectors.Count}");
+        if (disc.LibCryptSectors != null) Console.WriteLine($"    LibCrypt Sectors: {disc.LibCryptSectors.Count}");
         Console.WriteLine();
     }
 }
