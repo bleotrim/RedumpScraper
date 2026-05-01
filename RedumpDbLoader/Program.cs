@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using System.Text.Json;
 using RedumpLib;
 using RedumpDatabase.Services;
 using RedumpDatabase.Mappers;
@@ -214,6 +216,7 @@ async Task AddDisc(string discId)
 
     Console.WriteLine($"Fetching disc {discId}...");
     string url = $"http://redump.org/disc/{discId}/";
+    string logPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "error_log.json");
 
     try
     {
@@ -221,8 +224,7 @@ async Task AddDisc(string discId)
         
         if (string.IsNullOrEmpty(disc.Title))
         {
-            Console.WriteLine("Error: Disc not found or could not be parsed");
-            return;
+            throw new Exception("Disc not found or could not be parsed");
         }
 
         var document = DiscMapper.ToDocument(disc);
@@ -233,10 +235,35 @@ async Task AddDisc(string discId)
     catch (Exception ex)
     {
         Console.WriteLine($"✗ Failed to add disc: {ex.Message}");
+        
+        var logEntry = new
+        {
+            Timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+            DiscId = discId,
+            ErrorMessage = ex.Message,
+            StackTrace = ex.StackTrace
+        };
+
+        List<object> logs = new List<object>();
+        if (File.Exists(logPath))
+        {
+            try {
+                var existingJson = await File.ReadAllTextAsync(logPath);
+                logs = JsonSerializer.Deserialize<List<object>>(existingJson) ?? new List<object>();
+            } catch { /* restart if file is currupted */ }
+        }
+
+        logs.Add(logEntry);
+
+        var options = new JsonSerializerOptions { WriteIndented = true };
+        await File.WriteAllTextAsync(logPath, JsonSerializer.Serialize(logs, options));
+
         if (ex.StackTrace != null)
         {
             Console.WriteLine($"Stack trace:\n{ex.StackTrace}");
         }
+        
+        Console.WriteLine($"\nℹ️  Log saved in: {logPath}");
     }
 }
 
