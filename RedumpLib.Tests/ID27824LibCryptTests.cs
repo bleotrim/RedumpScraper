@@ -16,6 +16,7 @@ public class ID27824LibCryptTests : IClassFixture<ID27824Fixture>
     [Fact]
     public void DiscId_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc);
         Assert.Equal("27824", _disc.Id);
     }
 
@@ -29,18 +30,21 @@ public class ID27824LibCryptTests : IClassFixture<ID27824Fixture>
     [Fact]
     public void LibCryptSectors_ShouldNotBeEmpty()
     {
+        Assert.NotNull(_disc.LibCryptSectors);
         Assert.NotEmpty(_disc.LibCryptSectors);
     }
 
     [Fact]
     public void LibCryptSectors_CountShouldBe32()
     {
+        Assert.NotNull(_disc.LibCryptSectors);
         Assert.Equal(32, _disc.LibCryptSectors.Count);
     }
 
     [Fact]
     public void LibCryptSectors_AllShouldHaveSectorNumber()
     {
+        Assert.NotNull(_disc.LibCryptSectors);
         var invalidSectors = _disc.LibCryptSectors.Where(s => string.IsNullOrEmpty(s.Sector)).ToList();
         Assert.Empty(invalidSectors);
     }
@@ -48,6 +52,7 @@ public class ID27824LibCryptTests : IClassFixture<ID27824Fixture>
     [Fact]
     public void LibCryptSectors_AllSectorsShouldBeNumeric()
     {
+        Assert.NotNull(_disc.LibCryptSectors);
         var allNumeric = _disc.LibCryptSectors.All(s => int.TryParse(s.Sector, out _));
         Assert.True(allNumeric);
     }
@@ -55,6 +60,7 @@ public class ID27824LibCryptTests : IClassFixture<ID27824Fixture>
     [Fact]
     public void LibCryptSectors_AllShouldHaveMsf()
     {
+        Assert.NotNull(_disc.LibCryptSectors);
         var invalidSectors = _disc.LibCryptSectors.Where(s => string.IsNullOrEmpty(s.Msf)).ToList();
         Assert.Empty(invalidSectors);
     }
@@ -62,8 +68,9 @@ public class ID27824LibCryptTests : IClassFixture<ID27824Fixture>
     [Fact]
     public void LibCryptSectors_MsfFormatShouldBeValid()
     {
+        Assert.NotNull(_disc.LibCryptSectors);
         var validMsf = _disc.LibCryptSectors.All(s => 
-            s.Msf.Contains(":") && s.Msf.Split(':').Length == 3
+            s.Msf != null && s.Msf.Contains(":") && s.Msf.Split(':').Length == 3
         );
         Assert.True(validMsf, "All MSF values should have format MM:SS:FF");
     }
@@ -71,6 +78,7 @@ public class ID27824LibCryptTests : IClassFixture<ID27824Fixture>
     [Fact]
     public void LibCryptSectors_AllShouldHaveContents()
     {
+        Assert.NotNull(_disc.LibCryptSectors);
         var invalidSectors = _disc.LibCryptSectors.Where(s => string.IsNullOrEmpty(s.Contents)).ToList();
         Assert.Empty(invalidSectors);
     }
@@ -78,6 +86,7 @@ public class ID27824LibCryptTests : IClassFixture<ID27824Fixture>
     [Fact]
     public void LibCryptSectors_AllShouldHaveXor()
     {
+        Assert.NotNull(_disc.LibCryptSectors);
         var invalidSectors = _disc.LibCryptSectors.Where(s => string.IsNullOrEmpty(s.Xor)).ToList();
         Assert.Empty(invalidSectors);
     }
@@ -85,6 +94,7 @@ public class ID27824LibCryptTests : IClassFixture<ID27824Fixture>
     [Fact]
     public void LibCryptSectors_AllShouldHaveComments()
     {
+        Assert.NotNull(_disc.LibCryptSectors);
         var invalidSectors = _disc.LibCryptSectors.Where(s => string.IsNullOrEmpty(s.Comments)).ToList();
         Assert.Empty(invalidSectors);
     }
@@ -92,6 +102,7 @@ public class ID27824LibCryptTests : IClassFixture<ID27824Fixture>
     [Fact]
     public void LibCryptSector_FirstSector_ShouldBe14105()
     {
+        Assert.NotNull(_disc.LibCryptSectors);
         var firstSector = _disc.LibCryptSectors.First();
         Assert.Equal("14105", firstSector.Sector);
     }
@@ -99,6 +110,7 @@ public class ID27824LibCryptTests : IClassFixture<ID27824Fixture>
     [Fact]
     public void LibCryptSector_FirstSector_MsfShouldBe030805()
     {
+        Assert.NotNull(_disc.LibCryptSectors);
         var firstSector = _disc.LibCryptSectors.First();
         Assert.Equal("03:08:05", firstSector.Msf);
     }
@@ -106,13 +118,16 @@ public class ID27824LibCryptTests : IClassFixture<ID27824Fixture>
     [Fact]
     public void LibCryptSector_FirstSector_ShouldHaveContents()
     {
+        Assert.NotNull(_disc.LibCryptSectors);
         var firstSector = _disc.LibCryptSectors.First();
+        Assert.NotNull(firstSector.Contents);
         Assert.Contains("41 01 01", firstSector.Contents);
     }
 
     [Fact]
     public void LibCryptSector_FirstSector_XorShouldBe8001c701()
     {
+        Assert.NotNull(_disc.LibCryptSectors);
         var firstSector = _disc.LibCryptSectors.First();
         Assert.Equal("8001 c701", firstSector.Xor);
     }
@@ -120,13 +135,16 @@ public class ID27824LibCryptTests : IClassFixture<ID27824Fixture>
     [Fact]
     public void LibCryptSector_FirstSector_CommentsContainsLC1()
     {
+        Assert.NotNull(_disc.LibCryptSectors);
         var firstSector = _disc.LibCryptSectors.First();
+        Assert.NotNull(firstSector.Comments);
         Assert.Contains("LC1 sector", firstSector.Comments);
     }
 
     [Fact]
     public void LibCryptSector_LastSector_ShouldBe44317()
     {
+        Assert.NotNull(_disc.LibCryptSectors);
         var lastSector = _disc.LibCryptSectors.Last();
         Assert.Equal("44317", lastSector.Sector);
     }
@@ -134,6 +152,7 @@ public class ID27824LibCryptTests : IClassFixture<ID27824Fixture>
     [Fact]
     public void LibCryptSector_LastSector_MsfShouldBe095067()
     {
+        Assert.NotNull(_disc.LibCryptSectors);
         var lastSector = _disc.LibCryptSectors.Last();
         Assert.Equal("09:50:67", lastSector.Msf);
     }
@@ -141,6 +160,7 @@ public class ID27824LibCryptTests : IClassFixture<ID27824Fixture>
     [Fact]
     public void LibCryptSector_LastSector_ShouldHaveContents()
     {
+        Assert.NotNull(_disc.LibCryptSectors);
         var lastSector = _disc.LibCryptSectors.Last();
         Assert.NotEmpty(lastSector.Contents);
     }
@@ -148,6 +168,7 @@ public class ID27824LibCryptTests : IClassFixture<ID27824Fixture>
     [Fact]
     public void LibCryptSector_Sector42045_ShouldExist()
     {
+        Assert.NotNull(_disc.LibCryptSectors);
         var sector = _disc.LibCryptSectors.FirstOrDefault(s => s.Sector == "42045");
         Assert.NotNull(sector);
     }
@@ -155,6 +176,7 @@ public class ID27824LibCryptTests : IClassFixture<ID27824Fixture>
     [Fact]
     public void LibCryptSector_Sector42045_MsfShouldBe092045()
     {
+        Assert.NotNull(_disc.LibCryptSectors);
         var sector = _disc.LibCryptSectors.FirstOrDefault(s => s.Sector == "42045");
         Assert.NotNull(sector);
         Assert.Equal("09:20:45", sector!.Msf);
@@ -163,6 +185,7 @@ public class ID27824LibCryptTests : IClassFixture<ID27824Fixture>
     [Fact]
     public void LibCryptSector_Sector14110_ShouldExist()
     {
+        Assert.NotNull(_disc.LibCryptSectors);
         var sector = _disc.LibCryptSectors.FirstOrDefault(s => s.Sector == "14110");
         Assert.NotNull(sector);
     }
@@ -170,6 +193,7 @@ public class ID27824LibCryptTests : IClassFixture<ID27824Fixture>
     [Fact]
     public void LibCryptSector_Sector14110_XorShouldBe8001bbd8()
     {
+        Assert.NotNull(_disc.LibCryptSectors);
         var sector = _disc.LibCryptSectors.FirstOrDefault(s => s.Sector == "14110");
         Assert.NotNull(sector);
         Assert.Equal("8001 bbd8", sector!.Xor);
@@ -178,6 +202,7 @@ public class ID27824LibCryptTests : IClassFixture<ID27824Fixture>
     [Fact]
     public void LibCryptSectors_XorValuesShouldVary()
     {
+        Assert.NotNull(_disc.LibCryptSectors);
         var uniqueXorValues = _disc.LibCryptSectors.Select(s => s.Xor).Distinct().Count();
         Assert.True(uniqueXorValues > 1, "XOR values should vary between sectors");
     }
@@ -185,8 +210,9 @@ public class ID27824LibCryptTests : IClassFixture<ID27824Fixture>
     [Fact]
     public void LibCryptSectors_AllCommentsContainLC1OrError()
     {
+        Assert.NotNull(_disc.LibCryptSectors);
         var allValid = _disc.LibCryptSectors.All(s => 
-            s.Comments.Contains("LC1") || s.Comments.Contains("error")
+            s.Comments != null && (s.Comments.Contains("LC1") || s.Comments.Contains("error"))
         );
         Assert.True(allValid, "All comments should contain LC1 or error information");
     }
@@ -194,9 +220,9 @@ public class ID27824LibCryptTests : IClassFixture<ID27824Fixture>
     [Fact]
     public void LibCryptSectors_SectorNumbersShouldBeIncreasing()
     {
-        var sectors = _disc.LibCryptSectors.Select(s => int.Parse(s.Sector)).ToList();
+        Assert.NotNull(_disc.LibCryptSectors);
+        var sectors = _disc.LibCryptSectors.Select(s => int.Parse(s.Sector!)).ToList();
         
-        // Check that sectors are in a generally ascending order (though may have gaps)
         for (int i = 1; i < sectors.Count; i++)
         {
             Assert.True(sectors[i] >= sectors[i - 1] || (sectors[i] < sectors[i - 1] && i > 15),
@@ -207,6 +233,7 @@ public class ID27824LibCryptTests : IClassFixture<ID27824Fixture>
     [Fact]
     public void LibCryptSectors_MiddleSector_Sector16031_ShouldExist()
     {
+        Assert.NotNull(_disc.LibCryptSectors);
         var sector = _disc.LibCryptSectors.FirstOrDefault(s => s.Sector == "16031");
         Assert.NotNull(sector);
     }
@@ -214,6 +241,7 @@ public class ID27824LibCryptTests : IClassFixture<ID27824Fixture>
     [Fact]
     public void LibCryptSectors_MiddleSector_Sector16031_MsfShouldBe033356()
     {
+        Assert.NotNull(_disc.LibCryptSectors);
         var sector = _disc.LibCryptSectors.FirstOrDefault(s => s.Sector == "16031");
         Assert.NotNull(sector);
         Assert.Equal("03:33:56", sector!.Msf);
@@ -222,6 +250,7 @@ public class ID27824LibCryptTests : IClassFixture<ID27824Fixture>
     [Fact]
     public void LibCryptSectors_AllHaveRequiredFields()
     {
+        Assert.NotNull(_disc.LibCryptSectors);
         foreach (var sector in _disc.LibCryptSectors)
         {
             Assert.False(string.IsNullOrWhiteSpace(sector.Sector), "Sector number must not be empty");
@@ -235,8 +264,9 @@ public class ID27824LibCryptTests : IClassFixture<ID27824Fixture>
     [Fact]
     public void LibCryptSectors_ContentsContainHexData()
     {
+        Assert.NotNull(_disc.LibCryptSectors);
         var allHexData = _disc.LibCryptSectors.All(s => 
-            s.Contents.Contains("01") || s.Contents.Contains("41") || s.Contents.Contains("00")
+            s.Contents != null && (s.Contents.Contains("01") || s.Contents.Contains("41") || s.Contents.Contains("00"))
         );
         Assert.True(allHexData, "Contents should contain hex data");
     }
@@ -244,6 +274,7 @@ public class ID27824LibCryptTests : IClassFixture<ID27824Fixture>
     [Fact]
     public void LibCryptSector_FirstAndLastAreNotEqual()
     {
+        Assert.NotNull(_disc.LibCryptSectors);
         var first = _disc.LibCryptSectors.First();
         var last = _disc.LibCryptSectors.Last();
         
@@ -254,7 +285,8 @@ public class ID27824LibCryptTests : IClassFixture<ID27824Fixture>
     [Fact]
     public void LibCryptSectors_ShouldHaveGapsInSectorNumbers()
     {
-        var sectors = _disc.LibCryptSectors.Select(s => int.Parse(s.Sector)).OrderBy(x => x).ToList();
+        Assert.NotNull(_disc.LibCryptSectors);
+        var sectors = _disc.LibCryptSectors.Select(s => int.Parse(s.Sector!)).OrderBy(x => x).ToList();
         var gaps = false;
         
         for (int i = 1; i < sectors.Count; i++)
@@ -272,7 +304,7 @@ public class ID27824LibCryptTests : IClassFixture<ID27824Fixture>
     [Fact]
     public void LibCryptSectors_CountShouldMatchExpectedValue()
     {
-        // Should have exactly 32 protected sectors for this disc
+        Assert.NotNull(_disc.LibCryptSectors);
         Assert.Equal(32, _disc.LibCryptSectors.Count);
     }
 }
