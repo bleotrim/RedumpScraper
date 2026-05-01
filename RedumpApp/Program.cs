@@ -2,6 +2,7 @@
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using RedumpLib;
+using System.Linq;
 
 // Helper method to check if a value should be displayed
 static bool HasValue(string? value) => !string.IsNullOrWhiteSpace(value);
@@ -88,7 +89,7 @@ try
             if (HasValue(disc.GameInfo.Region)) Console.WriteLine($"Region:           {disc.GameInfo.Region}");
             if (HasValue(disc.GameInfo.Edition)) Console.WriteLine($"Edition:          {disc.GameInfo.Edition}");
             if (HasValue(disc.GameInfo.Version)) Console.WriteLine($"Version:          {disc.GameInfo.Version}");
-            if (disc.GameInfo != null && disc.GameInfo.Languages.Count > 0)
+            if (disc.GameInfo.Languages != null && disc.GameInfo.Languages.Count > 0)
             {
                 if (disc.GameInfo.Languages.Count > 1)
                 {
@@ -103,19 +104,19 @@ try
                     Console.WriteLine($"Language:         {disc.GameInfo.Languages[0]}");
                 }
             }
-            if (HasValue(disc.GameInfo?.BuildDate)) Console.WriteLine($"Build Date:     {disc.GameInfo?.BuildDate}");
-            if (HasValue(disc.GameInfo?.ExeDate)) Console.WriteLine($"EXE Date:         {disc.GameInfo?.ExeDate}");
-            if (HasValue(disc.GameInfo?.Edc)) Console.WriteLine($"EDC:              {disc.GameInfo?.Edc}");
-            if (HasValue(disc.GameInfo?.AntiModchip)) Console.WriteLine($"Anti-modchip:     {disc.GameInfo?.AntiModchip}");
-            if (HasValue(disc.GameInfo?.LibCrypt)) Console.WriteLine($"LibCrypt:         {disc.GameInfo?.LibCrypt}");
-            if (HasValue(disc.GameInfo?.ErrorsCount)) Console.WriteLine($"Errors Count:     {disc.GameInfo?.ErrorsCount}");
-            if (HasValue(disc.GameInfo?.WriteOffset)) Console.WriteLine($"Write Offset:     {disc.GameInfo?.WriteOffset}");
-            if (disc.GameInfo?.NumberOfTracks.HasValue == true)
+            if (HasValue(disc.GameInfo.BuildDate)) Console.WriteLine($"Build Date:     {disc.GameInfo.BuildDate}");
+            if (HasValue(disc.GameInfo.ExeDate)) Console.WriteLine($"EXE Date:         {disc.GameInfo.ExeDate}");
+            if (HasValue(disc.GameInfo.Edc)) Console.WriteLine($"EDC:              {disc.GameInfo.Edc}");
+            if (HasValue(disc.GameInfo.AntiModchip)) Console.WriteLine($"Anti-modchip:     {disc.GameInfo.AntiModchip}");
+            if (HasValue(disc.GameInfo.LibCrypt)) Console.WriteLine($"LibCrypt:         {disc.GameInfo.LibCrypt}");
+            if (HasValue(disc.GameInfo.ErrorsCount)) Console.WriteLine($"Errors Count:     {disc.GameInfo.ErrorsCount}");
+            if (HasValue(disc.GameInfo.WriteOffset)) Console.WriteLine($"Write Offset:     {disc.GameInfo.WriteOffset}");
+            if (disc.GameInfo.NumberOfTracks.HasValue == true)
             {
                 Console.WriteLine($"Number of Tracks: {disc.GameInfo.NumberOfTracks}");
             }
-            if (HasValue(disc.GameInfo?.AddedDate)) Console.WriteLine($"Added:            {disc.GameInfo?.AddedDate}");
-            if (HasValue(disc.GameInfo?.LastModifiedDate)) Console.WriteLine($"Last Modified:    {disc.GameInfo?.LastModifiedDate}");
+            if (HasValue(disc.GameInfo.AddedDate)) Console.WriteLine($"Added:            {disc.GameInfo.AddedDate}");
+            if (HasValue(disc.GameInfo.LastModifiedDate)) Console.WriteLine($"Last Modified:    {disc.GameInfo.LastModifiedDate}");
         }
     }
 
@@ -144,7 +145,7 @@ try
     }
 
     // TRACKS
-    if (disc.Tracks.Count > 0)
+    if (disc.Tracks != null && disc.Tracks.Count > 0)
     {
         Console.WriteLine("\n" + new string('=', 70));
         Console.WriteLine($"TRACKS ({disc.Tracks.Count})".PadRight(70));
@@ -176,7 +177,7 @@ try
     }
 
     // RINGS
-    if (disc.Rings.Count > 0)
+    if (disc.Rings != null && disc.Rings.Count > 0)
     {
         Console.WriteLine("\n" + new string('=', 70));
         Console.WriteLine($"RINGS ({disc.Rings.Count})".PadRight(70));
@@ -199,7 +200,7 @@ try
     }
 
     // PRIMARY VOLUME DESCRIPTOR (PVD)
-    if (disc.PvdEntries.Count > 0)
+    if (disc.PvdEntries != null && disc.PvdEntries.Count > 0)
     {
         Console.WriteLine("\n" + new string('=', 70));
         Console.WriteLine($"PRIMARY VOLUME DESCRIPTOR (PVD) ({disc.PvdEntries.Count})".PadRight(70));
@@ -224,7 +225,7 @@ try
     }
 
     // LIBCRYPT PROTECTION
-    if (disc.LibCryptSectors.Count > 0)
+    if (disc.LibCryptSectors != null && disc.LibCryptSectors.Count > 0)
     {
         Console.WriteLine("\n" + new string('=', 70));
         Console.WriteLine($"LIBCRYPT PROTECTION ({disc.LibCryptSectors.Count})".PadRight(70));
@@ -240,7 +241,7 @@ try
     }
 
     // HEADER ENTRIES
-    if (disc.HeaderEntries.Count > 0)
+    if (disc.HeaderEntries != null && disc.HeaderEntries.Count > 0)
     {
         Console.WriteLine("\n" + new string('=', 70));
         Console.WriteLine($"HEADER ENTRIES ({disc.HeaderEntries.Count})".PadRight(70));
@@ -259,7 +260,7 @@ try
     }
 
     // SECURITY SECTOR RANGES
-    if (disc.SecuritySectorRanges.Count > 0)
+    if (disc.SecuritySectorRanges != null && disc.SecuritySectorRanges.Count > 0)
     {
         Console.WriteLine("\n" + new string('=', 70));
         Console.WriteLine($"SECURITY SECTOR RANGES ({disc.SecuritySectorRanges.Count})".PadRight(70));
