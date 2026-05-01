@@ -22,6 +22,7 @@ public class ID123974SecuritySectorTests : IClassFixture<ID123974Fixture>
     [Fact]
     public void Id_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc);
         Assert.Equal("123974", _disc.Id);
     }
 
@@ -70,60 +71,70 @@ public class ID123974SecuritySectorTests : IClassFixture<ID123974Fixture>
     [Fact]
     public void SecuritySectorRanges_ShouldNotBeEmpty()
     {
+        Assert.NotNull(_disc.SecuritySectorRanges);
         Assert.NotEmpty(_disc.SecuritySectorRanges);
     }
 
     [Fact]
     public void SecuritySectorRanges_ShouldHaveTwoRanges()
     {
+        Assert.NotNull(_disc.SecuritySectorRanges);
         Assert.Equal(2, _disc.SecuritySectorRanges.Count);
     }
 
     [Fact]
     public void FirstSecuritySectorRange_NumberShouldBeOne()
     {
+        Assert.NotNull(_disc.SecuritySectorRanges);
         Assert.Equal(1, _disc.SecuritySectorRanges[0].Number);
     }
 
     [Fact]
     public void FirstSecuritySectorRange_StartShouldBe108976()
     {
+        Assert.NotNull(_disc.SecuritySectorRanges);
         Assert.Equal(108976, _disc.SecuritySectorRanges[0].Start);
     }
 
     [Fact]
     public void FirstSecuritySectorRange_EndShouldBe113071()
     {
+        Assert.NotNull(_disc.SecuritySectorRanges);
         Assert.Equal(113071, _disc.SecuritySectorRanges[0].End);
     }
 
     [Fact]
     public void SecondSecuritySectorRange_NumberShouldBeTwo()
     {
+        Assert.NotNull(_disc.SecuritySectorRanges);
         Assert.Equal(2, _disc.SecuritySectorRanges[1].Number);
     }
 
     [Fact]
     public void SecondSecuritySectorRange_StartShouldBe3719856()
     {
+        Assert.NotNull(_disc.SecuritySectorRanges);
         Assert.Equal(3719856, _disc.SecuritySectorRanges[1].Start);
     }
 
     [Fact]
     public void SecondSecuritySectorRange_EndShouldBe3723951()
     {
+        Assert.NotNull(_disc.SecuritySectorRanges);
         Assert.Equal(3723951, _disc.SecuritySectorRanges[1].End);
     }
 
     [Fact]
     public void SecondSecuritySectorRange_ShouldHaveNote()
     {
+        Assert.NotNull(_disc.SecuritySectorRanges);
         Assert.NotNull(_disc.SecuritySectorRanges[1].Note);
     }
 
     [Fact]
     public void SecondSecuritySectorRange_NoteShouldContainXGD2()
     {
+        Assert.NotNull(_disc.SecuritySectorRanges);
         var note = _disc.SecuritySectorRanges[1].Note;
         Assert.NotNull(note);
         Assert.Contains("XGD2", note);
@@ -132,6 +143,7 @@ public class ID123974SecuritySectorTests : IClassFixture<ID123974Fixture>
     [Fact]
     public void Barcode_ShouldBeCorrect()
     {
+        Assert.NotNull(_disc.GameComments);
         Assert.Equal("4 988648 539471", _disc.GameComments.Barcode);
     }
 
@@ -145,6 +157,7 @@ public class ID123974SecuritySectorTests : IClassFixture<ID123974Fixture>
     public void GameComments_Comments_ShouldContainXeMID()
     {
         Assert.NotNull(_disc.GameComments);
+        Assert.NotNull(_disc.GameComments.Comments);
         Assert.Contains("XeMID", _disc.GameComments.Comments);
     }
 
@@ -152,12 +165,14 @@ public class ID123974SecuritySectorTests : IClassFixture<ID123974Fixture>
     public void GameComments_Comments_ShouldContainDMI()
     {
         Assert.NotNull(_disc.GameComments);
+        Assert.NotNull(_disc.GameComments.Comments);
         Assert.Contains("DMI", _disc.GameComments.Comments);
     }
 
     [Fact]
     public void TrackStatus_ShouldNotBeEmpty()
     {
+        Assert.NotNull(_disc.TrackStatus);
         Assert.NotEmpty(_disc.TrackStatus);
     }
 }
