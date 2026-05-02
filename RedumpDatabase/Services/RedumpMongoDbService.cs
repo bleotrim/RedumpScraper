@@ -65,8 +65,6 @@ public class RedumpMongoDbService
     /// </summary>
     public async Task<string> UpsertDiscAsync(DiscDocument disc)
     {
-        disc.UpdatedAt = DateTime.UtcNow;
-        
         var filter = Builders<DiscDocument>.Filter.Eq(d => d.DiscId, disc.DiscId);
         
         // Try to find existing document to preserve its _id
@@ -76,12 +74,6 @@ public class RedumpMongoDbService
         {
             // Preserve existing _id
             disc.Id = existingDisc.Id;
-            disc.CreatedAt = existingDisc.CreatedAt;
-        }
-        else
-        {
-            // Set creation timestamp for new documents
-            disc.CreatedAt = DateTime.UtcNow;
         }
         
         var options = new ReplaceOptions { IsUpsert = true };
@@ -201,6 +193,22 @@ public class RedumpMongoDbService
             .Skip(skip)
             .Limit(pageSize)
             .ToListAsync();
+    }
+
+    public async Task<DiscDocument?> GetMostRecentlyModifiedRedumpDiscAsync()
+    {
+        try
+        {
+            return await _discsCollection
+                .Find(FilterDefinition<DiscDocument>.Empty)
+                .Sort(Builders<DiscDocument>.Sort.Descending(d => d.GameInfo.LastModifiedDate))
+                .FirstOrDefaultAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error retrieving the most recently modified document: {ex.Message}");
+            return null;
+        }
     }
 
     /// <summary>

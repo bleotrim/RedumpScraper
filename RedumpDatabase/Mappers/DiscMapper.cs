@@ -152,9 +152,7 @@ public static class DiscMapper
                 DiscId = disc.Metadata.DiscId ?? string.Empty,
                 Pic = disc.Metadata.Pic ?? string.Empty
             } : null,
-            HtmlSource = disc.HtmlSource,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
+            HtmlSource = disc.HtmlSource
         };
     }
 
