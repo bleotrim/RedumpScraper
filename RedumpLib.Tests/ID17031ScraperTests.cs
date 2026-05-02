@@ -173,14 +173,14 @@ public class ID17031ScraperTests : IClassFixture<ID17031Fixture>
     public void AddedDate_ShouldBeCorrect()
     {
         Assert.NotNull(_disc.GameInfo);
-        Assert.Equal("2010-11-28 11:00", _disc.GameInfo.AddedDate);
+        Assert.Equal(DateTime.Parse("2010-11-28 11:00"), _disc.GameInfo.AddedDate);
     }
 
     [Fact]
     public void LastModifiedDate_ShouldBeCorrect()
     {
         Assert.NotNull(_disc.GameInfo);
-        Assert.Equal("2019-07-05 19:14", _disc.GameInfo.LastModifiedDate);
+        Assert.Equal(DateTime.Parse("2019-07-05 19:14"), _disc.GameInfo.LastModifiedDate);
     }
 
     [Fact] 

@@ -127,7 +127,7 @@ public class Id625ScraperTests : IClassFixture<Id625Fixture>
     public void LastModified_ShouldBe201305012159()
     {
         Assert.NotNull(_disc.GameInfo);
-        Assert.Equal("2013-05-01 21:59", _disc.GameInfo.LastModifiedDate);
+        Assert.Equal(DateTime.Parse("2013-05-01 21:59"), _disc.GameInfo.LastModifiedDate);
     }
 
     [Fact]

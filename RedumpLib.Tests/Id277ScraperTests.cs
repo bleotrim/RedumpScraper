@@ -129,7 +129,7 @@ public class Id277ScraperTests : IClassFixture<Id277Fixture>
     public void LastModified_ShouldBeCorrect()
     {
         Assert.NotNull(_disc.GameInfo);
-        Assert.Equal("2025-01-10 16:29", _disc.GameInfo.LastModifiedDate);
+        Assert.Equal(DateTime.Parse("2025-01-10 16:29"), _disc.GameInfo.LastModifiedDate);
     }
 
     [Fact]

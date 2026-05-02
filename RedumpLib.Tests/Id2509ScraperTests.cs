@@ -122,14 +122,14 @@ public class Id2509ScraperTests : IClassFixture<Id2509Fixture>
     public void Added_ShouldBe200801270606()
     {
         Assert.NotNull(_disc.GameInfo);
-        Assert.Equal("2008-01-27 06:06", _disc.GameInfo.AddedDate);
+        Assert.Equal(DateTime.Parse("2008-01-27 06:06"), _disc.GameInfo.AddedDate);
     }
 
     [Fact]
     public void LastModified_ShouldBe202408061037()
     {
         Assert.NotNull(_disc.GameInfo);
-        Assert.Equal("2024-08-06 10:37", _disc.GameInfo.LastModifiedDate);
+        Assert.Equal(DateTime.Parse("2024-08-06 10:37"), _disc.GameInfo.LastModifiedDate);
     }
 
     [Fact]

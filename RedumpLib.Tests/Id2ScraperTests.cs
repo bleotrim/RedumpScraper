@@ -132,7 +132,7 @@ public class Id2BuildDateTests : IClassFixture<Id2Fixture>
     public void LastModified_ShouldBeCorrect()
     {
         Assert.NotNull(_disc.GameInfo);
-        Assert.Equal("2022-03-11 18:44", _disc.GameInfo.LastModifiedDate);
+        Assert.Equal(DateTime.Parse("2022-03-11 18:44"), _disc.GameInfo.LastModifiedDate);
     }
 
     [Fact]
