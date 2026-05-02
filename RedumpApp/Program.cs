@@ -115,8 +115,8 @@ try
             {
                 Console.WriteLine($"Number of Tracks: {disc.GameInfo.NumberOfTracks}");
             }
-            if (HasValue(disc.GameInfo.AddedDate)) Console.WriteLine($"Added:            {disc.GameInfo.AddedDate}");
-            if (HasValue(disc.GameInfo.LastModifiedDate)) Console.WriteLine($"Last Modified:    {disc.GameInfo.LastModifiedDate}");
+            if (disc.GameInfo.AddedDate.HasValue) Console.WriteLine($"Added:            {disc.GameInfo.AddedDate.Value}");
+            if (disc.GameInfo.LastModifiedDate.HasValue) Console.WriteLine($"Last Modified:    {disc.GameInfo.LastModifiedDate.Value}");
         }
     }
 

@@ -18,8 +18,8 @@ public class GameInfo
     public string? ErrorsCount { get; set; } = null;
     public int? NumberOfTracks { get; set; } = null;
     public string? WriteOffset { get; set; } = null;
-    public string? AddedDate { get; set; } = null;
-    public string? LastModifiedDate { get; set; } = null;
+    public DateTime? AddedDate { get; set; } = null;
+    public DateTime? LastModifiedDate { get; set; } = null;
     public string? ExeDate { get; set; } = null;
     public string? Edc { get; set; } = null;
     public string? AntiModchip { get; set; } = null;
@@ -41,8 +41,8 @@ public class GameInfo
         string errorsCount,
         int? numberOfTracks,
         string writeOffset,
-        string addedDate,
-        string lastModifiedDate,
+        DateTime addedDate,
+        DateTime lastModifiedDate,
         string exeDate,
         string edc,
         string antiModchip,

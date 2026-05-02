@@ -350,11 +350,17 @@ public class Scraper
                 }
                 else if (header.Contains("Added"))
                 {
-                    gameInfo.AddedDate = string.IsNullOrWhiteSpace(val) ? null : val;
+                    gameInfo.AddedDate = DateTime.TryParseExact(val, "yyyy-MM-dd HH:mm", 
+                        System.Globalization.CultureInfo.InvariantCulture, 
+                        System.Globalization.DateTimeStyles.AssumeUniversal, 
+                        out DateTime added) ? added : (DateTime?)null;
                 }
                 else if (header.Contains("Last modified"))
                 {
-                    gameInfo.LastModifiedDate = string.IsNullOrWhiteSpace(val) ? null : val;
+                    gameInfo.LastModifiedDate = DateTime.TryParseExact(val, "yyyy-MM-dd HH:mm", 
+                        System.Globalization.CultureInfo.InvariantCulture, 
+                        System.Globalization.DateTimeStyles.AssumeUniversal, 
+                        out var lastModified) ? lastModified : null;
                 }
                 else if (header.Contains("Layerbreak"))
                 {
