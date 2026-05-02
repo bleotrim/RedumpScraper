@@ -17,6 +17,7 @@ if (args.Length == 0)
 {
     Console.WriteLine("Usage:");
     Console.WriteLine("  Add disc:              dotnet run -- add <disc-id>");
+    Console.WriteLine("  Sync disc:             dotnet run -- sync");
     Console.WriteLine("  Search by title:       dotnet run -- search <query>");
     Console.WriteLine("  Search by serial:      dotnet run -- serial <serial-number>");
     Console.WriteLine("  Search by CRC32:       dotnet run -- crc32 <hash>");
@@ -52,6 +53,10 @@ try
     {
         case "add":
             await AddDisc(args.Length > 1 ? args[1] : "");
+            break;
+
+        case "sync":
+            await SyncDatabase();
             break;
 
         case "search":
@@ -204,6 +209,87 @@ async Task AdvancedFilter(string[] filterArgs)
         if (disc.LibCryptSectors != null && disc.LibCryptSectors.Count > 0) Console.WriteLine($"    LibCrypt Sectors: {disc.LibCryptSectors.Count}");
         Console.WriteLine();
     }
+}
+
+DateTime TruncateToMinutes(DateTime dt) => new DateTime(dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, 0, dt.Kind);
+
+async Task SyncDatabase()
+{
+    Console.WriteLine("=== Starting Incremental Synchronization (Buffer Fix) ===");
+
+    var latestInDb = await dbService.GetMostRecentlyModifiedRedumpDiscAsync();
+    
+    DateTime? thresholdDate = latestInDb?.GameInfo?.LastModifiedDate != null 
+        ? TruncateToMinutes(latestInDb.GameInfo.LastModifiedDate.Value) 
+        : null;
+
+    if (thresholdDate.HasValue)
+    {
+        Console.WriteLine($"Stopping point detected: {thresholdDate.Value:yyyy-MM-dd HH:mm}");
+    }
+    else
+    {
+        Console.WriteLine("No previous records in the database. Full synchronization in progress...");
+    }
+
+    int currentPage = 1;
+    bool keepScanning = true;
+    int updatedCount = 0;
+    int bufferCount = 0;
+    int bufferLimit = 1500;
+    bool isThresholdReached = false;
+
+    while (keepScanning)
+    {
+        Console.WriteLine($"Analyzing page {currentPage}...");
+        string url = $"http://redump.org/discs/sort/modified/dir/desc/?page={currentPage}";
+        
+        var discIds = scraper.ParseDiscIdsFromPage(url);
+        if (discIds == null || discIds.Count == 0) break;
+
+        foreach (var discId in discIds)
+        {
+            string discUrl = $"http://redump.org/disc/{discId}/";
+            var freshDisc = scraper.ParseRedumpPage(discUrl);
+            var freshDocument = DiscMapper.ToDocument(freshDisc);
+            
+            if (!isThresholdReached && freshDocument.GameInfo?.LastModifiedDate != null)
+            {
+                DateTime currentDiscDate = TruncateToMinutes(freshDocument.GameInfo.LastModifiedDate.Value);
+
+                if (thresholdDate.HasValue && currentDiscDate <= thresholdDate.Value)
+                {
+                    isThresholdReached = true;
+                    Console.WriteLine($"--- [THRESHOLD REACHED] ID {discId} ({currentDiscDate:yyyy-MM-dd HH:mm}) ---");
+                }
+            }
+
+            if (isThresholdReached)
+            {
+                bufferCount++;
+                Console.WriteLine($"[BUFFER] {bufferCount}/{bufferLimit} - ID: {discId}");
+                
+                if (bufferCount >= bufferLimit)
+                {
+                    Console.WriteLine($"Buffer limit reached ({bufferCount}). Stopping synchronization.");
+                    keepScanning = false;
+                }
+            }
+
+            await dbService.UpsertDiscAsync(freshDocument);
+            Console.WriteLine($"[OK] Updated: {discId} - {freshDocument.Title}");
+            updatedCount++;
+
+            if (!keepScanning) break;
+        }
+
+        if (!keepScanning) break;
+        currentPage++;
+        
+        if (currentPage > 1000) break;
+    }
+
+    Console.WriteLine($"Synchronization finished. Total processed: {updatedCount}");
 }
 
 async Task AddDisc(string discId)
