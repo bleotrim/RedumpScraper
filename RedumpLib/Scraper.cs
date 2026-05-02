@@ -777,4 +777,64 @@ public class Scraper
 
         return disc;
     }
+
+    /// <summary>
+    /// Parses a Redump "last modified" discs listing page and extracts all disc IDs.
+    /// Works with both a local HTML file path and a live URL.
+    /// </summary>
+    /// <param name="source">Local file path or URL of the listing page</param>
+    /// <returns>Ordered list of disc IDs found on the page</returns>
+    public List<string> ParseDiscIdsFromPage(string source)
+    {
+        HtmlDocument doc;
+
+        if (source.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+            source.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+        {
+            var web = new HtmlWeb { UserAgent = _userAgent };
+            doc = web.Load(source);
+        }
+        else
+        {
+            doc = new HtmlDocument();
+            doc.Load(source);
+        }
+
+        return ParseDiscIdsFromDocument(doc);
+    }
+
+    /// <summary>
+    /// Parses a Redump listing page from raw HTML string and extracts all disc IDs.
+    /// </summary>
+    public List<string> ParseDiscIdsFromHtml(string html)
+    {
+        var doc = new HtmlDocument();
+        doc.LoadHtml(html);
+        return ParseDiscIdsFromDocument(doc);
+    }
+
+    private List<string> ParseDiscIdsFromDocument(HtmlDocument doc)
+    {
+        var ids = new List<string>();
+        var seen = new HashSet<string>();
+
+        // All links that match /disc/{id}/
+        var links = doc.DocumentNode.SelectNodes("//a[@href]");
+        if (links == null)
+            return ids;
+
+        foreach (var link in links)
+        {
+            var href = link.GetAttributeValue("href", "");
+            var match = Regex.Match(href, @"/disc/(\d+)/");
+            if (match.Success)
+            {
+                string id = match.Groups[1].Value;
+                if (seen.Add(id))
+                    ids.Add(id);
+            }
+        }
+
+        return ids;
+    }
 }
