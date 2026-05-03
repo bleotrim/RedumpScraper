@@ -211,6 +211,22 @@ public class RedumpMongoDbService
         }
     }
 
+    public async Task<DiscDocument?> GetMostRecentlyAddedRedumpDiscAsync()
+    {
+        try
+        {
+            return await _discsCollection
+                .Find(FilterDefinition<DiscDocument>.Empty)
+                .Sort(Builders<DiscDocument>.Sort.Descending(d => d.GameInfo.AddedDate))
+                .FirstOrDefaultAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error retrieving the most recently added document: {ex.Message}");
+            return null;
+        }
+    }
+
     /// <summary>
     /// Get discs by multiple filters including title, serial, and hash searches
     /// </summary>
