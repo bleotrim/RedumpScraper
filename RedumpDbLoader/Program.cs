@@ -215,6 +215,12 @@ DateTime TruncateToMinutes(DateTime dt) => new DateTime(dt.Year, dt.Month, dt.Da
 
 async Task SyncDatabase()
 {
+    await SyncLastModifiedToDatabase();
+    await SyncLastAddedToDatabase();    
+}
+
+async Task SyncLastModifiedToDatabase()
+{
     Console.WriteLine("=== Starting Incremental Synchronization (Buffer Fix) ===");
 
     var latestInDb = await dbService.GetMostRecentlyModifiedRedumpDiscAsync();
@@ -236,12 +242,12 @@ async Task SyncDatabase()
     bool keepScanning = true;
     int updatedCount = 0;
     int bufferCount = 0;
-    int bufferLimit = 1500;
+    int bufferLimit = 20;
     bool isThresholdReached = false;
 
     while (keepScanning)
     {
-        Console.WriteLine($"Analyzing page {currentPage}...");
+        Console.WriteLine($"Analyzing last modified page {currentPage}...");
         string url = $"http://redump.org/discs/sort/modified/dir/desc/?page={currentPage}";
         
         var discIds = scraper.ParseDiscIdsFromPage(url);
@@ -276,7 +282,86 @@ async Task SyncDatabase()
                 }
             }
 
-            await dbService.UpsertDiscAsync(freshDocument);
+            await AddDisc(freshDocument.DiscId);
+            Console.WriteLine($"[OK] Updated: {discId} - {freshDocument.Title}");
+            updatedCount++;
+
+            if (!keepScanning) break;
+        }
+
+        if (!keepScanning) break;
+        currentPage++;
+        
+        if (currentPage > 1000) break;
+    }
+
+    Console.WriteLine($"Synchronization finished. Total processed: {updatedCount}");
+}
+
+async Task SyncLastAddedToDatabase()
+{
+    Console.WriteLine("=== Starting Incremental Synchronization (Buffer Fix) ===");
+
+    var latestInDb = await dbService.GetMostRecentlyAddedRedumpDiscAsync();
+    
+    DateTime? thresholdDate = latestInDb?.GameInfo?.AddedDate != null 
+        ? TruncateToMinutes(latestInDb.GameInfo.AddedDate.Value) 
+        : null;
+
+    if (thresholdDate.HasValue)
+    {
+        Console.WriteLine($"Stopping point detected: {thresholdDate.Value:yyyy-MM-dd HH:mm}");
+    }
+    else
+    {
+        Console.WriteLine("No previous records in the database. Full synchronization in progress...");
+    }
+
+    int currentPage = 1;
+    bool keepScanning = true;
+    int updatedCount = 0;
+    int bufferCount = 0;
+    int bufferLimit = 20;
+    bool isThresholdReached = false;
+
+    while (keepScanning)
+    {
+        Console.WriteLine($"Analyzing last added page {currentPage}...");
+        string url = $"http://redump.org/discs/sort/added/dir/desc/?page={currentPage}";
+        
+        var discIds = scraper.ParseDiscIdsFromPage(url);
+        if (discIds == null || discIds.Count == 0) break;
+
+        foreach (var discId in discIds)
+        {
+            string discUrl = $"http://redump.org/disc/{discId}/";
+            var freshDisc = scraper.ParseRedumpPage(discUrl);
+            var freshDocument = DiscMapper.ToDocument(freshDisc);
+            
+            if (!isThresholdReached && freshDocument.GameInfo?.AddedDate != null)
+            {
+                DateTime currentDiscDate = TruncateToMinutes(freshDocument.GameInfo.AddedDate.Value);
+
+                if (thresholdDate.HasValue && currentDiscDate <= thresholdDate.Value)
+                {
+                    isThresholdReached = true;
+                    Console.WriteLine($"--- [THRESHOLD REACHED] ID {discId} ({currentDiscDate:yyyy-MM-dd HH:mm}) ---");
+                }
+            }
+
+            if (isThresholdReached)
+            {
+                bufferCount++;
+                Console.WriteLine($"[BUFFER] {bufferCount}/{bufferLimit} - ID: {discId}");
+                
+                if (bufferCount >= bufferLimit)
+                {
+                    Console.WriteLine($"Buffer limit reached ({bufferCount}). Stopping synchronization.");
+                    keepScanning = false;
+                }
+            }
+
+            await AddDisc(freshDocument.DiscId);
             Console.WriteLine($"[OK] Updated: {discId} - {freshDocument.Title}");
             updatedCount++;
 
