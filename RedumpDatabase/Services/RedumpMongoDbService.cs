@@ -78,7 +78,7 @@ public class RedumpMongoDbService
         
         var options = new ReplaceOptions { IsUpsert = true };
         var result = await _discsCollection.ReplaceOneAsync(filter, disc, options);
-        return disc.DiscId;
+        return disc.DiscId.ToString();
     }
 
     /// <summary>
@@ -86,7 +86,7 @@ public class RedumpMongoDbService
     /// </summary>
     public async Task<DiscDocument?> GetDiscByIdAsync(string discId)
     {
-        var filter = Builders<DiscDocument>.Filter.Eq(d => d.DiscId, discId);
+        var filter = Builders<DiscDocument>.Filter.Eq(d => d.DiscId, long.Parse(discId));
         return await _discsCollection.Find(filter).FirstOrDefaultAsync();
     }
 
@@ -178,7 +178,7 @@ public class RedumpMongoDbService
     /// </summary>
     public async Task<bool> DeleteDiscAsync(string discId)
     {
-        var filter = Builders<DiscDocument>.Filter.Eq(d => d.DiscId, discId);
+        var filter = Builders<DiscDocument>.Filter.Eq(d => d.DiscId, long.Parse(discId));
         var result = await _discsCollection.DeleteOneAsync(filter);
         return result.DeletedCount > 0;
     }
@@ -223,6 +223,22 @@ public class RedumpMongoDbService
         catch (Exception ex)
         {
             Console.WriteLine($"Error retrieving the most recently added document: {ex.Message}");
+            return null;
+        }
+    }
+
+    public async Task<DiscDocument?> GetMostRecentDocument()
+    {
+        try
+        {
+            return await _discsCollection
+                .Find(FilterDefinition<DiscDocument>.Empty)
+                .SortByDescending(doc => doc.DiscId)
+                .FirstOrDefaultAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error retrieving the most recent document: {ex.Message}");
             return null;
         }
     }

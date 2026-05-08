@@ -18,6 +18,7 @@ if (args.Length == 0)
     Console.WriteLine("Usage:");
     Console.WriteLine("  Add disc:              dotnet run -- add <disc-id>");
     Console.WriteLine("  Sync disc:             dotnet run -- sync");
+    Console.WriteLine("  PopulateDatabase:      dotnet run -- populate");
     Console.WriteLine("  Search by title:       dotnet run -- search <query>");
     Console.WriteLine("  Search by serial:      dotnet run -- serial <serial-number>");
     Console.WriteLine("  Search by CRC32:       dotnet run -- crc32 <hash>");
@@ -57,6 +58,10 @@ try
 
         case "sync":
             await SyncDatabase();
+            break;
+
+        case "populate":
+            await PopulateDatabase();
             break;
 
         case "search":
@@ -213,6 +218,33 @@ async Task AdvancedFilter(string[] filterArgs)
 
 DateTime TruncateToMinutes(DateTime dt) => new DateTime(dt.Year, dt.Month, dt.Day, dt.Hour, dt.Minute, 0, dt.Kind);
 
+async Task PopulateDatabase()
+{
+    string url = $"http://redump.org/discs/sort/added/dir/desc/?page=1";
+    var discIds = scraper.ParseDiscIdsFromPage(url);
+    long startingDiscId = 1;
+
+    var mostRecentDoc = await dbService.GetMostRecentDocument();
+
+    if (mostRecentDoc != null)
+    {
+        startingDiscId = mostRecentDoc.DiscId;
+    }
+
+    if (discIds == null || discIds.Count == 0)
+    {
+        Console.WriteLine("No disc IDs found on the page.");
+        return;
+    }
+
+    var greatest = long.Parse(discIds.MaxBy(s => long.Parse(s)));
+
+    for (long i = startingDiscId; i < greatest; i++)
+    {
+        await AddDisc(i.ToString());
+    }
+}
+
 async Task SyncDatabase()
 {
     await SyncLastModifiedToDatabase();
@@ -282,7 +314,7 @@ async Task SyncLastModifiedToDatabase()
                 }
             }
 
-            await AddDisc(freshDocument.DiscId);
+            await AddDisc(freshDocument.DiscId.ToString());
             Console.WriteLine($"[OK] Updated: {discId} - {freshDocument.Title}");
             updatedCount++;
 
@@ -361,7 +393,7 @@ async Task SyncLastAddedToDatabase()
                 }
             }
 
-            await AddDisc(freshDocument.DiscId);
+            await AddDisc(freshDocument.DiscId.ToString());
             Console.WriteLine($"[OK] Updated: {discId} - {freshDocument.Title}");
             updatedCount++;
 
@@ -392,11 +424,6 @@ async Task AddDisc(string discId)
     try
     {
         RedumpDisc disc = scraper.ParseRedumpPage(url);
-        
-        if (string.IsNullOrEmpty(disc.Title))
-        {
-            throw new Exception("Disc not found or could not be parsed");
-        }
 
         var document = DiscMapper.ToDocument(disc);
         await dbService.UpsertDiscAsync(document);
