@@ -3,7 +3,7 @@ namespace RedumpLib;
 public class RedumpDisc
 {
     public string Id { get; set; } = "";
-    public string Title { get; set; } = "";
+    public string? Title { get; set; } = null;
     public GameInfo? GameInfo { get; set; }
     public GameComments? GameComments { get; set; }
     public string? TrackStatus { get; set; } = null;

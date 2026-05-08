@@ -258,7 +258,7 @@ public class Scraper
     {
         var disc = new RedumpDisc();
 
-        disc.Title = doc.DocumentNode.SelectSingleNode("//h1")?.InnerText.Trim() ?? "N/D";
+        disc.Title = doc.DocumentNode.SelectSingleNode("//h1")?.InnerText.Trim() ?? null;
 
         var gameInfoRows = doc.DocumentNode.SelectNodes("//table[@class='gameinfo']//tr");
         if (gameInfoRows != null)
