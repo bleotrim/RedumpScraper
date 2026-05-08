@@ -46,9 +46,9 @@ public static class DiscMapper
     {
         return new DiscDocument
         {
-            Id = GenerateUuidV5(disc.Id ?? ""), // Generate deterministic UUID v5 from disc ID
-            DiscId = disc.Id ?? string.Empty,
-            Title = disc.Title ?? string.Empty,
+            Id = GenerateUuidV5(disc.Id), // Generate deterministic UUID v5 from disc ID
+            DiscId = long.Parse(disc.Id),
+            Title = disc.Title,
             GameInfo = disc.GameInfo != null ? new GameInfoDocument
             {
                 System = disc.GameInfo.System,
@@ -160,7 +160,7 @@ public static class DiscMapper
     {
         return new RedumpDisc
         {
-            Id = doc.DiscId,
+            Id = doc.DiscId.ToString(),
             Title = doc.Title,
             GameInfo = doc.GameInfo != null ? new RedumpLib.GameInfo(
                 doc.GameInfo.System ?? string.Empty,

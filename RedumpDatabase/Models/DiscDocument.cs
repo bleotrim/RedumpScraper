@@ -13,10 +13,10 @@ public class DiscDocument
     public string Id { get; set; } = string.Empty;
 
     [BsonElement("disc_id")]
-    public string DiscId { get; set; } = string.Empty;
+    public long DiscId { get; set; } = 0;
 
     [BsonElement("title")]
-    public string Title { get; set; } = string.Empty;
+    public string? Title { get; set; }
 
     [BsonElement("game_info")]
     public GameInfoDocument? GameInfo { get; set; }
