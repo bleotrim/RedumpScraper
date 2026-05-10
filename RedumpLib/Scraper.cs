@@ -24,8 +24,44 @@ public class Scraper
 
     public RedumpDisc ParseRedumpPage(string url)
     {
-        var web = new HtmlWeb { UserAgent = _userAgent };
-        var doc = web.Load(url);
+        const int maxTries = 10;
+        const int delayMilliseconds = 2000;
+        string html = string.Empty;
+
+        using (var client = new HttpClient())
+        {
+            client.DefaultRequestHeaders.Add("User-Agent", _userAgent);
+
+            for (int i = 1; i <= maxTries; i++)
+            {
+                try
+                {
+                    var response = client.GetAsync(url).GetAwaiter().GetResult();
+
+                    if (response.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable)
+                    {
+                        if (i == maxTries)
+                            throw new Exception("Redump returned 503 Service Unavailable. Max retries reached.");
+
+                        Task.Delay(delayMilliseconds).Wait();
+                        continue;
+                    }
+
+                    response.EnsureSuccessStatusCode();
+                    html = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                    break; // Success! Exit the retry loop.
+                }
+                catch (Exception ex) when (i < maxTries)
+                {
+                    // Log or handle other transient network issues here if desired
+                    Task.Delay(delayMilliseconds).Wait();
+                }
+            }
+        }
+
+        var doc = new HtmlDocument();
+        doc.LoadHtml(html);
+
         var disc = ParseDocument(doc);
 
         var idMatch = Regex.Match(url, @"/disc/(\d+)/");
@@ -33,9 +69,6 @@ public class Scraper
         {
             disc.Id = idMatch.Groups[1].Value;
         }
-
-        // Capture HTML source and clean it
-        disc.HtmlSource = doc.DocumentNode.OuterHtml;
 
         return disc;
     }
@@ -350,16 +383,16 @@ public class Scraper
                 }
                 else if (header.Contains("Added"))
                 {
-                    gameInfo.AddedDate = DateTime.TryParseExact(val, "yyyy-MM-dd HH:mm", 
-                        System.Globalization.CultureInfo.InvariantCulture, 
-                        System.Globalization.DateTimeStyles.AssumeUniversal, 
+                    gameInfo.AddedDate = DateTime.TryParseExact(val, "yyyy-MM-dd HH:mm",
+                        System.Globalization.CultureInfo.InvariantCulture,
+                        System.Globalization.DateTimeStyles.AssumeUniversal,
                         out DateTime added) ? added : (DateTime?)null;
                 }
                 else if (header.Contains("Last modified"))
                 {
-                    gameInfo.LastModifiedDate = DateTime.TryParseExact(val, "yyyy-MM-dd HH:mm", 
-                        System.Globalization.CultureInfo.InvariantCulture, 
-                        System.Globalization.DateTimeStyles.AssumeUniversal, 
+                    gameInfo.LastModifiedDate = DateTime.TryParseExact(val, "yyyy-MM-dd HH:mm",
+                        System.Globalization.CultureInfo.InvariantCulture,
+                        System.Globalization.DateTimeStyles.AssumeUniversal,
                         out var lastModified) ? lastModified : null;
                 }
                 else if (header.Contains("Layerbreak"))
@@ -371,80 +404,80 @@ public class Scraper
             disc.GameInfo = gameInfo;
         }
 
-    var tracksTable = doc.DocumentNode.SelectSingleNode("//table[@class='tracks']");
-    if (tracksTable != null)
-    {
-        // Parsing Status (H3)
-        var h3Node = tracksTable.SelectSingleNode(".//h3");
-        if (h3Node != null)
+        var tracksTable = doc.DocumentNode.SelectSingleNode("//table[@class='tracks']");
+        if (tracksTable != null)
         {
-            string h3Html = h3Node.InnerHtml;
-            string trackSection = h3Html.Contains(" | Cuesheet") ? h3Html.Split(" | Cuesheet")[0] : h3Html;
-            HtmlDocument tempDoc = new HtmlDocument();
-            tempDoc.LoadHtml($"<div>{trackSection}</div>");
-            var trackImages = tempDoc.DocumentNode.SelectNodes(".//img");
-            if (trackImages != null) disc.TrackStatus = string.Join(" | ", trackImages.Select(i => i.GetAttributeValue("alt", "")));
-
-            if (h3Html.Contains(" | Cuesheet"))
+            // Parsing Status (H3)
+            var h3Node = tracksTable.SelectSingleNode(".//h3");
+            if (h3Node != null)
             {
-                string cuesheetSection = h3Html.Split(" | Cuesheet")[1];
-                HtmlDocument cuesheetDoc = new HtmlDocument();
-                cuesheetDoc.LoadHtml($"<div>{cuesheetSection}</div>");
-                var cuesheetImages = cuesheetDoc.DocumentNode.SelectNodes(".//img");
-                if (cuesheetImages != null) disc.CuesheetStatus = string.Join(" | ", cuesheetImages.Select(i => i.GetAttributeValue("alt", "")));
+                string h3Html = h3Node.InnerHtml;
+                string trackSection = h3Html.Contains(" | Cuesheet") ? h3Html.Split(" | Cuesheet")[0] : h3Html;
+                HtmlDocument tempDoc = new HtmlDocument();
+                tempDoc.LoadHtml($"<div>{trackSection}</div>");
+                var trackImages = tempDoc.DocumentNode.SelectNodes(".//img");
+                if (trackImages != null) disc.TrackStatus = string.Join(" | ", trackImages.Select(i => i.GetAttributeValue("alt", "")));
+
+                if (h3Html.Contains(" | Cuesheet"))
+                {
+                    string cuesheetSection = h3Html.Split(" | Cuesheet")[1];
+                    HtmlDocument cuesheetDoc = new HtmlDocument();
+                    cuesheetDoc.LoadHtml($"<div>{cuesheetSection}</div>");
+                    var cuesheetImages = cuesheetDoc.DocumentNode.SelectNodes(".//img");
+                    if (cuesheetImages != null) disc.CuesheetStatus = string.Join(" | ", cuesheetImages.Select(i => i.GetAttributeValue("alt", "")));
+                }
+            }
+
+            var trackColumnIndex = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            var headerRow = tracksTable.SelectSingleNode(".//tr[th]");
+            if (headerRow != null)
+            {
+                var headers = headerRow.SelectNodes("th");
+                for (int i = 0; i < (headers?.Count ?? 0); i++)
+                {
+                    string headerText = headers![i].InnerText.Trim();
+                    if (headerText == "#") headerText = "Number";
+                    if (!string.IsNullOrEmpty(headerText) && !trackColumnIndex.ContainsKey(headerText))
+                        trackColumnIndex[headerText] = i;
+                }
+            }
+
+            string? GetTrackCol(HtmlNodeCollection cols, string colName)
+            {
+                if (!trackColumnIndex.TryGetValue(colName, out int idx) || idx >= cols.Count) return null;
+                var node = cols[idx];
+                if (node.SelectSingleNode("span[@class='null']") != null) return null;
+                var text = HtmlEntity.DeEntitize(node.InnerText).Trim();
+                return string.IsNullOrEmpty(text) ? null : text;
+            }
+
+            var trackRows = tracksTable.SelectNodes(".//tr[td]");
+            if (trackRows != null)
+            {
+                disc.Tracks = new List<DiscTrack>();
+                foreach (var row in trackRows)
+                {
+                    var cols = row.SelectNodes("td");
+                    if (cols == null) continue;
+
+                    string? number = GetTrackCol(cols, "Number");
+                    string? size = GetTrackCol(cols, "Size");
+                    if (number == null || size == null) continue;
+
+                    disc.Tracks.Add(new DiscTrack(
+                        number,
+                        GetTrackCol(cols, "Type") ?? null,
+                        GetTrackCol(cols, "Pregap") ?? null,
+                        GetTrackCol(cols, "Length") ?? null,
+                        GetTrackCol(cols, "Sectors") ?? null,
+                        size,
+                        GetTrackCol(cols, "CRC-32") ?? null,
+                        GetTrackCol(cols, "MD5") ?? null,
+                        GetTrackCol(cols, "SHA-1") ?? null
+                    ));
+                }
             }
         }
-
-        var trackColumnIndex = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-        var headerRow = tracksTable.SelectSingleNode(".//tr[th]");
-        if (headerRow != null)
-        {
-            var headers = headerRow.SelectNodes("th");
-            for (int i = 0; i < (headers?.Count ?? 0); i++)
-            {
-                string headerText = headers![i].InnerText.Trim();
-                if (headerText == "#") headerText = "Number";
-                if (!string.IsNullOrEmpty(headerText) && !trackColumnIndex.ContainsKey(headerText))
-                    trackColumnIndex[headerText] = i;
-            }
-        }
-
-        string? GetTrackCol(HtmlNodeCollection cols, string colName)
-        {
-            if (!trackColumnIndex.TryGetValue(colName, out int idx) || idx >= cols.Count) return null;
-            var node = cols[idx];
-            if (node.SelectSingleNode("span[@class='null']") != null) return null;
-            var text = HtmlEntity.DeEntitize(node.InnerText).Trim();
-            return string.IsNullOrEmpty(text) ? null : text;
-        }
-
-        var trackRows = tracksTable.SelectNodes(".//tr[td]");
-        if (trackRows != null)
-        {
-            disc.Tracks = new List<DiscTrack>();
-            foreach (var row in trackRows)
-            {
-                var cols = row.SelectNodes("td");
-                if (cols == null) continue;
-
-                string? number = GetTrackCol(cols, "Number");
-                string? size = GetTrackCol(cols, "Size");
-                if (number == null || size == null) continue;
-
-                disc.Tracks.Add(new DiscTrack(
-                    number,
-                    GetTrackCol(cols, "Type") ?? null,
-                    GetTrackCol(cols, "Pregap") ?? null,
-                    GetTrackCol(cols, "Length") ?? null,
-                    GetTrackCol(cols, "Sectors") ?? null,
-                    size,
-                    GetTrackCol(cols, "CRC-32") ?? null,
-                    GetTrackCol(cols, "MD5") ?? null,
-                    GetTrackCol(cols, "SHA-1") ?? null
-                ));
-            }
-        }
-    }
 
         // TODO: check id 950. the ring table has 4 rows, but only 3 of them are correctly parsed.
         // the one which is not parsed is the one without the ring number.
